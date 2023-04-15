@@ -1,13 +1,16 @@
 import makeWASocket ,{ DisconnectReason,useMultiFileAuthState, fetchLatestBaileysVersion, downloadMediaMessagem, S_WHATSAPP_NET } from'@adiwajshing/baileys';
 import {Boom} from '@hapi/boom';
-import {Message} from './message'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+
+import { processCommand } from './command/process_command.js';
+import {message_objek} from './message'
 
 export let client;
 
 async function connecting () {
   const { state, saveCreds } = await  useMultiFileAuthState('./auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
-  client = makeWASocket.default({
+  client = makeWASocket({
     version,
     printQRInTerminal: true,
     auth: state,
@@ -19,7 +22,8 @@ async function connecting () {
   })
   
   client.ev.on ('creds.update', saveCreds)
-
+  // client.ev.on('messages.upsert', m => {
+  // })
 
   client.ev.on('connection.update', async update => {
       const { connection, lastDisconnect } = update
@@ -35,24 +39,47 @@ async function connecting () {
       }
   })
     client.ev.on("messages.upsert", async m => {
-      const msg = m.message[0];
+      const msg = m.messages[0];
       if(!msg.message) return
       await client.readMessages([msg.key]);
       
-
-      const message_objek = new Message(msg)
-                  
+      const message = message_objek(msg)
       //cek command
-      if(message_objek.message.body.includes('!'))
+      if(message.body.includes('!'))
       {
-          await processCommand(message_objek).catch(err => {
-          await message_objek.message.reply(`*Terjadi Error*
+          await processCommand(message).catch(async err => {
+          await message.reply(message, {text: `*Terjadi Error*
 
-          ${err.toString()}`)
+${err.toString()}`})
+            const date = new Date()
+            const error = errorLog(`Error Message\n`+
+            `Date: ${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}\n`+
+            `chat: ${message.mentions}\n`+
+            `chat room: ${(await client.groupMetadata(message.mentions))?.subject || 'private chat'}\n`+
+            `text: ${message.body}\n`+
+            `typeMessage: ${message?.typeMsg || 'UNKNOWN'}`
+            `errorMessage: ${err.toString()}`
+            )
+
+            message.reply(message.ownerNumber, error.text)
         })
       }
 
 
     })
 }
+
+function errorLog(log) {
+  const pathLog = '.command/log'
+  if(!existsSync(pathLog)){
+    mkdirSync(pathLog)
+    return writeFileSync(`${pathLog}/log.txt`, log)
+  }
+  const readFile = readFileSync(pathLog, {encoding: 'utf8'})
+  writeFileSync(`${pathLog}/log.txt`, `${readFile}\n\n${log}`)
+  return {
+    text: '*Error Message Detected*\nsilahkan check log message'}
+}
+
+
 connecting()

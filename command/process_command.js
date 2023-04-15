@@ -30,12 +30,14 @@ function filePath(body) {
 }
 
 export async function processCommand(msg) {
+    
     const {default: Run} = await import(filePath(msg.body))
-    let getScript
-    try {
-        getScript = await Run()
-    } catch (error) {
-        throw error
+    const script = await Run()
+
+    const isQuoted = await msg.quotedMessage()
+
+    if(isQuoted){
+       return isQuoted.reply(msg.mentions, script.text, script.quoted)
     }
-    msg.reply(msg.mentions, getScript, {quoted: msg.quotedID})
+    msg.reply(msg.mentions, script.text, script.quoted)
 }
