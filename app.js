@@ -1,31 +1,12 @@
-import { client } from "./bot"
+import * as express from 'express'
 
-export class sendMsg {
-    constructor ({contact, msg, quoted}){
-        this.msg = msg
-        this.contact = contact
-        this.delayMsg = async (body, options ={}) => {
-        options.ephemeralExpiration = 60*60*24 
-        await client.presenceSubscribe(contact)
-        await delay(options.kuisDate || 500)
+const app = express()
+const port = process.env.PORT || 3000
 
-        await client.sendPresenceUpdate('composing', contact)
-        await delay(options.kuisDate || 500)
-        
-        await client.sendPresenceUpdate('paused', contact)
-      
-        await client.sendMessage(contact, body, options)
-        return 
-        }
+app.get('/', (req, res) => {
+    res.send('<p>Bot Online...</p>')
+})
 
-        this.quoted = quoted
-    }
-
-    async pingMsg(salam, userName) {
-        await this.delayMsg({text: `halo ${userName + '' + salam[Math.floor(Math.random() * salam.length)]}`, mentions: [this.contact]}, {quoted: this.msg})
-        return
-    }
-    async processCommand()
-    
-}
-
+app.listen(port, () => {
+    console.log('ACTIVATING BOT...')
+})
