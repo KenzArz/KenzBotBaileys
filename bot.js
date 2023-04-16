@@ -1,4 +1,4 @@
-import makeWASocket ,{ DisconnectReason,useMultiFileAuthState, fetchLatestBaileysVersion, downloadMediaMessagem, S_WHATSAPP_NET } from'@adiwajshing/baileys';
+import makeWASocket ,{ DisconnectReason,useMultiFileAuthState, fetchLatestBaileysVersion } from'@adiwajshing/baileys';
 import {Boom} from '@hapi/boom';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
@@ -22,8 +22,6 @@ async function connecting () {
   })
   
   client.ev.on ('creds.update', saveCreds)
-  // client.ev.on('messages.upsert', m => {
-  // })
 
   client.ev.on('connection.update', async update => {
       const { connection, lastDisconnect } = update
@@ -44,6 +42,7 @@ async function connecting () {
       await client.readMessages([msg.key]);
       
       const message = message_objek(msg)
+      const isGroup = message.mentions.includes('@g.us')
       //cek command
       if(message.body.includes('!'))
       {
@@ -52,16 +51,17 @@ async function connecting () {
 
 ${err.toString()}`})
             const date = new Date()
+            const {subject} = isGroup ? await client.groupMetadata(message.mentions) : false
             const error = errorLog(`Error Message\n`+
-            `Date: ${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}\n`+
+            `Date: ${date.getHours() + 7}:${date.getMinutes()}}\n`+
             `chat: ${message.mentions}\n`+
-            `chat room: ${(await client.groupMetadata(message.mentions))?.subject || 'private chat'}\n`+
+            `chat room: ${subject || 'private chat'}\n`+
             `text: ${message.body}\n`+
-            `typeMessage: ${message?.typeMsg || 'UNKNOWN'}`
+            `typeMessage: ${message?.typeMsg || 'UNKNOWN'}\n`+
             `errorMessage: ${err.toString()}`
             )
 
-            message.reply(message.ownerNumber, error.text)
+            message.reply(message.ownerNumber, error)
         })
       }
 
@@ -70,12 +70,14 @@ ${err.toString()}`})
 }
 
 function errorLog(log) {
-  const pathLog = '.command/log'
+  const pathLog = 'command/log'
   if(!existsSync(pathLog)){
     mkdirSync(pathLog)
-    return writeFileSync(`${pathLog}/log.txt`, log)
+    writeFileSync(`${pathLog}/log.txt`, log)
+    return {
+      text: '*Error Message Detected*\nsilahkan check log message'}
   }
-  const readFile = readFileSync(pathLog, {encoding: 'utf8'})
+  const readFile = readFileSync(pathLog + '/log.txt', {encoding: 'utf8'})
   writeFileSync(`${pathLog}/log.txt`, `${readFile}\n\n${log}`)
   return {
     text: '*Error Message Detected*\nsilahkan check log message'}

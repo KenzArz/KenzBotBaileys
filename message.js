@@ -1,7 +1,7 @@
 import { downloadMediaMessage, S_WHATSAPP_NET, delay } from "@adiwajshing/baileys"
 import { writeFile } from "fs/promises"
 
-import {client} from './bot'
+import {client} from './bot.js'
 
 export function message_objek(msg) {
   const getMsgType = msg.ephemeralMessage?.message || msg.documentWithCaptionMessage?.message || msg.message
@@ -18,6 +18,7 @@ export function message_objek(msg) {
   isOwner = bot || ownerId,
 
   body = msg.message?.conversation|| msg.message.extendedTextMessage?.text || msg.message.imageMessage?.caption
+  if(!body) return {body: 'not a message'}
 
 
   return {
@@ -25,7 +26,7 @@ export function message_objek(msg) {
     contactName: contactName,
     body,
     mentions: room_chat,
-    typeMsg: getType.typeMsg,
+    typeMsg: getType?.typeMsg,
     isMedia,
     isOwner,
     ownerNumber,
@@ -37,9 +38,9 @@ export function message_objek(msg) {
       const quoted = ctxInfo.quotedMessage
       if(!quoted) return false
 
-      const bodyQuoted = quoted.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
+      const bodyQuoted = quoted?.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
       
-      const getType = checkType(findType => findType.find(findOBJ => Object.keys(quoted).find(m => m === findOBJ)))
+      const getType = checkType(findType => findType.find(findOBJ => Object.keys(quoted).find(m => m === findOBJ.type)))
       const isMedia = getType?.isMedia ? true : false
       
       return {
@@ -48,10 +49,10 @@ export function message_objek(msg) {
         message: quoted
         },
         body: bodyQuoted,
-        typeMsg: getType.typeMsg,
+        typeMsg: getType?.typeMsg,
         isMedia,
-        media: isMedia ? async (path) => {
-          const download = await downloadMedia(quoted);
+        media: isMedia ? async function (path) {
+          const download = await downloadMedia(this.quotedID);
           writeFile(path, download);
           
         } : null,
@@ -65,7 +66,7 @@ export function message_objek(msg) {
       }
     },
     media: isMedia ? async (path) => {
-      const download = await downloadMedia(key);
+      const download = await downloadMedia(msg);
       writeFile(path, download);
       return download
       

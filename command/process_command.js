@@ -25,19 +25,19 @@ function filePath(body) {
         item: getItem.item,
         subItem: getItem.subItem.find(subItem => subItem === delPrefix.toLowerCase())
     }
-    return`${mainDir}/${setPath.item}/${setPath.subItem}.js`
+    return`./${setPath.item}/${setPath.subItem}.js`
     
 }
 
 export async function processCommand(msg) {
     
     const {default: Run} = await import(filePath(msg.body))
-    const script = await Run()
+    const script = await Run(msg)
 
     const isQuoted = await msg.quotedMessage()
 
     if(isQuoted){
-       return isQuoted.reply(msg.mentions, script.text, script.quoted)
+       return isQuoted.reply(msg.mentions, script.text, {quoted: script.quoted})
     }
-    msg.reply(msg.mentions, script.text, script.quoted)
+    msg.reply(msg.mentions, script.text, {quoted: script.quoted})
 }
