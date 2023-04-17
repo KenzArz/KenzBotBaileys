@@ -20,24 +20,21 @@ function filePath(body) {
     const checkDir = dirPath()
     const delPrefix = body.slice(1)
     
-    const getItem = checkDir.find(m => m.subItem.find(k => k == delPrefix)),
-    setPath = {
+    const getItem = checkDir.find(m => m.subItem.find(k => k == delPrefix))
+    if(!getItem) return {text: `fitur ${body} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`}
+    const setPath = {
         item: getItem.item,
         subItem: getItem.subItem.find(subItem => subItem === delPrefix.toLowerCase())
     }
-    return`./${setPath.item}/${setPath.subItem}.js`
+    return {path: `./${setPath.item}/${setPath.subItem}.js`}
     
 }
 
 export async function processCommand(msg) {
     
-    const {default: Run} = await import(filePath(msg.body))
-    const script = await Run(msg)
+    const checkFitur =  filePath(msg.body)
+    if(checkFitur.text) return checkFitur
 
-    const isQuoted = await msg.quotedMessage()
-
-    if(isQuoted){
-       return isQuoted.reply(msg.mentions, script.text, {quoted: script.quoted})
-    }
-    msg.reply(msg.mentions, script.text, {quoted: script.quoted})
+    const {default: Run} = await import(checkFitur)
+    await Run(msg)
 }

@@ -1,22 +1,20 @@
 import { Sticker, StickerTypes } from "wa-sticker-formatter";
 
 export default async function (msg) {
-    const imagePath = 'command/convert/sticker.webp';
     const isQuoted = msg.quotedMessage()
-    const errorMessage = 'tidak ada image untuk di convert menjadi stiker'
-    let quoted;
+    const errorMessage = 'tidak ada image untuk diconvert menjadi stiker'
+    let bufferImage;
+    
     if(!isQuoted || msg.isMedia){
-        quoted = msg.quotedID
-        await msg.media(imagePath)
-    }else {
-        if(!isQuoted.isMedia) throw errorMessage
-        quoted = msg.quotedID
-        await isQuoted.media(imagePath)
+        if(!msg.isMedia) return errorMessage
+        bufferImage = await msg.media()
     }
-    const buffer = new Sticker(imagePath, {author: 'KenzBot (´-﹏-`)', type: StickerTypes.FULL})
-    return {
-        typeMsg: msg.typeMsg,
-        text: await buffer.toMessage(),
-        quoted
+    else {
+        if(!isQuoted.isMedia) return errorMessage
+        bufferImage = await isQuoted.media()
     }
+    const buffer = new Sticker(bufferImage, {author: 'KenzBot (´-﹏-`)', type: StickerTypes.FULL})
+    const sticker = await buffer.toMessage()
+    
+    msg.reply(msg.mentions, sticker, {quoted: msg.quotedID})
 }

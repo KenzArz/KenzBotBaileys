@@ -7,10 +7,10 @@ import {message_objek} from './message'
 
 export let client;
 
-async function connecting () {
+export async function connecting () {
   const { state, saveCreds } = await  useMultiFileAuthState('./auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
-  client = makeWASocket({
+  let client = makeWASocket({
     version,
     printQRInTerminal: true,
     auth: state,
@@ -46,8 +46,10 @@ async function connecting () {
       //cek command
       if(message.body.includes('!'))
       {
-          await processCommand(message).catch(async err => {
-          await message.reply(message, {text: `*Terjadi Error*
+          await processCommand(message)
+            .then(text => message.reply(message.mentions, text))
+            .catch(async err => {
+          await message.reply(message.mentions, {text: `*Terjadi Error*
 
 ${err.toString()}`})
             const date = new Date()
@@ -58,7 +60,7 @@ ${err.toString()}`})
             `chat room: ${subject || 'private chat'}\n`+
             `text: ${message.body}\n`+
             `typeMessage: ${message?.typeMsg || 'UNKNOWN'}\n`+
-            `errorMessage: ${err.toString()}`
+            `errorMessage: ${err}`
             )
 
             message.reply(message.ownerNumber, error)
@@ -82,6 +84,3 @@ function errorLog(log) {
   return {
     text: '*Error Message Detected*\nsilahkan check log message'}
 }
-
-
-connecting()
