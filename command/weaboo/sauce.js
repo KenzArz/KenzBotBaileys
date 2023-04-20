@@ -75,11 +75,11 @@ Romaji: ${content.romaji || '-'}
 English: ${content.english || '-'}
 Episode: ${content.episode || '-'}
 Kemiripan: ${similarity}\n\n`
-    }
+    } 
 
     listAnime += `╾─͙─͙─͙Info Hanime─͙─͙─͙╼\n`
     for(const [index, adultContent] of isAdult.entries()) {
-        const getPresentase = content.similarity.toString()
+        const getPresentase = adultContent.similarity.toString()
         const [_, persentase] = getPresentase.split('.')
 
         const realNumber = persentase.slice(0, 2)
@@ -106,25 +106,37 @@ Kemiripan: ${similarity}\n\n`
     const imageAnime = filter[0].image
     const video = filter[0].video
 
-    const downloadImage = await fetch(imageAnime)
-    downloadImage.body.pipe(createWriteStream('./anime.jpg'))
+    let downloadImagePath = './anime.jpeg';
+    try {
+        await msg.imgUrl(imageAnime, downloadImagePath)
+    } catch (error) {
+        throw error + 'url tidak valid'
+    }
+    
+    let downloadVideoPath = './anime.mp4';
+    try {
+        await fetch(video, downloadVideoPath)
+    } catch (error) {
+        throw error + 'url tidak valid'
+    }
 
-    const downloadVideo = await fetch(video)
-    downloadVideo.body.pipe(createWriteStream('./anime.mp4'))
-
-    if(isAdult[0].isAdult) {
-        const warning = await fetch(isAdult[0].video)
-        warning.body.pipe(createWriteStream('./warning.mp4'))
+    let HPath = './warning.mp4'
+    if(isAdult[0]?.isAdult) {
+        try {
+        await msg.imgUrl(isAdult[0].isAdult.video, HPath)
+        } catch (error) {
+            throw error + 'url tidak valid'
+        }
     }
 
     msg.reply(msg.mentions, {
-        video: readFileSync('./anime.mp4'),
+        video: readFileSync(downloadVideoPath),
         caption: filterAnime,
         giftPlayback: true
     })
 
     isAdult[0].isAdult ? msg.reply(msg.ownerNumber, {
-        video: readFileSync('./anime.mp4'),
+        video: readFileSync(HPath),
         caption: filterHanime,
         giftPlayback: true
     }) : null

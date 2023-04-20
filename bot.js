@@ -3,14 +3,14 @@ import {Boom} from '@hapi/boom';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
 import { processCommand } from './command/process_command.js';
-import {message_objek} from './message'
+import {message_objek} from './message.js'
 
 export let client;
 
 export async function connecting () {
   const { state, saveCreds } = await  useMultiFileAuthState('./auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
-  let client = makeWASocket({
+  client = makeWASocket.default({
     version,
     printQRInTerminal: true,
     auth: state,
@@ -42,12 +42,12 @@ export async function connecting () {
       await client.readMessages([msg.key]);
       
       const message = message_objek(msg)
-      const isGroup = message.mentions.includes('@g.us')
+      const isGroup = message?.mentions?.includes('@g.us')
       //cek command
       if(message.body.includes('!'))
       {
           await processCommand(message)
-            .then(text => message.reply(message.mentions, text))
+            .then(text => text ? message.reply(message.mentions, text) : '')
             .catch(async err => {
           await message.reply(message.mentions, {text: `*Terjadi Error*
 

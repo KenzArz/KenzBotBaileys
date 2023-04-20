@@ -1,5 +1,6 @@
 import { downloadMediaMessage, S_WHATSAPP_NET, delay } from "@adiwajshing/baileys"
-import { writeFile } from "fs/promises"
+import { createWriteStream } from "fs"
+import fetch from 'node-fetch'
 
 import {client} from './bot.js'
 
@@ -51,29 +52,27 @@ export function message_objek(msg) {
         body: bodyQuoted,
         typeMsg: getType?.typeMsg,
         isMedia,
-        media: isMedia ? async function (path) {
+        media: isMedia ? async function () {
           const download = await downloadMedia(this.quotedID);
-          writeFile(path, download);
+          return download;
           
         } : null,
         imgUrl: isMedia ? async (url, path) => {
-          const urlImage = await downloadMediaUrl(url)
-          writeFile(path, urlImage)
+          const urlImage = await downloadMediaUrl(url, path)
+          return urlImage
         } : null,
         reply: async (contact, text, options) => {
           await delayMsg(contact, text, options)
         }
       }
     },
-    media: isMedia ? async (path) => {
+    media: isMedia ? async () => {
       const download = await downloadMedia(msg);
-      writeFile(path, download);
       return download
       
     } : null,
     imgUrl: isMedia ? async (url, path) => {
-      const urlImage = await downloadMediaUrl(url)
-      writeFile(path, urlImage)
+      const urlImage = await downloadMediaUrl(url, path)
       return urlImage
     } : null,
     reply: async (contact, text, options) =>{
@@ -90,12 +89,12 @@ function checkType (type, msgDetail) {
   },
   {
     type: 'videoMessage',
-    typeMsg: msgDetail.videoMessage?.gifPlayback ? 'gif' : 'video',
+    typeMsg: msgDetail?.videoMessage?.gifPlayback ? 'gif' : 'video',
     isMedia: true
   },
   {
     type: 'audioMessage',
-    typeMsg: msgDetail.audioMessage?.ppt ? 'vn' : 'audio',
+    typeMsg: msgDetail?.audioMessage?.ppt ? 'vn' : 'audio',
     isMedia: true
   },
   {
@@ -129,12 +128,12 @@ async function downloadMedia(imageMessage) {
   return await downloadMediaMessage(imageMessage, 'buffer')
 }
 
-async function downloadMediaUrl(url) {
-  const getUrl = await axios({url, responseType: 'stream'})
-  new Promise (async (resolve, reject) => {
-    await getUrl.data
-    .pipe(fs.createWriteStream(filePath))
-    .on('finish', () => resolve())
-    .on('error', e => reject(e));
+async function downloadMediaUrl(url, path) {
+  const getUrl = await fetch(url)
+  return new Promise((res, rej) => {
+    getUrl.body
+      .pipe(createWriteStream(path))
+      .on('finish', () => res('succes'))
+      .on('error', () => rej('failed'))
   })
 }
