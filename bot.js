@@ -66,8 +66,6 @@ ${err.toString()}`})
             message.reply(message.ownerNumber, error)
         })
       }
-
-
     })
 }
 
