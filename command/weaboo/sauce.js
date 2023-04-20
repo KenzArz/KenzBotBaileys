@@ -93,8 +93,6 @@ Romaji: ${adultContent.romaji || '-'}
 English: ${adultContent.english || '-'}
 Episode: ${adultContent.episode || '-'}
 Kemiripan: ${similarity}\n\n`
-
-
     }
 
     const indexAnime = listAnime.indexOf(`╾─͙─͙─͙Info Hanime─͙─͙─͙╼`)
@@ -129,13 +127,22 @@ Kemiripan: ${similarity}\n\n`
         }
     }
 
+    if(msg.isOwner){
+        msg.reply(msg.ownerNumber, {
+            video: readFileSync(downloadVideoPath),
+            caption: listAnime,
+            giftPlayback: true
+        })
+        return
+    }
+
     msg.reply(msg.mentions, {
         video: readFileSync(downloadVideoPath),
         caption: filterAnime,
         giftPlayback: true
     })
 
-    isAdult[0].isAdult ? msg.reply(msg.ownerNumber, {
+    isAdult[0]?.isAdult ? msg.reply(msg.ownerNumber, {
         video: readFileSync(HPath),
         caption: filterHanime,
         giftPlayback: true
