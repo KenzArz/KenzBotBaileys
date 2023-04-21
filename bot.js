@@ -14,13 +14,13 @@ export async function connecting () {
     version,
     printQRInTerminal: true,
     auth: state,
+    linkPreviewImageThumbnailWidth: 90,
     getMessage: async () => {
 			return {
 				conversation: 'pesan ini sedang pending atau tidak dapat dilihat dikarenakan masalah koneksi'
 			}
 		}
   })
-  
   client.ev.on ('creds.update', saveCreds)
 
   client.ev.on('connection.update', async update => {

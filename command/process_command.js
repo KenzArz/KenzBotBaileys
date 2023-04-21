@@ -35,6 +35,6 @@ export async function processCommand(msg) {
     const checkFitur =  filePath(msg.body)
     if(checkFitur.text) return checkFitur
 
-    const {default: Run} = await import(checkFitur)
+    const {default: Run} = await import(checkFitur.path)
     await Run(msg)
 }

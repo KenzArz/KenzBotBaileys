@@ -1,6 +1,7 @@
 import { downloadMediaMessage, S_WHATSAPP_NET, delay } from "@adiwajshing/baileys"
 import { createWriteStream } from "fs"
 import fetch from 'node-fetch'
+import sharp from 'sharp'
 
 import {client} from './bot.js'
 
@@ -63,7 +64,11 @@ export function message_objek(msg) {
         } : null,
         reply: async (contact, text, options) => {
           await delayMsg(contact, text, options)
-        }
+        },
+        resize: isMedia ? async (image) => {
+          const media = await sharpImage(image)
+          return media
+        } : null
       }
     },
     media: isMedia ? async () => {
@@ -77,7 +82,11 @@ export function message_objek(msg) {
     } : null,
     reply: async (contact, text, options) =>{
       await delayMsg(contact, text, options)
-    }
+    },
+    resize: isMedia ? async (image) => {
+      const media = await sharpImage(image)
+      return media
+    } : null
   }
 }
 
@@ -136,4 +145,12 @@ async function downloadMediaUrl(url, path) {
       .on('finish', () => res('succes'))
       .on('error', () => rej('failed'))
   })
+}
+
+async function sharpImage() {
+  const resize = await sharp(image)
+    .resize(50,25)
+    .jpeg({quality: 35})
+    .toBuffer()
+  return resize
 }

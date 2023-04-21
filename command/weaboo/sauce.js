@@ -102,49 +102,73 @@ Kemiripan: ${similarity}\n\n`
     const filterHanime = listAnime.slice(indexHanime)
 
     const imageAnime = filter[0].image
-    const video = filter[0].video
-
     let downloadImagePath = './anime.jpeg';
     try {
-        await msg.imgUrl(imageAnime, downloadImagePath)
-    } catch (error) {
-        throw error + 'url tidak valid'
-    }
-    
-    let downloadVideoPath = './anime.mp4';
-    try {
-        await fetch(video, downloadVideoPath)
+        if(isQuoted.imgUrl !== null) {
+            await isQuoted.imgUrl(imageAnime, downloadImagePath)
+        }
+        if(msg.imgUrl !== null) {
+            await msg.imgUrl(imageAnime, downloadImagePath)
+        }
     } catch (error) {
         throw error + 'url tidak valid'
     }
 
-    let HPath = './warning.mp4'
+    let HPath = './warning.jpeg'
     if(isAdult[0]?.isAdult) {
         try {
-        await msg.imgUrl(isAdult[0].isAdult.video, HPath)
+            if(isQuoted.imgUrl !== null) {
+                await isQuoted.imgUrl(isAdult[0].image, HPath)
+            }
+            if(msg.imgUrl !== null) {
+                await msg.imgUrl(isAdult[0].image, HPath)
+            }
         } catch (error) {
             throw error + 'url tidak valid'
         }
     }
+    
+    let thumb;
+    let HThumb;
+    if(!isQuoted || msg.isMedia) {
+        if(!msg.isMedia) return errorMessage
+        thumb =  await msg.resize(downloadImagePath)
+
+        if(isAdult[0]?.isAdult) {
+            HThumb = msg.resize(HPath)
+        }
+    }
+    else {
+        if(!isQuoted.isMedia) return errorMessage
+        thumb = await isQuoted.resize(downloadImagePath)
+
+        if(isAdult[0].isAdult) {
+            HThumb = await isQuoted.resize(HPath)
+        }
+    }
+
 
     if(msg.isOwner){
         msg.reply(msg.ownerNumber, {
-            video: readFileSync(downloadVideoPath),
+            image: readFileSync(downloadImagePath),
             caption: listAnime,
-            giftPlayback: true
+            mimetype: 'image/jpeg',
+            jpegThumbnail: thumb
         })
         return
     }
 
     msg.reply(msg.mentions, {
-        video: readFileSync(downloadVideoPath),
+        image: readFileSync(downloadImagePath),
         caption: filterAnime,
-        giftPlayback: true
+        mimetype: 'image/jpeg',
+        jpegThumbnail: thumb
     })
 
     isAdult[0]?.isAdult ? msg.reply(msg.ownerNumber, {
-        video: readFileSync(HPath),
+        image: readFileSync(HPath),
         caption: filterHanime,
-        giftPlayback: true
+        mimetype: 'image/jpeg',
+        jpegThumbnail: HThumb
     }) : null
 }
