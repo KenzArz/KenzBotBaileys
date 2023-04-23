@@ -34,11 +34,12 @@ export function message_objek(msg) {
     ownerNumber,
     quotedID: msg,
     quotedMessage: () => {
-      key.participant = msg?.extendedTextMessage?.contextInfo?.participant
+      key.participant = msg.message?.extendedTextMessage?.contextInfo?.participant
 
       const ctxInfo = msg.message?.extendedTextMessage?.contextInfo || msg.message?.imageMessage?.contextInfo || msg.message?.audioMessage?.contextInfo
       const quoted = ctxInfo.quotedMessage
       if(!quoted) return false
+      console.log(ctxInfo)
 
       const bodyQuoted = quoted?.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
       
@@ -81,7 +82,7 @@ export function message_objek(msg) {
       return urlImage
     } : null,
     reply: async (contact, text, options) =>{
-      await delayMsg(contact, text, options)
+      return delayMsg(contact, text, options)
     },
     resize: isMedia ? async (image) => {
       const media = await sharpImage(image)
@@ -130,7 +131,7 @@ async function delayMsg(contact, body, options = {}) {
   
   await client.sendPresenceUpdate('paused', contact)
 
-  await client.sendMessage(contact, body, options)
+  return client.sendMessage(contact, body, options)
 }
 
 async function downloadMedia(imageMessage) {
@@ -147,7 +148,7 @@ async function downloadMediaUrl(url, path) {
   })
 }
 
-async function sharpImage() {
+async function sharpImage(image) {
   const resize = await sharp(image)
     .resize(50,25)
     .jpeg({quality: 35})

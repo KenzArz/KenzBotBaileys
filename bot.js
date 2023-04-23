@@ -43,6 +43,8 @@ export async function connecting () {
       
       const message = message_objek(msg)
       const isGroup = message?.mentions?.includes('@g.us')
+
+      console.log(message)
       //cek command
       if(message.body.includes('!'))
       {

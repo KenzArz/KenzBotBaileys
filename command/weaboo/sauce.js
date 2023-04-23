@@ -104,7 +104,7 @@ Kemiripan: ${similarity}\n\n`
     const imageAnime = filter[0].image
     let downloadImagePath = './anime.jpeg';
     try {
-        if(isQuoted.imgUrl !== null) {
+        if(isQuoted.imgUrl !== null && isQuoted) {
             await isQuoted.imgUrl(imageAnime, downloadImagePath)
         }
         if(msg.imgUrl !== null) {
@@ -117,17 +117,16 @@ Kemiripan: ${similarity}\n\n`
     let HPath = './warning.jpeg'
     if(isAdult[0]?.isAdult) {
         try {
-            if(isQuoted.imgUrl !== null) {
-                await isQuoted.imgUrl(isAdult[0].image, HPath)
+            if(isQuoted.imgUrl !== null && isQuoted) {
+                await isQuoted.imgUrl(isAdult[0]?.image, HPath)
             }
             if(msg.imgUrl !== null) {
-                await msg.imgUrl(isAdult[0].image, HPath)
+                await msg.imgUrl(isAdult[0]?.image, HPath)
             }
         } catch (error) {
             throw error + 'url tidak valid'
         }
     }
-    
     let thumb;
     let HThumb;
     if(!isQuoted || msg.isMedia) {
@@ -142,19 +141,20 @@ Kemiripan: ${similarity}\n\n`
         if(!isQuoted.isMedia) return errorMessage
         thumb = await isQuoted.resize(downloadImagePath)
 
-        if(isAdult[0].isAdult) {
+        if(isAdult[0]?.isAdult) {
             HThumb = await isQuoted.resize(HPath)
         }
     }
 
-
     if(msg.isOwner){
-        msg.reply(msg.ownerNumber, {
+        const message = await msg.reply(msg.ownerNumber, {
             image: readFileSync(downloadImagePath),
             caption: listAnime,
             mimetype: 'image/jpeg',
-            jpegThumbnail: thumb
+            jpegThumbnail: thumb,
+            id: 'aing maung'
         })
+      console.log(message)
         return
     }
 
