@@ -1,7 +1,7 @@
 import { createWriteStream, readFileSync } from 'fs'
 import fetch from 'node-fetch'
 
-export default async function (msg) {
+export default async function (msg, {repeat = false}) {
     
     const isQuoted = msg.quotedMessage()
     const errorMessage = 'tidak ada image untuk dicari'
@@ -74,7 +74,7 @@ export default async function (msg) {
 Romaji: ${content.romaji || '-'}
 English: ${content.english || '-'}
 Episode: ${content.episode || '-'}
-Kemiripan: ${similarity}\n\n`
+Similarity: ${similarity}\n\n`
     } 
 
     listAnime += `╾─͙─͙─͙Info Hanime─͙─͙─͙╼\n`
@@ -92,7 +92,7 @@ Kemiripan: ${similarity}\n\n`
 Romaji: ${adultContent.romaji || '-'}
 English: ${adultContent.english || '-'}
 Episode: ${adultContent.episode || '-'}
-Kemiripan: ${similarity}\n\n`
+Similarity: ${similarity}\n\n`
     }
 
     const indexAnime = listAnime.indexOf(`╾─͙─͙─͙Info Hanime─͙─͙─͙╼`)
@@ -111,7 +111,7 @@ Kemiripan: ${similarity}\n\n`
             await msg.imgUrl(imageAnime, downloadImagePath)
         }
     } catch (error) {
-        throw error + 'url tidak valid'
+        throw error + '\n\nurl tidak valid'
     }
 
     let HPath = './warning.jpeg'
@@ -124,7 +124,7 @@ Kemiripan: ${similarity}\n\n`
                 await msg.imgUrl(isAdult[0].image, HPath)
             }
         } catch (error) {
-            throw error + 'url tidak valid'
+            throw error + '\n\nurl tidak valid'
         }
     }
     
@@ -154,7 +154,7 @@ Kemiripan: ${similarity}\n\n`
             caption: listAnime,
             mimetype: 'image/jpeg',
             jpegThumbnail: thumb
-        })
+        }, {temp: true})
         return
     }
 
@@ -163,12 +163,16 @@ Kemiripan: ${similarity}\n\n`
         caption: filterAnime,
         mimetype: 'image/jpeg',
         jpegThumbnail: thumb
-    })
+    }, {temp: true})
 
     isAdult[0]?.isAdult ? msg.reply(msg.ownerNumber, {
         image: readFileSync(HPath),
         caption: filterHanime,
         mimetype: 'image/jpeg',
         jpegThumbnail: HThumb
-    }) : null
+    }, {temp: true}) : null
+
+    const {clearCache} = await import('../process_command.js')
+    clearCache({filter, isAdult})
+    
 }
