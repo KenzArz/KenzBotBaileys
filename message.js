@@ -11,7 +11,7 @@ export function message_objek(msg) {
 
   const isMedia = getType?.isMedia ? true : null
 
-  const key = msg.key,
+  const messageID = msg.key.id,
   room_chat = msg.key.remoteJid,
   contactName = msg.pushName,
   bot = key.fromMe,
@@ -24,8 +24,8 @@ export function message_objek(msg) {
 
 
   return {
-    contactID: key,
-    contactName: contactName,
+    messageID,
+    contactName,
     body,
     mentions: room_chat,
     typeMsg: getType?.typeMsg,
@@ -38,8 +38,9 @@ export function message_objek(msg) {
 
       const ctxInfo = msg.message?.extendedTextMessage?.contextInfo || msg.message?.imageMessage?.contextInfo || msg.message?.audioMessage?.contextInfo
       const quoted = ctxInfo.quotedMessage
-      if(!quoted) return false
-      console.log(ctxInfo)
+
+      const quotedID = ctxInfo.stanzaId
+      if(!quoted) return null
 
       const bodyQuoted = quoted?.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
       
@@ -52,6 +53,7 @@ export function message_objek(msg) {
         message: quoted
         },
         body: bodyQuoted,
+        stanza: quotedID,
         typeMsg: getType?.typeMsg,
         isMedia,
         media: isMedia ? async function () {
@@ -131,7 +133,11 @@ async function delayMsg(contact, body, options = {}) {
   
   await client.sendPresenceUpdate('paused', contact)
 
-  return client.sendMessage(contact, body, options)
+  const tempMessage = await client.sendMessage(contact, body, options)
+
+  if(options.temp){
+  const {tempStore} = await import('./bot.js')
+  tempStore(tempMessage)}
 }
 
 async function downloadMedia(imageMessage) {

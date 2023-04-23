@@ -6,11 +6,23 @@ import { processCommand } from './command/process_command.js';
 import {message_objek} from './message.js'
 
 export let client;
+export const temp = []
+export const tempStore = (message) => {
+  temp.push(message)
+  const index = temp.length - 1
+  new Promise((res, rej) => {
+    setTimeout(() => {
+      temp.splice(index, 1)
+      res('ok')
+      rej('error')
+    }, 180000)
+  })
+}
 
 export async function connecting () {
   const { state, saveCreds } = await  useMultiFileAuthState('./auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
-  client = makeWASocket.default({
+  let client = makeWASocket({
     version,
     printQRInTerminal: true,
     auth: state,
@@ -22,7 +34,6 @@ export async function connecting () {
 		}
   })
   client.ev.on ('creds.update', saveCreds)
-
   client.ev.on('connection.update', async update => {
       const { connection, lastDisconnect } = update
       if(connection === 'close') {
@@ -40,15 +51,36 @@ export async function connecting () {
       const msg = m.messages[0];
       if(!msg.message) return
       await client.readMessages([msg.key]);
-      
+      msg.message.extendedTextMessage.contextInfo.stanzaId
       const message = message_objek(msg)
       const isGroup = message?.mentions?.includes('@g.us')
 
-      console.log(message)
       //cek command
       if(message.body.includes('!'))
       {
           await processCommand(message)
+            .then(text => text ? message.reply(message.mentions, text) : '')
+            .catch(async err => {
+          await message.reply(message.mentions, {text: `*Terjadi Error*
+
+${err.toString()}`})
+            const date = new Date()
+            const {subject} = isGroup ? await client.groupMetadata(message.mentions) : false
+            const error = errorLog(`Error Message\n`+
+            `Date: ${date.getHours() + 7}:${date.getMinutes()}}\n`+
+            `chat: ${message.mentions}\n`+
+            `chat room: ${subject || 'private chat'}\n`+
+            `text: ${message.body}\n`+
+            `typeMessage: ${message?.typeMsg || 'UNKNOWN'}\n`+
+            `errorMessage: ${err}`
+            )
+
+            message.reply(message.ownerNumber, error)
+        })
+      }
+      if(parseInt(message.body)  && message?.quotedMessage && temp.length !== 0)
+      {
+          await processCommand(message, {quoted: true})
             .then(text => text ? message.reply(message.mentions, text) : '')
             .catch(async err => {
           await message.reply(message.mentions, {text: `*Terjadi Error*

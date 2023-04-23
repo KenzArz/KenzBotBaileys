@@ -1,6 +1,19 @@
 import { readdirSync} from 'fs'
 
 let mainDir = './command'
+export const cache = []
+export const clearCache = (message) => {
+    cache.push(message)
+    const index = cache.length - 1
+    new Promise((res, rej) => {
+      setTimeout(() => {
+        cache.splice(index, 1)
+        res('ok')
+        rej('error')
+      }, 180000)
+    })
+  }
+
 function dirPath() {
     const checkDir = readdirSync(mainDir, {withFileTypes: true}).map(item => {
         if(!item.isDirectory()) return
@@ -30,7 +43,12 @@ function filePath(body) {
     
 }
 
-export async function processCommand(msg) {
+export async function processCommand(msg, option = {}) {
+
+    if(option.quoted) {
+        const {temp} = await import('../bot.js')
+        console.log(temp)
+    }
     
     const checkFitur =  filePath(msg.body)
     if(checkFitur.text) return checkFitur
