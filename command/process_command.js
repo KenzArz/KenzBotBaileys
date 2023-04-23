@@ -1,4 +1,4 @@
-import { readdirSync} from 'fs'
+import { readdirSync, readFileSync} from 'fs'
 
 let mainDir = './command'
 export const cache = []
@@ -46,8 +46,32 @@ function filePath(body) {
 export async function processCommand(msg, option = {}) {
 
     if(option.quoted) {
+        const quoted = msg.quotedMessage()
         const {temp} = await import('../bot.js')
-        console.log(temp)
+        const id = temp.find(MID => MID.key.id == quoted.stanza)
+        if(id) {
+            let media;
+            for(const mediaInfo of cache) {
+                media = mediaInfo.filter.find((infoDetail, index) => index == (parseInt(msg.body) -1 ) ? infoDetail : null)
+            }
+
+            const checkType = await type(id, media)
+            try {
+                await quoted.imgUrl(media.image, './infoMedia.jpeg')    
+            } catch (error) {
+                throw error + '\n\nurl tidak valid'
+            }
+            
+            const thumb = await quoted.resize('./infoMedia.jpeg')
+            msg.reply(msg.mentions, {
+                image: readFileSync('./infoMedia.jpeg'),
+                caption: checkType,
+                mimetype: 'image/jpeg',
+                jpegThumbnail: thumb
+            })
+        
+        }
+        return
     }
     
     const checkFitur =  filePath(msg.body)
@@ -55,4 +79,27 @@ export async function processCommand(msg, option = {}) {
 
     const {default: Run} = await import(checkFitur.path)
     await Run(msg)
+}
+
+async function type(bodyQuoted, detailInfo) {
+    const ctx = bodyQuoted.message.ephemeralMessage.message.imageMessage.contextInfo.quotedMessage
+    const body = ctx.imageMessage.caption.slice(1) || ctx.extendedTextMessage.text.slice(1)
+    
+    switch (body) {
+        case 'sticker':
+
+            const [_, getPresentase] = detailInfo.similarity.toString().split('.')
+            const similarity = `${getPresentase.slice(0,2)}.${getPresentase.slice(2,4)}%`
+            
+            const info = `╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`+
+            `Title: ${detailInfo.native}\n`+
+            `Romaji: ${detailInfo.romaji || '-'}\n`+
+            `English: ${detailInfo.english || '-'}\n`+
+            `Episode: ${detailInfo.episode || '-'}\n`+
+            `Similarity: ${similarity}`
+
+            return info
+        default:
+            return;
+    }
 }

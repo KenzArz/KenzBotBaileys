@@ -1,7 +1,7 @@
 import { createWriteStream, readFileSync } from 'fs'
 import fetch from 'node-fetch'
 
-export default async function (msg, {repeat = false}) {
+export default async function (msg) {
     
     const isQuoted = msg.quotedMessage()
     const errorMessage = 'tidak ada image untuk dicari'
@@ -104,7 +104,7 @@ Similarity: ${similarity}\n\n`
     const imageAnime = filter[0].image
     let downloadImagePath = './anime.jpeg';
     try {
-        if(isQuoted.imgUrl !== null && isQuoted) {
+        if(isQuoted?.imgUrl !== null && isQuoted) {
             await isQuoted.imgUrl(imageAnime, downloadImagePath)
         }
         if(msg.imgUrl !== null) {
@@ -117,7 +117,7 @@ Similarity: ${similarity}\n\n`
     let HPath = './warning.jpeg'
     if(isAdult[0]?.isAdult) {
         try {
-            if(isQuoted.imgUrl !== null && isQuoted) {
+            if(isQuoted?.imgUrl !== null && isQuoted) {
                 await isQuoted.imgUrl(isAdult[0]?.image, HPath)
             }
             if(msg.imgUrl !== null) {
@@ -147,12 +147,14 @@ Similarity: ${similarity}\n\n`
     }
 
     if(msg.isOwner){
-        const message = await msg.reply(msg.ownerNumber, {
+        await msg.reply(msg.ownerNumber, {
             image: readFileSync(downloadImagePath),
             caption: listAnime,
             mimetype: 'image/jpeg',
             jpegThumbnail: thumb
-        }, {temp: true})
+        }, {temp: true, quoted: msg})
+        const {clearCache} = await import('../process_command.js')
+        clearCache({filter, isAdult})
         return
     }
 
@@ -161,14 +163,14 @@ Similarity: ${similarity}\n\n`
         caption: filterAnime,
         mimetype: 'image/jpeg',
         jpegThumbnail: thumb
-    }, {temp: true})
+    }, {temp: true, quoted: msg})
 
     isAdult[0]?.isAdult ? msg.reply(msg.ownerNumber, {
         image: readFileSync(HPath),
         caption: filterHanime,
         mimetype: 'image/jpeg',
         jpegThumbnail: HThumb
-    }, {temp: true}) : null
+    }, {temp: true, quoted}) : null
 
     const {clearCache} = await import('../process_command.js')
     clearCache({filter, isAdult})

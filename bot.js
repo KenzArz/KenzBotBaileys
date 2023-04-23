@@ -22,7 +22,7 @@ export const tempStore = (message) => {
 export async function connecting () {
   const { state, saveCreds } = await  useMultiFileAuthState('./auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
-  let client = makeWASocket({
+  client = makeWASocket.default({
     version,
     printQRInTerminal: true,
     auth: state,
