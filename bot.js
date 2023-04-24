@@ -51,7 +51,6 @@ export async function connecting () {
       const msg = m.messages[0];
       if(!msg.message) return
       await client.readMessages([msg.key]);
-      msg.message.extendedTextMessage.contextInfo.stanzaId
       const message = message_objek(msg)
       const isGroup = message?.mentions?.includes('@g.us')
 

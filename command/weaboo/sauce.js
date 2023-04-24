@@ -138,41 +138,43 @@ Similarity: ${similarity}\n\n`
         }
     }
     else {
-        if(!isQuoted.isMedia) return errorMessage
+        if(!isQuoted?.isMedia) return errorMessage
         thumb = await isQuoted.resize(downloadImagePath)
 
         if(isAdult[0]?.isAdult) {
             HThumb = await isQuoted.resize(HPath)
         }
     }
-
+    
+    const {tempStore} = await import('../../bot.js')
     if(msg.isOwner){
-        await msg.reply(msg.ownerNumber, {
+        const allNime = await msg.reply(msg.ownerNumber, {
             image: readFileSync(downloadImagePath),
             caption: listAnime,
             mimetype: 'image/jpeg',
             jpegThumbnail: thumb
-        }, {temp: true, quoted: msg})
-        const {clearCache} = await import('../process_command.js')
-        clearCache({filter, isAdult})
+        }, {quoted: msg.quotedID})
+        tempStore({message: allNime, filter})
         return
     }
 
-    msg.reply(msg.mentions, {
+    const animeContent = await msg.reply(msg.mentions, {
         image: readFileSync(downloadImagePath),
         caption: filterAnime,
         mimetype: 'image/jpeg',
         jpegThumbnail: thumb
-    }, {temp: true, quoted: msg})
+    }, {quoted: msg.quotedID})
+    tempStore({message: animeContent, filter})
 
-    isAdult[0]?.isAdult ? msg.reply(msg.ownerNumber, {
-        image: readFileSync(HPath),
-        caption: filterHanime,
-        mimetype: 'image/jpeg',
-        jpegThumbnail: HThumb
-    }, {temp: true, quoted}) : null
 
-    const {clearCache} = await import('../process_command.js')
-    clearCache({filter, isAdult})
+    if(isAdult[0]?.isAdult) {
+        await  msg.reply(msg.ownerNumber, {
+            image: readFileSync(HPath),
+            caption: filterHanime,
+            mimetype: 'image/jpeg',
+            jpegThumbnail: HThumb
+        }, {quote: msg.quotedID})
+    }
+
     
 }

@@ -133,11 +133,7 @@ async function delayMsg(contact, body, options = {}) {
   
   await client.sendPresenceUpdate('paused', contact)
 
-  const tempMessage = await client.sendMessage(contact, body, options)
-
-  if(options.temp){
-  const {tempStore} = await import('./bot.js')
-  tempStore(tempMessage)}
+  await client.sendMessage(contact, body, options)
 }
 
 async function downloadMedia(imageMessage) {
