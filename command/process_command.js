@@ -4,7 +4,14 @@ let mainDir = './command'
 
 function dirPath() {
     const checkDir = readdirSync(mainDir, {withFileTypes: true}).map(item => {
-        if(!item.isDirectory()) return
+        if(!item.isDirectory()) {
+            if(item.name !== 'process_command.js'){
+                return {
+                    item: item.name.split('.js')[0],
+                    owner: false
+                }
+            }
+        }
         return {
             item: item.name,
             subItem: readdirSync(`${mainDir}/${item.name}`, {withFileTypes: true}).map(subItem => {
@@ -21,13 +28,13 @@ function filePath(body) {
     const checkDir = dirPath()
     const delPrefix = body.slice(1)
     
-    const getItem = checkDir.find(m => m.subItem.find(k => k == delPrefix))
+    const getItem = checkDir.find(m => m.subItem?.find(k => k == delPrefix)) || checkDir.find(m => m.item == delPrefix)
     if(!getItem) return {text: `fitur ${body} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`}
     const setPath = {
         item: getItem.item,
-        subItem: getItem.subItem.find(subItem => subItem === delPrefix.toLowerCase())
+        subItem: getItem?.subItem?.find(subItem => subItem === delPrefix.toLowerCase()) || ''
     }
-    return {path: `./${setPath.item}/${setPath.subItem}.js`}
+    return {path: `./${setPath.item}${setPath.subItem ? `/${setPath.subItem}` : ''}.js`}
     
 }
 
@@ -66,7 +73,7 @@ export async function processCommand(msg, option = {}) {
 
 async function type(content, body) {
     const ctx = content.message.message.ephemeralMessage.message.imageMessage.contextInfo.quotedMessage
-    const bodyMesage = ctx.imageMessage.caption.slice(1) || ctx.extendedTextMessage.text.slice(1)
+    const bodyMesage = ctx.imageMessage?.caption?.slice(1) || ctx.extendedTextMessage?.text?.slice(1)
     
     switch (bodyMesage) {
         case 'sauce':

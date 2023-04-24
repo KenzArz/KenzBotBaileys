@@ -58,16 +58,16 @@ export default async function (msg) {
     const isAdult = filter.filter(adultContent => adultContent.isAdult)
     filter.forEach((adultContent, index) => adultContent.isAdult ? filter.splice(index, 1) : '')
 
-    let listAnime =  `╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`
+    let listAnime =  `  ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`
 
     for(const [index, content] of filter.entries()) {
         const getPresentase = content.similarity.toString()
-        const [_, persentase] = getPresentase.split('.')
+        const [perfect, persentase] = getPresentase.split('.')
 
-        const realNumber = persentase.slice(0, 2)
-        const desimal = persentase.slice(2, 4)
+        const realNumber = persentase?.slice(0, 2) || perfect + '00'
+        const desimal = persentase?.slice(2, 4) || undefined
 
-        const similarity = `${realNumber}.${desimal}%`
+        const similarity = `${realNumber}${desimal ? `.${desimal}` : ''}%`
 
         
         listAnime += `${index + 1}. Title: ${content.native}
@@ -77,15 +77,15 @@ Episode: ${content.episode || '-'}
 Similarity: ${similarity}\n\n`
     } 
 
-    listAnime += `╾─͙─͙─͙Info Hanime─͙─͙─͙╼\n`
+    listAnime += `  ╾─͙─͙─͙Info Hanime─͙─͙─͙╼\n`
     for(const [index, adultContent] of isAdult.entries()) {
         const getPresentase = adultContent.similarity.toString()
-        const [_, persentase] = getPresentase.split('.')
+        const [perfect, persentase] = getPresentase.split('.')
 
-        const realNumber = persentase.slice(0, 2)
-        const desimal = persentase.slice(2, 4)
+        const realNumber = persentase.slice(0, 2) || perfect + '00'
+        const desimal = persentase.slice(2, 4) || undefined
 
-        const similarity = `${realNumber}.${desimal}%`
+        const similarity = `${realNumber}${desimal ? `.${desimal}` : ''}%`
         
 
         listAnime += `${index + 1}. Title: ${adultContent.native}

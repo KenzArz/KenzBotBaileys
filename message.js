@@ -11,8 +11,9 @@ export function message_objek(msg) {
 
   const isMedia = getType?.isMedia ? true : null
 
-  const messageID = msg.key.id,
-  room_chat = msg.key.remoteJid,
+  const key = msg.key,
+  messageID = key.id,
+  room_chat = key.remoteJid,
   contactName = msg.pushName,
   bot = key.fromMe,
   ownerNumber = process.env.OWNER + S_WHATSAPP_NET,
@@ -133,7 +134,7 @@ async function delayMsg(contact, body, options = {}) {
   
   await client.sendPresenceUpdate('paused', contact)
 
-  await client.sendMessage(contact, body, options)
+  return client.sendMessage(contact, body, options)
 }
 
 async function downloadMedia(imageMessage) {
