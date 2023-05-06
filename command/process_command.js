@@ -27,7 +27,7 @@ function dirPath() {
 
 function filePath(body) {
     const checkDir = dirPath()
-    const delPrefix = body.slice(1)
+    const delPrefix = body.slice(1).split(' ')[0]
     
     const getItem = checkDir.find(m => m.subItem?.find(k => k == delPrefix)) || checkDir.find(m => m.item == delPrefix)
     if(!getItem) return {text: `fitur ${body} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`}
@@ -42,7 +42,7 @@ function filePath(body) {
 export async function processCommand(msg, option = {}) {
 
     if(option.quoted) {
-        const quoted = msg.quotedMessage()
+        const quoted = await msg.quotedMessage()
         const {temp} = await import('../bot.js')
         const id = temp.find(({message}) => message.key.id == quoted.stanza)
 
@@ -61,7 +61,6 @@ export async function processCommand(msg, option = {}) {
             jpegThumbnail: thumb
         })
     
-
         return
     }
     

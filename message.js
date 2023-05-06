@@ -34,7 +34,7 @@ export function message_objek(msg) {
     isOwner,
     ownerNumber,
     quotedID: msg,
-    quotedMessage: () => {
+    quotedMessage: async () => {
       key.participant = msg.message?.extendedTextMessage?.contextInfo?.participant
 
       const ctxInfo = msg.message?.extendedTextMessage?.contextInfo || msg.message?.imageMessage?.contextInfo || msg.message?.audioMessage?.contextInfo
@@ -62,17 +62,17 @@ export function message_objek(msg) {
           return download;
           
         } : null,
-        imgUrl: isMedia ? async (url, path) => {
+        urlDownload: async (url, path) => {
           const urlImage = await downloadMediaUrl(url, path)
           return urlImage
-        } : null,
+        },
         reply: async (contact, text, options) => {
           await delayMsg(contact, text, options)
         },
-        resize: isMedia ? async (image) => {
+        resize: async (image) => {
           const media = await sharpImage(image)
           return media
-        } : null
+        }
       }
     },
     media: isMedia ? async () => {
@@ -80,10 +80,10 @@ export function message_objek(msg) {
       return download
       
     } : null,
-    imgUrl: isMedia ? async (url, path) => {
+    urlDownload: async (url, path) => {
       const urlImage = await downloadMediaUrl(url, path)
       return urlImage
-    } : null,
+    },
     reply: async (contact, text, options) =>{
       return delayMsg(contact, text, options)
     },

@@ -1,7 +1,7 @@
 import { Sticker, StickerTypes } from "wa-sticker-formatter";
 
 export default async function (msg) {
-    const isQuoted = msg.quotedMessage()
+    const isQuoted = await msg.quotedMessage()
     const errorMessage = 'tidak ada image untuk diconvert menjadi stiker'
     let bufferImage;
     

@@ -4,11 +4,11 @@ import fetch from 'node-fetch'
 
 export default async function (msg) {
 
-    // const quotedMessage = msg.quotedMessage()
-    // const param = quotedMessage.body || msg.body
-    
+    const quotedMessage = await msg.quotedMessage()
+    const param = quotedMessage.body || msg.body
+
     let data;
-    const YTshort = link.includes('shorts') ? true : false
+    const YTshort = param.includes('shorts') ? true : false
     if(!YTshort) {
         data  = await fetch(`https://api.zahwazein.xyz/searching/ytsearch?query=${encodeURIComponent(title)}%20xl&apikey=zenzkey_d4d353be64`)
     }
@@ -17,13 +17,15 @@ export default async function (msg) {
         if(data.statusText !== 'OK')return
         const {result: {title, thumb, getVideo}} = await data.json()
 
-        fetch(getVideo).then(m => m.body.pipe(createWriteStream('./short.mp4')))
-        fetch(thumb).then(m => m.body.pipe(createWriteStream('./thumShort.jpeg')))
+        await msg.urlDownload(getVideo, './short.mp4')
+        await msg.urlDownload(thumb, './thumShort.jpeg')
+
+        const thumbnail = await msg.resize('./thumShort.jpeg')
 
         msg.reply(msg.mentions, {
             caption: title,
-            video: readFileSync('./short'),
-            jpegThumbnail: readFileSync('./thumShort.jpeg')
+            video: readFileSync('./short.mp4'),
+            jpegThumbnail: thumbnail
         }, {counter: true})
         
         return

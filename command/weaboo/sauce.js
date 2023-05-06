@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 
 export default async function (msg) {
     
-    const isQuoted = msg.quotedMessage()
+    const isQuoted = await msg.quotedMessage()
     const errorMessage = 'tidak ada image untuk dicari'
     let bufferImage;
 
@@ -104,11 +104,11 @@ Similarity: ${similarity}\n\n`
     const imageAnime = filter[0].image
     let downloadImagePath = './anime.jpeg';
     try {
-        if(isQuoted?.imgUrl !== null && isQuoted) {
-            await isQuoted.imgUrl(imageAnime, downloadImagePath)
+        if(isQuoted?.urlDownload !== null && isQuoted) {
+            await isQuoted.urlDownload(imageAnime, downloadImagePath)
         }
-        if(msg.imgUrl !== null) {
-            await msg.imgUrl(imageAnime, downloadImagePath)
+        if(msg.urlDownload !== null) {
+            await msg.urlDownload(imageAnime, downloadImagePath)
         }
     } catch (error) {
         throw error + '\n\nurl tidak valid'
@@ -117,11 +117,11 @@ Similarity: ${similarity}\n\n`
     let HPath = './warning.jpeg'
     if(isAdult[0]?.isAdult) {
         try {
-            if(isQuoted?.imgUrl !== null && isQuoted) {
-                await isQuoted.imgUrl(isAdult[0]?.image, HPath)
+            if(isQuoted?.urlDownload !== null && isQuoted) {
+                await isQuoted.urlDownload(isAdult[0]?.image, HPath)
             }
-            if(msg.imgUrl !== null) {
-                await msg.imgUrl(isAdult[0]?.image, HPath)
+            if(msg.urlDownload !== null) {
+                await msg.urlDownload(isAdult[0]?.image, HPath)
             }
         } catch (error) {
             throw error + '\n\nurl tidak valid'
