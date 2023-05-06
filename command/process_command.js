@@ -90,7 +90,30 @@ async function type(content, body) {
             `Episode: ${infoAnime.episode || '-'}\n`+
             `Similarity: ${similarity}`
 
-            return {content: info, media: infoAnime.image}
+            return {content: info, media: infoAnime.image};
+        case 'ytdl':
+            const {downloaded} = content
+            const mediaDownload = downloaded[parseInt(body) - 1]
+            
+            let media = {}
+            switch(body.split(' ')[1]) {
+                case '-v':
+                    media.video = mediaDownload.video
+                    media.jpegThumbnail = await msg.resize(mediaDownload.video)
+                    break
+                case '-vd':
+                        media.document = mediaDownload.video
+                        break
+                case '-a':
+                    media.audio = mediaDownload.audio
+                    break
+                case '-ad':
+                    media.document = mediaDownload.audio
+                    break
+            }
+
+            await msg.reply(msg.mentions, media)
+            
         default:
             return;
     }

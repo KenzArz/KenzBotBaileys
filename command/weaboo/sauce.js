@@ -58,7 +58,7 @@ export default async function (msg) {
     const isAdult = filter.filter(adultContent => adultContent.isAdult)
     filter.forEach((adultContent, index) => adultContent.isAdult ? filter.splice(index, 1) : '')
 
-    let listAnime =  `  ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`
+    let listAnime =  `      ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n\n`
 
     for(const [index, content] of filter.entries()) {
         const getPresentase = content.similarity.toString()
@@ -77,7 +77,7 @@ Episode: ${content.episode || '-'}
 Similarity: ${similarity}\n\n`
     } 
 
-    listAnime += `  ╾─͙─͙─͙Info Hanime─͙─͙─͙╼\n`
+    listAnime += `      ╾─͙─͙─͙Info Hanime─͙─͙─͙╼\n`
     for(const [index, adultContent] of isAdult.entries()) {
         const getPresentase = adultContent.similarity.toString()
         const [perfect, persentase] = getPresentase.split('.')
@@ -102,26 +102,26 @@ Similarity: ${similarity}\n\n`
     const filterHanime = listAnime.slice(indexHanime)
 
     const imageAnime = filter[0].image
-    let downloadImagePath = './anime.jpeg';
+    let downloadImage
     try {
         if(isQuoted?.urlDownload !== null && isQuoted) {
-            await isQuoted.urlDownload(imageAnime, downloadImagePath)
+            downloadImage = await isQuoted.urlDownload(imageAnime)
         }
         if(msg.urlDownload !== null) {
-            await msg.urlDownload(imageAnime, downloadImagePath)
+            downloadImage = await msg.urlDownload(imageAnime)
         }
     } catch (error) {
         throw error + '\n\nurl tidak valid'
     }
 
-    let HPath = './warning.jpeg'
+    let HImage
     if(isAdult[0]?.isAdult) {
         try {
             if(isQuoted?.urlDownload !== null && isQuoted) {
-                await isQuoted.urlDownload(isAdult[0]?.image, HPath)
+                HImage = await isQuoted.urlDownload(isAdult[0]?.image)
             }
             if(msg.urlDownload !== null) {
-                await msg.urlDownload(isAdult[0]?.image, HPath)
+                HImage = await msg.urlDownload(isAdult[0]?.image)
             }
         } catch (error) {
             throw error + '\n\nurl tidak valid'
@@ -131,25 +131,25 @@ Similarity: ${similarity}\n\n`
     let HThumb;
     if(!isQuoted || msg.isMedia) {
         if(!msg.isMedia) return errorMessage
-        thumb =  await msg.resize(downloadImagePath)
+        thumb =  await msg.resize(downloadImage)
 
         if(isAdult[0]?.isAdult) {
-            HThumb = msg.resize(HPath)
+            HThumb = await msg.resize(HImage)
         }
     }
     else {
         if(!isQuoted?.isMedia) return errorMessage
-        thumb = await isQuoted.resize(downloadImagePath)
+        thumb = await isQuoted.resize(downloadImage)
 
         if(isAdult[0]?.isAdult) {
-            HThumb = await isQuoted.resize(HPath)
+            HThumb = await isQuoted.resize(HImage)
         }
     }
     
     const {tempStore} = await import('../../bot.js')
     if(msg.isOwner){
         const allNime = await msg.reply(msg.ownerNumber, {
-            image: readFileSync(downloadImagePath),
+            image: downloadImage,
             caption: listAnime,
             mimetype: 'image/jpeg',
             jpegThumbnail: thumb
@@ -159,7 +159,7 @@ Similarity: ${similarity}\n\n`
     }
 
     const animeContent = await msg.reply(msg.mentions, {
-        image: readFileSync(downloadImagePath),
+        image: downloadImage,
         caption: filterAnime,
         mimetype: 'image/jpeg',
         jpegThumbnail: thumb
@@ -169,7 +169,7 @@ Similarity: ${similarity}\n\n`
 
     if(isAdult[0]?.isAdult) {
         await  msg.reply(msg.ownerNumber, {
-            image: readFileSync(HPath),
+            image: HImage,
             caption: filterHanime,
             mimetype: 'image/jpeg',
             jpegThumbnail: HThumb

@@ -143,18 +143,14 @@ async function downloadMedia(imageMessage) {
 
 async function downloadMediaUrl(url, path) {
   const getUrl = await fetch(url)
-  return new Promise((res, rej) => {
-    getUrl.body
-      .pipe(createWriteStream(path))
-      .on('finish', () => res('succes'))
-      .on('error', () => rej('failed'))
-  })
+  return getUrl.buffer()
+  
 }
 
 async function sharpImage(image) {
   const resize = await sharp(image)
-    .resize(50,25)
-    .jpeg({quality: 35})
+    .resize(300, 150)
+    .jpeg({quality: 100})
     .toBuffer()
   return resize
 }
