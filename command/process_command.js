@@ -11,6 +11,7 @@ function dirPath() {
                     owner: false
                 }
             }
+            return
         }
         return {
             item: item.name,

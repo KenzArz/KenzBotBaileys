@@ -125,7 +125,7 @@ return type(arrType)
 }
 
 async function delayMsg(contact, body, options = {}) {
-  options.ephemeralExpiration = 60*60*24 
+  options.ephemeralExpiration = !options.counter ? 60*60*24 : undefined
   await client.presenceSubscribe(contact)
   await delay(options.kuisDate || 500)
 
