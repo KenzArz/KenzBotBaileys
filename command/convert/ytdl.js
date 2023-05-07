@@ -39,7 +39,7 @@ export default async function (msg) {
     
     const getData = await data.json(),
 
-    newData = []
+    downloaded = []
     for(const [i, result] of getData.result.entries()){
         if(result.type !== 'video')continue
         if(parseInt(result.timestamp.split(':')[0]) > 5 || result.timestamp.split(':').length > 2)continue
@@ -54,7 +54,7 @@ export default async function (msg) {
             timestamp: duration,
             author:{name:author}} = result
 
-            newData.push({
+            downloaded.push({
                 url,
                 title,
                 thumbnail,
@@ -63,23 +63,6 @@ export default async function (msg) {
                 duration, 
                 author})
 
-    }
-
-    const downloaded = []
-    for(const detailDownload of newData) {
-        const youtubeData = await fetch(`https://api.zahwazein.xyz/downloader/youtube?apikey=zenzkey_d4d353be64&url=${encodeURIComponent(detailDownload.url)}`)
-
-        const downloadMedia = await youtubeData.json()
-
-        const audio = downloadMedia.result.getAudio
-        const video = downloadMedia.result.getVideo
-
-        detailDownload.audio = await msg.urlDownload(audio)
-        detailDownload.video = await msg.urlDownload(video)
-
-        delete detailDownload.url
-
-        downloaded.push(detailDownload)
     }
     
     let youtubeInfo = `     ╾─͙─͙─͙Youtube Download List─͙─͙─͙╼\n\n`

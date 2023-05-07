@@ -46,20 +46,45 @@ export async function processCommand(msg, option = {}) {
         const {temp} = await import('../bot.js')
         const id = temp.find(({message}) => message.key.id == quoted.stanza)
 
-        const {content, media} = await type(id, msg.body)
+        const {content, media, type, option = {}} = await selector(id, msg.body)
+
+        let downloadMedia
+        let downloadThumb;
         try {
-            await quoted.imgUrl(media, './infoMedia.jpeg')    
+            downloadMedia = await quoted.urlDownload(media.content || media)
+            if(media.jpegThumbnail) downloadThumb = await quoted.urlDownload(media.jpegThumbnail)
         } catch (error) {
             throw error + '\n\nurl tidak valid'
         }
         
-        const thumb = await quoted.resize('./infoMedia.jpeg')
-        msg.reply(msg.mentions, {
-            image: readFileSync('./infoMedia.jpeg'),
-            caption: content,
-            mimetype: 'image/jpeg',
-            jpegThumbnail: thumb
-        })
+        const thumb = await quoted.resize(downloadThumb)
+
+        const mimetype = {}
+        switch (type) {
+            case 'image':
+                mimetype.image = downloadMedia
+                mimetype.jpegThumbnail = thumb
+                mimetype.mimetype = 'image/jpeg'
+                break;
+            case 'video':
+                mimetype.video = downloadMedia
+                mimetype.jpegThumbnail = thumb
+                mimetype.mimetype = 'video/mp4'
+                break
+            case 'audio':
+                mimetype.audio = downloadMedia
+                mimetype.mimetype = 'audio/mp4'
+                break
+            case 'document':
+                mimetype.document = downloadMedia
+                break
+            default:
+                break;
+        }
+        
+        mimetype.caption = content
+        
+        await msg.reply(msg.mentions, mimetype, option)
     
         return
     }
@@ -71,49 +96,75 @@ export async function processCommand(msg, option = {}) {
     await Run(msg)
 }
 
-async function type(content, body) {
-    const ctx = content.message.message.ephemeralMessage.message.imageMessage.contextInfo.quotedMessage
+async function selector(content, body) {
+    const ctx = content.message.message.ephemeralMessage.message.imageMessage.contextInfo.quotedMessage || content.message.message.ephemeralMessage.message.extendedTextMessage.contextInfo.quotedMessage
     const bodyMesage = ctx.imageMessage?.caption?.slice(1) || ctx.extendedTextMessage?.text?.slice(1)
     
-    switch (bodyMesage) {
+    switch (bodyMesage.split(' ')[0]) {
         case 'sauce':
             const {filter} = content
             const infoAnime = filter[parseInt(body) - 1]
             
-            const [_, getPresentase] = infoAnime.similarity.toString().split('.')
-            const similarity = `${getPresentase.slice(0,2)}.${getPresentase.slice(2,4)}%`
+            const [perfect, persentase] = infoAnime.similarity.toString().split('.')
+
+            const realNumber = persentase?.slice(0, 2) || perfect + '00'
+            const desimal = persentase?.slice(2, 4) || undefined
+
+            const similarity = `${realNumber}${desimal ? `.${desimal}` : ''}%`
             
-            const info = `  ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`+
+            const info = `      ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`+
             `Title: ${infoAnime.native}\n`+
             `Romaji: ${infoAnime.romaji || '-'}\n`+
             `English: ${infoAnime.english || '-'}\n`+
             `Episode: ${infoAnime.episode || '-'}\n`+
             `Similarity: ${similarity}`
 
-            return {content: info, media: infoAnime.image};
+            return {content: info, media: infoAnime.image, type: 'image'};
         case 'ytdl':
+            const [bodyMessage, detailInfo] = body.split(' ')
+            if(!detailInfo) return `sertakan keterangan untuk mengirim file dalam bentuk apa
+            
+Keterangan: 
+-v: untuk Video
+-a: untuk audio
+-vd: untuk video yang dikirim melalui document
+-ad: untuk audio yang dikirim melalui document
+
+*CONTOH*: 5 -a`
+            
             const {downloaded} = content
-            const mediaDownload = downloaded[parseInt(body) - 1]
+            const mediaDownload = downloaded[parseInt(bodyMessage) - 1]
+            const youtubeData = await fetch(`https://api.zahwazein.xyz/downloader/youtube?apikey=zenzkey_d4d353be64&url=${mediaDownload.url}`)
+            if(youtubeData.statusText !== 'OK')return '404 Fot Found'
+
+            const parse = await youtubeData.json()
+
+            const video = parse.result.getVideo
+            const audio = parse.result.getAudio
             
             let media = {}
+            let type;
             switch(body.split(' ')[1]) {
                 case '-v':
-                    media.video = mediaDownload.video
-                    media.jpegThumbnail = await msg.resize(mediaDownload.video)
+                    media.content = video
+                    media.jpegThumbnail = mediaDownload.thumbnail
+                    type = 'video'
                     break
                 case '-vd':
-                        media.document = mediaDownload.video
-                        break
-                case '-a':
-                    media.audio = mediaDownload.audio
+                    media.content = video
+                    type = 'document'
                     break
                 case '-ad':
-                    media.document = mediaDownload.audio
+                    media.content = audio
+                    type = 'document'
+                    break
+                case '-a':
+                    media.content = audio
+                    type = 'audio'
                     break
             }
-
-            await msg.reply(msg.mentions, media)
-            
+            return {content: '', media, type, option: {counter: true}}
+        
         default:
             return;
     }

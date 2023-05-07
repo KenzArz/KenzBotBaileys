@@ -82,8 +82,8 @@ Similarity: ${similarity}\n\n`
         const getPresentase = adultContent.similarity.toString()
         const [perfect, persentase] = getPresentase.split('.')
 
-        const realNumber = persentase.slice(0, 2) || perfect + '00'
-        const desimal = persentase.slice(2, 4) || undefined
+        const realNumber = persentase?.slice(0, 2) || perfect + '00'
+        const desimal = persentase?.slice(2, 4) || undefined
 
         const similarity = `${realNumber}${desimal ? `.${desimal}` : ''}%`
         

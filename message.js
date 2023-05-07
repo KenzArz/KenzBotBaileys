@@ -87,10 +87,10 @@ export function message_objek(msg) {
     reply: async (contact, text, options) =>{
       return delayMsg(contact, text, options)
     },
-    resize: isMedia ? async (image) => {
+    resize: async (image) => {
       const media = await sharpImage(image)
       return media
-    } : null
+    }
   }
 }
 
@@ -141,7 +141,7 @@ async function downloadMedia(imageMessage) {
   return await downloadMediaMessage(imageMessage, 'buffer')
 }
 
-async function downloadMediaUrl(url, path) {
+async function downloadMediaUrl(url) {
   const getUrl = await fetch(url)
   return getUrl.buffer()
   
