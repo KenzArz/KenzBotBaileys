@@ -63,11 +63,13 @@ export async function processCommand(msg, option = {}) {
         switch (type) {
             case 'image':
                 mimetype.image = downloadMedia
+                mimetype.caption = content
                 mimetype.jpegThumbnail = thumb
                 mimetype.mimetype = 'image/jpeg'
                 break;
             case 'video':
                 mimetype.video = downloadMedia
+                mimetype.caption = content
                 mimetype.jpegThumbnail = thumb
                 mimetype.mimetype = 'video/mp4'
                 break
@@ -81,9 +83,7 @@ export async function processCommand(msg, option = {}) {
             default:
                 break;
         }
-        
-        mimetype.caption = content
-        
+                
         await msg.reply(msg.mentions, mimetype, option)
     
         return
@@ -163,7 +163,7 @@ Keterangan:
                     type = 'audio'
                     break
             }
-            return {content: '', media, type, option: {counter: true}}
+            return {content: mediaDownload.title, media, type, option: {counter: true}}
         
         default:
             return;
