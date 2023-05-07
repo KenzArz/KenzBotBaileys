@@ -6,7 +6,7 @@ export default async function (msg) {
     const quotedMessage = await msg.quotedMessage()
 
     const param = quotedMessage?.body ? `${quotedMessage.body} ${msg.body.slice(6)}` : msg.body.slice(6)
-    const [body, keterangan] = param.split(' ')
+    const [body, keterangan] = param.split('-')
 
     let data;
     const link = body.includes('https') ? true : false
@@ -14,7 +14,7 @@ export default async function (msg) {
         data  = await fetch(`https://api.zahwazein.xyz/searching/ytsearch?query=${encodeURIComponent(body)}%20xl&apikey=zenzkey_d4d353be64`)
     }
     else if(link) {
-        if(!keterangan) return `sertakan keterangan untuk mengirim file dalam bentuk apa
+        if(!keterangan) return {text: `sertakan keterangan untuk mengirim file dalam bentuk apa
             
 Keterangan: 
 -v: untuk Video
@@ -22,36 +22,40 @@ Keterangan:
 -vd: untuk video yang dikirim melalui document
 -ad: untuk audio yang dikirim melalui document
 
-*CONTOH*: 5 -a`
+*CONTOH*: 5 -a`, error: true}
         
         data = await fetch(`https://api.zahwazein.xyz/downloader/youtube?apikey=zenzkey_d4d353be64&url=${body}`)
 
         if(data.statusText !== 'OK')return '404 Fot Found'
-        const {result: {title, thumb, getVideo, duration}} = await data.json()
+        const {result: {title, thumb, getVideo, getAudio, duration}} = await data.json()
 
-        if(parseInt(duration.split(':')[0]) > 5 || duration.split(':').length > 2)return 'durasi lebih dari 5 menit, tidak bisa mengconvert video lebih dari 5 menit'
+        if(parseInt(duration.split(':')[0]) > 5 || duration.split(':').length > 2)return {text: 'durasi lebih dari 5 menit, tidak bisa mengconvert video lebih dari 5 menit', error: true}
         
-        const short = await msg.urlDownload(getVideo)
         const jpegThumbnail = await msg.urlDownload(thumb)
 
         const thumbnail = await msg.resize(jpegThumbnail)
 
         const media = {}
         switch(keterangan) {
-            case '-v':
-                media.video = short
+            case 'v':
+                media.video = {url: getVideo}
                 media.caption = title
                 media.mimetype = 'video/mp4'
                 media.jpegThumbnail = thumbnail
                 break
-            case '-vd':
-                media.document = video
+            case 'vd':
+                media.document = {url: getVideo}
+                media.fileName = title
+                media.mimetype = 'video/mp4'
                 break
-            case '-ad':
-                media.document = audio
+            case 'ad':
+                media.document = {url: getAudio}
+                media.fileName = title
+                media.mimetype = 'audio/mp4'
                 break
-            case '-a':
+            case 'a':
                 media.audio = audio
+                media.mimetype = 'audio/mp4'
                 break
         }
 

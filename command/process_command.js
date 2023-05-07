@@ -48,37 +48,41 @@ export async function processCommand(msg, option = {}) {
 
         const {content, media, type, option = {}} = await selector(id, msg.body)
 
-        let downloadMedia
+        let downloadMedia;
         let downloadThumb;
         try {
-            downloadMedia = await quoted.urlDownload(media.content || media)
-            if(media.jpegThumbnail) downloadThumb = await quoted.urlDownload(media.jpegThumbnail)
+            if(!media.content) downloadMedia = await quoted.urlDownload(media)
+            if(media?.jpegThumbnail) downloadThumb = await quoted.urlDownload(media.jpegThumbnail)
         } catch (error) {
             throw error + '\n\nurl tidak valid'
         }
         
-        const thumb = await quoted.resize(downloadThumb)
+        let thumb
+        const thumbData = downloadThumb || downloadMedia 
+        if(thumbData && type !== 'audio' || type !== 'document')thumb = await quoted.resize(thumbData)
 
         const mimetype = {}
-        switch (type) {
+        switch (type.split(' ')[0]) {
             case 'image':
-                mimetype.image = downloadMedia
+                mimetype.image = {url: media.content || media}
                 mimetype.caption = content
                 mimetype.jpegThumbnail = thumb
                 mimetype.mimetype = 'image/jpeg'
                 break;
             case 'video':
-                mimetype.video = downloadMedia
+                mimetype.video = {url: media.content}
                 mimetype.caption = content
                 mimetype.jpegThumbnail = thumb
                 mimetype.mimetype = 'video/mp4'
                 break
             case 'audio':
-                mimetype.audio = downloadMedia
+                mimetype.audio = {url: media.content}
                 mimetype.mimetype = 'audio/mp4'
                 break
             case 'document':
-                mimetype.document = downloadMedia
+                mimetype.document = {url: media.content}
+                mimetype.fileName = media.title
+                mimetype.mimetype = type.includes('video') ? 'video/mp4' : 'audio/mp4'
                 break
             default:
                 break;
@@ -93,7 +97,8 @@ export async function processCommand(msg, option = {}) {
     if(checkFitur.text) return checkFitur
 
     const {default: Run} = await import(checkFitur.path)
-    await Run(msg)
+    const command = await Run(msg)
+    if(command.error) return command.text
 }
 
 async function selector(content, body) {
@@ -152,11 +157,13 @@ Keterangan:
                     break
                 case '-vd':
                     media.content = video
-                    type = 'document'
+                    media.title = mediaDownload.title
+                    type = 'document video'
                     break
                 case '-ad':
                     media.content = audio
-                    type = 'document'
+                    media.title = mediaDownload.title
+                    type = 'document audio'
                     break
                 case '-a':
                     media.content = audio
