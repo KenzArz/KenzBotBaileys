@@ -17,13 +17,13 @@
     </a>
   </p>
   <p align ="center">
-  <a href="https://KenzArz/KenzBotBaileys/">
+  <a href="https://github.com/KenzArz/KenzBotBaileys/">
     <img title ="hits" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/KenzArz/KenzBotBaileys&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=white&title=hits-today&edge_flat=true">
   </a>
-  <a href="https://KenzArz/KenzBotBaileys/">
+  <a href="https://github.com/KenzArz/KenzBotBaileys/">
     <img src="https://badges.frapsoft.com/os/v2/open-source.svg">
   </a>
-  <a href="https://KenzArz/KenzBotBaileys/">
+  <a href="https://github.com/KenzArz/KenzBotBaileys/">
     <img src="https://img.shields.io/badge/Maintenance-Yes-critical.svg?style=flat-square&logo=github"
   </a>
   </p>
