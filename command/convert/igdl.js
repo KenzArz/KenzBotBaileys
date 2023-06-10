@@ -1,4 +1,4 @@
-import { POST } from '../../system/scraper/savefrom'
+import { POST } from '../../system/scraper/savefrom.js'
 
 export default async function (msg) {
   const quotedMessage = await msg.quotedMessage()
