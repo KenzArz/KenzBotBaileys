@@ -60,7 +60,7 @@ a: untuk audio
 
         if(typeContent == 'mp3') {
             ID.fquality = '128'
-            const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, convert: true})
+            const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, isConvert: true})
             await msg.reply(msg.mentions, {
                 audio: {url: convert},
                 mimetype: "audio/mp4"

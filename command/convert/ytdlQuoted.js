@@ -8,7 +8,7 @@ export default async function (msg, {downloaded, ID, thumbnail}) {
     const quality = /1080|720|480|360|240|144|128/.exec(bitrate)[0]
     ID.fquality = quality
 
-    const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, convert: true})
+    const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, isConvert: true})
     await msg.reply(msg.mentions, {
         video: {url: convert},
         jpegThumbnail: thumbnail,

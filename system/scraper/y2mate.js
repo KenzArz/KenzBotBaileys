@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
+import {JSDOM} from 'jsdom'
 
-export async function POST({url, formData, type, convert}) {
+export async function POST({url, formData, type, isConvert}) {
     const fetching = await fetch(url, {
         method: 'POST',
         headers: {
@@ -11,7 +12,7 @@ export async function POST({url, formData, type, convert}) {
         body: new URLSearchParams(Object.entries(formData))
     })
     const {result} = await fetching.json()
-    if(convert) return /<a.+?href="(.+?)"/.exec(result)[1]
+    if(isConvert) return /<a.+?href="(.+?)"/.exec(result)[1]
 
     const converting = await convert(result, type)
     return converting
