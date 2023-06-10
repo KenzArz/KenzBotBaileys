@@ -1,4 +1,3 @@
-import { createWriteStream, readFileSync } from 'fs'
 import fetch from 'node-fetch'
 import {upload} from '../../message.js'
 

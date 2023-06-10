@@ -5,8 +5,7 @@ export default async function (msg) {
 
     await msg.reaction('process')
     const quotedMessage = await msg.quotedMessage()
-
-    const content = msg?.quotedMessage()?.body || msg.body
+    const content = quotedMessage?.body || msg.body
     const [_, type, links] = content.split(' ')
 
     let data;
@@ -25,8 +24,6 @@ export default async function (msg) {
 Keterangan: 
 v: untuk Video
 a: untuk audio
-vd: untuk video yang dikirim melalui document
-ad: untuk audio yang dikirim melalui document
 
 *CONTOH*: !ytdl a link`, error: true}
 
@@ -107,9 +104,7 @@ ad: untuk audio yang dikirim melalui document
     }
 
     if(data.statusText !== 'OK')return '404 Not Found'
-    
     const getData = await data.json(),
-
     downloaded = []
     
     for(const [i, result] of getData.result.entries()){
@@ -155,10 +150,7 @@ Author: ${media.author || '-'}\n\n`
 
 Keterangan: 
 -v: untuk Video
--a: untuk audio
--vd: untuk video yang dikirim melalui document
--ad: untuk audio yang dikirim melalui document`
-
+-a: untuk audio`
 const infoMedia = await msg.reply(msg.mentions, {text: youtubeInfo}, {quoted: msg.quotedID})
 const {tempStore} = await import('../../bot.js')
 

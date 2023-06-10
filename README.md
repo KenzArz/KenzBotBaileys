@@ -24,7 +24,7 @@
     <img src="https://badges.frapsoft.com/os/v2/open-source.svg">
   </a>
   <a href="https://github.com/KenzArz/KenzBotBaileys/">
-    <img src="https://img.shields.io/badge/Maintenance-Yes-critical.svg?style=flat-square&logo=github"
+    <img src="https://img.shields.io/badge/Maintenance-Yes-critical.svg?style=flat-square&logo=github">
   </a>
   </p>
   <p align="center">
@@ -32,6 +32,6 @@
     <img src="https://img.shields.io/badge/Library-Baileys-ff69b4.svg?style=flat-square&logo=github">
     </a>
     <a href="#">
-      <img src="https://img.shields.io/badge/Website-unvailable-9cf.svg?style=flat-square&logo=github"
+      <img src="https://img.shields.io/badge/Website-unvailable-9cf.svg?style=flat-square&logo=github">
   </p>
 </p>

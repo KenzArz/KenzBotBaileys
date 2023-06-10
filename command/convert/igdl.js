@@ -1,6 +1,5 @@
 import got from 'got'
 import vm from 'vm'
-import fetch from 'node-fetch'
 
 export default async function (msg) {
   const quotedMessage = await msg.quotedMessage()
@@ -8,8 +7,8 @@ export default async function (msg) {
 
   if(!url.includes('instagram.com')) return {text: 'link tidak valid pastikan link benar dari instagram', error: true}
 
- await msg.reaction('process')
- const script = await got('https://worker.sf-tools.com/savefrom.php', {
+  await msg.reaction('process')
+  const script = await got('https://worker.sf-tools.com/savefrom.php', {
     method: 'POST',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
@@ -30,8 +29,8 @@ export default async function (msg) {
       'sf-nomad': 1
     }
   })
-   const executeCode = '[]["filter"]["constructor"](b).call(a);'
-   const fileScript = script.body.replace(executeCode, `
+  const executeCode = '[]["filter"]["constructor"](b).call(a);'
+  const fileScript = script.body.replace(executeCode, `
   try {const script = ${executeCode.split('.call')[0]}.toString();if (script.includes('function showResult')) scriptResult = script;else (${executeCode.replace(/;/, '')});} catch {}
  `)
 
@@ -40,7 +39,7 @@ export default async function (msg) {
     log: console.log
   }
   vm.createContext(context)
-   new vm.Script(fileScript).runInContext(context)
+  new vm.Script(fileScript).runInContext(context)
   const data = context.scriptResult.split('window.parent.sf.videoResult.show(')?.[1] || context.scriptResult.split('window.parent.sf.videoResult.showRows(')?.[1]
 
   const content = data.split(');')[0].split(",\"instagram.com\"")[0]
@@ -49,11 +48,10 @@ export default async function (msg) {
   
   if(!isArray) {
     let media = {}
-     for(const content of toJSON.url) {
-       media.url = content.url
-       media.type = content.type
+    for(const content of toJSON.url) {
+      media.url = content.url
+      media.type = content.type
      }
-    console.log(toJSON.thumb)
   
     let message = {}
     if(media.type == 'jpg' || media.type == 'webp') {
@@ -66,7 +64,6 @@ export default async function (msg) {
     }
 
     const fetching = await msg.urlDownload(toJSON.thumb)
-   // console.log(fetching)
     const thumb = await msg.resize(fetching)
     message.jpegThumbnail = thumb
     await msg.reply(msg.mentions, message)

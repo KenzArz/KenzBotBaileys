@@ -12,14 +12,14 @@ export default async function (msg) {
       height = 256
       width = 144
     }
-  else if(width > height) {
-    width = 256
-    height = 144
-  }
-  else if( height == width) {
-    height = 300
-    width = 300
-  }
+    else if(width > height) {
+      width = 256
+      height = 144
+    }
+    else if( height == width) {
+      height = 300
+      width = 300
+    }
     
     const thumbSize = await quoted.resize(downloadThumb, {height, width})
     
@@ -28,4 +28,5 @@ export default async function (msg) {
         mimetype: 'image/jpeg',
         jpegThumbnail: thumbSize
     })
+    await msg.reaction('')
 }

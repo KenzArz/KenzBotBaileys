@@ -1,5 +1,4 @@
 import { readdirSync, readFileSync} from 'fs'
-import fetch from "node-fetch"
 
 let mainDir = './command'
 
@@ -63,12 +62,12 @@ export async function commandQuoted(msgQuoted) {
   
     const ctx = content.message.message.ephemeralMessage.message?.imageMessage?.contextInfo?.quotedMessage || content.message.message.ephemeralMessage.message.extendedTextMessage.contextInfo.quotedMessage
     const bodyMesage = ctx.imageMessage?.caption?.slice(0) || ctx.extendedTextMessage?.text?.slice(0)
-if(msgQuoted.body.split(' ')[0] == '0')return
+    if(msgQuoted.body.split(' ')[0] == '0')return
 
-  const checkFitur = filePath(bodyMesage.split(' ')[0]+ 'Quoted')
-  const {default: Run} = await import(checkFitur.path)
-  const commandQuoted = await Run(msgQuoted, content)
-  if(commandQuoted?.error)return commandQuoted
-  return false
+    const checkFitur = filePath(bodyMesage.split(' ')[0]+ 'Quoted')
+    const {default: Run} = await import(checkFitur.path)
+    const commandQuoted = await Run(msgQuoted, content)
+    if(commandQuoted?.error)return commandQuoted
+    return false
   
 }
