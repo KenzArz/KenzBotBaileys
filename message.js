@@ -34,7 +34,7 @@ export function message_objek(msg) {
     isOwner,
     ownerNumber,
     quotedID: msg,
-    quotedMessage: async () => {
+    quotedMessage: () => {
       key.participant = msg.message?.extendedTextMessage?.contextInfo?.participant
 
       const ctxInfo = msg.message?.extendedTextMessage?.contextInfo || msg.message?.imageMessage?.contextInfo || msg.message?.audioMessage?.contextInfo
@@ -147,9 +147,9 @@ async function downloadMediaUrl(url) {
   
 }
 
-async function sharpImage(image) {
+async function sharpImage(image, size = {}) {
   const resize = await sharp(image)
-    .resize(300, 150)
+    .resize(size.width || 300, size.height || 150)
     .jpeg({quality: 100})
     .toBuffer()
   return resize

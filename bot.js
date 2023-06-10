@@ -2,7 +2,7 @@ import makeWASocket ,{ DisconnectReason,useMultiFileAuthState, fetchLatestBailey
 import {Boom} from '@hapi/boom';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
-import { processCommand } from './command/process_command.js';
+import { processCommand, commandQuoted } from './command/process_command.js';
 import {message_objek} from './message.js'
 
 export let client;
@@ -19,7 +19,7 @@ export const tempStore = (message) => {
   })
 }
 
-export async function connecting () {
+export default async function connecting () {
   const { state, saveCreds } = await  useMultiFileAuthState('./auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
   client = makeWASocket.default({
@@ -77,9 +77,9 @@ ${err.toString()}`})
             message.reply(message.ownerNumber, error)
         })
       }
-      if(parseInt(message.body)  && message?.quotedMessage && temp.length !== 0)
+      if(parseInt(message.body)  && message?.quotedMessage() && temp.length !== 0)
       {
-          await processCommand(message, {quoted: true})
+          await commandQuoted(message, {quoted: true})
             .then(text => text ? message.reply(message.mentions, text) : '')
             .catch(async err => {
           await message.reply(message.mentions, {text: `*Terjadi Error*
@@ -114,4 +114,5 @@ function errorLog(log) {
   writeFileSync(`${pathLog}/log.txt`, `${readFile}\n\n${log}`)
   return {
     text: '*Error Message Detected*\nsilahkan check log message'}
+    return
 }

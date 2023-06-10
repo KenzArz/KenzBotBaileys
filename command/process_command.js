@@ -33,146 +33,98 @@ function filePath(body) {
     if(!getItem) return {text: `fitur ${body} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`}
     const setPath = {
         item: getItem.item,
-        subItem: getItem?.subItem?.find(subItem => subItem === delPrefix.toLowerCase()) || ''
+        subItem: getItem?.subItem?.find(subItem => subItem.toLowerCase() === delPrefix.toLowerCase()) || ''
     }
     return {path: `./${setPath.item}${setPath.subItem ? `/${setPath.subItem}` : ''}.js`}
     
 }
 
-export async function processCommand(msg, option = {}) {
-
-    if(option.quoted) {
-        const quoted = await msg.quotedMessage()
-        const {temp} = await import('../bot.js')
-        const id = temp.find(({message}) => message.key.id == quoted.stanza)
-
-        const {content, media, type, option = {}} = await selector(id, msg.body)
-
-        let downloadMedia;
-        let downloadThumb;
-        try {
-            if(!media.content) downloadMedia = await quoted.urlDownload(media)
-            if(media?.jpegThumbnail) downloadThumb = await quoted.urlDownload(media.jpegThumbnail)
-        } catch (error) {
-            throw error + '\n\nurl tidak valid'
-        }
-        
-        let thumb
-        const thumbData = downloadThumb || downloadMedia 
-        if(thumbData && type !== 'audio' || type !== 'document')thumb = await quoted.resize(thumbData)
-
-        const mimetype = {}
-        switch (type.split(' ')[0]) {
-            case 'image':
-                mimetype.image = {url: media.content || media}
-                mimetype.caption = content
-                mimetype.jpegThumbnail = thumb
-                mimetype.mimetype = 'image/jpeg'
-                break;
-            case 'video':
-                mimetype.video = {url: media.content}
-                mimetype.caption = content
-                mimetype.jpegThumbnail = thumb
-                mimetype.mimetype = 'video/mp4'
-                break
-            case 'audio':
-                mimetype.audio = {url: media.content}
-                mimetype.mimetype = 'audio/mp4'
-                break
-            case 'document':
-                mimetype.document = {url: media.content}
-                mimetype.fileName = media.title
-                mimetype.mimetype = type.includes('video') ? 'video/mp4' : 'audio/mp4'
-                break
-            default:
-                break;
-        }
-                
-        await msg.reply(msg.mentions, mimetype, option)
-    
-        return
-    }
+export async function processCommand(msg) {
     
     const checkFitur =  filePath(msg.body)
     if(checkFitur.text) return checkFitur
 
     const {default: Run} = await import(checkFitur.path)
     const command = await Run(msg)
-    if(command.error) return command.text
+    if(command?.error) return command
+    return false
 }
 
-async function selector(content, body) {
+export async function commandQuoted(msgQuoted) {
+
+    const quoted = await msgQuoted.quotedMessage()
+    const {temp} = await import('../bot.js')
+    const content = temp.find(({message}) => message.key.id == quoted.stanza)
+
     const ctx = content.message.message.ephemeralMessage.message.imageMessage.contextInfo.quotedMessage || content.message.message.ephemeralMessage.message.extendedTextMessage.contextInfo.quotedMessage
-    const bodyMesage = ctx.imageMessage?.caption?.slice(1) || ctx.extendedTextMessage?.text?.slice(1)
+    const bodyMesage = ctx.imageMessage?.caption || ctx.extendedTextMessage?.text
+    if(msgQuoted.body.split(' ')[0] == '0')return
+
+    const checkFitur = filePath(bodyMesage.spit(' ')[0] + 'Quoted')
+    if(checkFitur?.text) return checkFitur
     
-    switch (bodyMesage.split(' ')[0]) {
-        case 'sauce':
-            const {filter} = content
-            const infoAnime = filter[parseInt(body) - 1]
+    const {default : Run} = await import(checkFitur.path)
+    const commandQuoted = await Run(msgQuoted, content)
+    if(commandQuoted?.error) return commandQuoted
+    return false
+//     switch (bodyMesage.split(' ')[0]) {
+//         case 'ytdl':
+//             const [bodyMessage, detailInfo] = body.split('-')
+//             if(!detailInfo) return{errorContent: {text: `sertakan keterangan untuk mengirim file dalam bentuk apa
             
-            const [perfect, persentase] = infoAnime.similarity.toString().split('.')
+// Keterangan: 
+// -v: untuk Video
+// -a: untuk audio
+// -vd: untuk video yang dikirim melalui document
+// -ad: untuk audio yang dikirim melalui document
 
-            const realNumber = persentase?.slice(0, 2) || perfect + '00'
-            const desimal = persentase?.slice(2, 4) || undefined
-
-            const similarity = `${realNumber}${desimal ? `.${desimal}` : ''}%`
+// *CONTOH*: 5 -a`, error: true}}
             
-            const info = `      ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`+
-            `Title: ${infoAnime.native}\n`+
-            `Romaji: ${infoAnime.romaji || '-'}\n`+
-            `English: ${infoAnime.english || '-'}\n`+
-            `Episode: ${infoAnime.episode || '-'}\n`+
-            `Similarity: ${similarity}`
-
-            return {content: info, media: infoAnime.image, type: 'image'};
-        case 'ytdl':
-            const [bodyMessage, detailInfo] = body.split(' ')
-            if(!detailInfo) return `sertakan keterangan untuk mengirim file dalam bentuk apa
+//             const {downloaded} = content
+//             const mediaDownload = downloaded[parseInt(bodyMessage) - 1]
+//             const youtubeData = await fetch(`https://api.zahwazein.xyz/downloader/youtube?apikey=zenzkey_d4d353be64&url=${mediaDownload.url}`)
+//             if(youtubeData.statusText !== 'OK')return {text: '404 Fot Found',error: true}
             
-Keterangan: 
--v: untuk Video
--a: untuk audio
--vd: untuk video yang dikirim melalui document
--ad: untuk audio yang dikirim melalui document
+//             const parse = await youtubeData.json()
+//             if(parse.result.message.includes('report!'))return {errorContent: {text: 'server error harap tunggu sampai server kembali pulih', error: true}}
 
-*CONTOH*: 5 -a`
+//             const video = parse.result.getVideo
+//             const audio = parse.result.getAudio
             
-            const {downloaded} = content
-            const mediaDownload = downloaded[parseInt(bodyMessage) - 1]
-            const youtubeData = await fetch(`https://api.zahwazein.xyz/downloader/youtube?apikey=zenzkey_d4d353be64&url=${mediaDownload.url}`)
-            if(youtubeData.statusText !== 'OK')return '404 Fot Found'
-
-            const parse = await youtubeData.json()
-
-            const video = parse.result.getVideo
-            const audio = parse.result.getAudio
-            
-            let media = {}
-            let type;
-            switch(body.split(' ')[1]) {
-                case '-v':
-                    media.content = video
-                    media.jpegThumbnail = mediaDownload.thumbnail
-                    type = 'video'
-                    break
-                case '-vd':
-                    media.content = video
-                    media.title = mediaDownload.title
-                    type = 'document video'
-                    break
-                case '-ad':
-                    media.content = audio
-                    media.title = mediaDownload.title
-                    type = 'document audio'
-                    break
-                case '-a':
-                    media.content = audio
-                    type = 'audio'
-                    break
-            }
-            return {content: mediaDownload.title, media, type, option: {counter: true}}
+//             let media = {}
+//             let type;
+//             switch(body.split(' ')[1]) {
+//                 case '-v':
+//                     media.content = video
+//                     media.jpegThumbnail = mediaDownload.thumbnail
+//                     type = 'video'
+//                     break
+//                 case '-vd':
+//                     media.content = video
+//                     media.title = mediaDownload.title
+//                     type = 'document video'
+//                     break
+//                 case '-ad':
+//                     media.content = audio
+//                     media.title = mediaDownload.title
+//                     type = 'document audio'
+//                     break
+//                 case '-a':
+//                     media.content = audio
+//                     type = 'audio'
+//                     break
+//             }
+//             return {content: mediaDownload.title, media, type, option: {counter: true}}
         
-        default:
-            return;
-    }
+//         default:
+//             return{errorContent: {text: `sertakan keterangan untuk mengirim file dalam bentuk apa
+            
+//             Keterangan: 
+//             -v: untuk Video
+//             -a: untuk audio
+//             -vd: untuk video yang dikirim melalui document
+//             -ad: untuk audio yang dikirim melalui document
+            
+//             *CONTOH*: 5 -a`, error: true}}
+//     }
 }

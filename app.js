@@ -9,6 +9,6 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, async () => {
-    await connecting()
+    await connecting.default()
     console.log('ACTIVATING BOT...')
 })

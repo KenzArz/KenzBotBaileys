@@ -175,6 +175,5 @@ Similarity: ${similarity}\n\n`
             jpegThumbnail: HThumb
         }, {quote: msg.quotedID})
     }
-
     
 }
