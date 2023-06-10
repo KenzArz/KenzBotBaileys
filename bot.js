@@ -22,10 +22,10 @@ export const tempStore = (message) => {
 const logger= pino({ level: 'silent' }) 
 const store = makeInMemoryStore({logger})
 // can be read from a file
-store.readFromFile('./baileys_store.json')
+store.readFromFile('system/baileys_store.json')
 // saves the state to a file every 10s
  setInterval(() => {
-     store.writeToFile('./baileys_store.json')
+     store.writeToFile('system/baileys_store.json')
 }, 10_000)
 
 export default async function connecting () {
@@ -118,7 +118,7 @@ ${err.toString()}`})
 }
 
 function errorLog(log) {
-  const pathLog = 'command/log'
+  const pathLog = 'system/log'
   if(!existsSync(pathLog)){
     mkdirSync(pathLog)
     writeFileSync(`${pathLog}/log.txt`, log)

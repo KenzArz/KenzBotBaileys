@@ -161,7 +161,7 @@ async function sharpImage(image, size={}) {
 }
 
 async function react(key, emoji) {
-  const emotJson = JSON.parse(readFileSync('emoji/emoji.json'))
+  const emotJson = JSON.parse(readFileSync('system/emoji/emoji.json'))
   const emot = emotJson[emoji]
   return client.sendMessage(key.remoteJid, {
     react: {
