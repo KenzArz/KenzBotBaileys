@@ -30,7 +30,7 @@ function filePath(body) {
     const delPrefix = body.slice(1).split(' ')[0]
     
     const getItem = checkDir.find(m => m.subItem?.find(k => k == delPrefix)) || checkDir.find(m => m.item == delPrefix)
-    if(!getItem) return {text: `fitur ${body} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`}
+    if(!getItem) return {text: `fitur ${body.split(' ')[0]} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`}
     const setPath = {
         item: getItem.item,
         subItem: getItem?.subItem?.find(subItem => subItem.toLowerCase() === delPrefix.toLowerCase()) || ''
