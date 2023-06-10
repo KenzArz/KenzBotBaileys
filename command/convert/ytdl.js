@@ -1,70 +1,108 @@
 import fetch from 'node-fetch'
-
+import js from 'jsdom'
+const {JSDOM} = js
 
 export default async function (msg) {
 
+    await msg.reaction('process')
     const quotedMessage = await msg.quotedMessage()
 
-    const param = quotedMessage?.body ? `${quotedMessage.body} ${msg.body.slice(6)}` : msg.body.slice(6)
-    const [body, keterangan] = param.split('-')
+    const content = msg?.quotedMessage()?.body || msg.body
+    const [_, type, links] = content.split(' ')
 
     let data;
-    const link = body.includes('https') ? true : false
-    if(!link) {
-        data  = await fetch(`https://api.zahwazein.xyz/searching/ytsearch?query=${encodeURIComponent(body)}%20xl&apikey=zenzkey_d4d353be64`)
+    const isLink = links?.includes('https')  || type?.includes('https') ? true : false
+    if(!isLink) {
+      return {
+        text: 'maintenance, untuk sekarang fitur ini hanya support untuk convert link yt',
+        error: true
+      }
+        data  = await fetch(`https://api.zahwazein.xyz/searching/ytsearch?query=${encodeURIComponent(links)}%20xl&apikey=zenzkey_d4d353be64`)
     }
-    else if(link) {
-        if(!keterangan) return {text: `sertakan keterangan untuk mengirim file dalam bentuk apa
+    else if(isLink) {
+        if(!links) return {
+            text: `sertakan keterangan untuk mengirim file dalam bentuk apa
             
 Keterangan: 
--v: untuk Video
--a: untuk audio
--vd: untuk video yang dikirim melalui document
--ad: untuk audio yang dikirim melalui document
+v: untuk Video
+a: untuk audio
+vd: untuk video yang dikirim melalui document
+ad: untuk audio yang dikirim melalui document
 
-*CONTOH*: 5 -a`, error: true}
+*CONTOH*: !ytdl a link`, error: true}
+
+        let typeContent
+        if(type.slice(0,1) == 'v')typeContent = 'mp4'
+        else if(type.slice(0,1) == 'a')typeContent = 'mp3'
+        else{return}
         
-        data = await fetch(`https://api.zahwazein.xyz/downloader/youtube?apikey=zenzkey_d4d353be64&url=${body}`)
+        const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:shorts\/)|(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/
+        if(!ytIdRegex.test(links))return {text: 'url tidak valid', error: true}
+        const ytId = ytIdRegex.exec(links)
+        const url = 'https://youtu.be/' + ytId[1]
+        data = await POST(`https://www.y2mate.com/mates/en60/analyze/ajax`, {
+            url,
+            q_auto: 0,
+            ajax: 1
+        })
 
-        if(data.statusText !== 'OK')return '404 Fot Found'
-        const {result: {title, thumb, getVideo, getAudio, duration}} = await data.json()
-
-        if(parseInt(duration.split(':')[0]) > 5 || duration.split(':').length > 2)return {text: 'durasi lebih dari 5 menit, tidak bisa mengconvert video lebih dari 5 menit', error: true}
+        const {result} = await data.json()
+        const {document} = (new JSDOM(result)).window
+        const tables = document.querySelectorAll('table')
+        const table = tables[{mp4: 0, mp3: 1}[typeContent]  || 0]
         
-        const jpegThumbnail = await msg.urlDownload(thumb)
-
-        const thumbnail = await msg.resize(jpegThumbnail)
-
-        const media = {}
-        switch(keterangan) {
-            case 'v':
-                media.video = {url: getVideo}
-                media.caption = title
-                media.mimetype = 'video/mp4'
-                media.jpegThumbnail = thumbnail
-                break
-            case 'vd':
-                media.document = {url: getVideo}
-                media.fileName = title
-                media.mimetype = 'video/mp4'
-                break
-            case 'ad':
-                media.document = {url: getAudio}
-                media.fileName = title
-                media.mimetype = 'audio/mp4'
-                break
-            case 'a':
-                media.audio = audio
-                media.mimetype = 'audio/mp4'
-                break
+        const fileContent = []
+        if(typeContent == 'mp4') {
+            const list = [...table.querySelectorAll('td')].filter(v => !/\.3gp/.test(v.innerHTML)).flatMap(v => {
+                    if(v.innerHTML.match(/.*?(?=\()/) !== null){
+                        const content = v.textContent
+                        if(!content.includes('Download')){
+                            fileContent.push({bitrate: content})
+                        }
+                    }
+                    else {
+                        for(const [i, content] of fileContent.entries()) {
+                            if(!content.size) {
+                                fileContent.push({bitrate: content.bitrate, size: v.textContent})
+                                fileContent.splice(i, 1)
+                            }
+                        }
+                    }
+                })
+            }
+        else if(typeContent == 'mp3') {
+            fileContent.push({bitrate: '128kbps', size : table.querySelector('td').nextSibling.nextSibling.textContent})
         }
 
-        msg.reply(msg.mentions, media, {counter: true})
+        const title = document.querySelector('b').innerHTML
+        const thumbnail = document.querySelector('img').src
+        const id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
+        const idContent = {
+          id: id[1],
+          ytId: ytId[1],
+          ftype: typeContent
+        }
+
+        let dataContent = 'Reply pesan ini dan pilih angka yang sesuai untuk memilih kualitas video\n\n' +'title: '+ title + '\n'
+        for(const [i, content] of fileContent.entries()) {
+            dataContent += `${i + 1}. ${content.bitrate} : ${content.size}\n`
+        }
         
-        return
-    }
-    else{
-        return 'url atau title yang dimasukkan tidak valid'
+        const getThumb = await msg.urlDownload(thumbnail)
+        const thumb = await msg.resize(getThumb)
+        const caption = `${dataContent}`
+        
+       const infoContent = await msg.reply(msg.mentions, {
+            image: getThumb,
+            caption,
+            mimetype: 'image/jpeg',
+            jpegThumbnail: thumb
+        }, {quoted: msg.quotedID})
+
+        const {tempStore} = await import('../../bot.js')
+        tempStore({message: infoContent, downloaded: fileContent, id: idContent, thumbnail: thumb})
+        return msg.reaction('')
+      
     }
 
     if(data.statusText !== 'OK')return '404 Not Found'
@@ -72,7 +110,7 @@ Keterangan:
     const getData = await data.json(),
 
     downloaded = []
-    console.log(getData)
+    
     for(const [i, result] of getData.result.entries()){
         if(result.type !== 'video')continue
         if(parseInt(result.timestamp.split(':')[0]) > 5 || result.timestamp.split(':').length > 2)continue
@@ -101,7 +139,7 @@ Keterangan:
     let youtubeInfo = `     ╾─͙─͙─͙Youtube Download List─͙─͙─͙╼\n\n`
     for(const [i, media] of downloaded.entries()) {
         const date = new Date().getFullYear()
-        const checkTime = media.time.includes('years')
+        const checkTime = media?.time?.includes('years')
 
         const isMonth = !checkTime ? media.time : (date - parseInt(media.time))
 
@@ -126,4 +164,14 @@ const {tempStore} = await import('../../bot.js')
 tempStore({message: infoMedia, downloaded})
 }
 
-tes('https://youtube.com/watch?v=UoklxctRrsk')
+async function POST(url, formData) {
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            accept: "*/*",
+            'accept-language': "en-US,en;q=0.9",
+            'content-type': "application/x-www-form-urlencoded; charset=UTF-8"
+        },
+        body: new URLSearchParams(Object.entries(formData))
+    })
+}

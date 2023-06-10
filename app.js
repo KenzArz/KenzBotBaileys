@@ -1,5 +1,5 @@
 import * as express from 'express'
-import {connecting} from './bot.js'
+import connecting from './bot.js'
 
 const app = express.default()
 const port = process.env.PORT || 3000

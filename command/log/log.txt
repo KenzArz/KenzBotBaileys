@@ -1,0 +1,1865 @@
+Error Message
+Date: 20:31}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !fimage
+typeMessage: image
+errorMessage: TypeError: quoted.media is not a function
+
+Error Message
+Date: 22:34}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading 'contextInfo')
+
+Error Message
+Date: 22:36}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 10 -v
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: fetch is not defined
+
+Error Message
+Date: 22:37}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl それがあなたの幸せとしても
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 22:41}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl それがあなたの幸せとしても
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 22:42}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl  それがあなたの幸せとしても
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 22:42}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl それが貴方の幸せとしても
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 22:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl それがあなたのしあわせとしても kano official
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 22:47}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -vd
+typeMessage: UNKNOWN
+errorMessage: Error: Invalid input
+
+Error Message
+Date: 22:49}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -vd
+typeMessage: UNKNOWN
+errorMessage: Error: Invalid input
+
+Error Message
+Date: 22:50}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -vd
+typeMessage: UNKNOWN
+errorMessage: Error: Invalid input
+
+Error Message
+Date: 22:52}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -vd
+typeMessage: UNKNOWN
+errorMessage: Error: Invalid input
+
+Error Message
+Date: 22:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -vd
+typeMessage: UNKNOWN
+errorMessage: Error: Invalid input
+
+Error Message
+Date: 22:57}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -vd
+typeMessage: UNKNOWN
+errorMessage: Error: Invalid input
+
+Error Message
+Date: 22:11}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce
+typeMessage: UNKNOWN
+errorMessage: TypeError: result is not iterable
+
+Error Message
+Date: 16:38}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot use 'in' operator to search for 'text' in sertakan keterangan untuk mengirim file dalam bentuk apa
+            
+Keterangan: 
+-v: untuk Video
+-a: untuk audio
+-vd: untuk video yang dikirim melalui document
+-ad: untuk audio yang dikirim melalui document
+
+*CONTOH*: 5 -a
+
+Error Message
+Date: 16:39}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:39}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl !ytdl https://youtu.be/OtNrC2Wg_dA v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot use 'in' operator to search for 'text' in sertakan keterangan untuk mengirim file dalam bentuk apa
+            
+Keterangan: 
+-v: untuk Video
+-a: untuk audio
+-vd: untuk video yang dikirim melalui document
+-ad: untuk audio yang dikirim melalui document
+
+*CONTOH*: 5 -a
+
+Error Message
+Date: 16:40}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA  -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:42}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -a
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token 'if'
+
+Error Message
+Date: 16:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token 'if'
+
+Error Message
+Date: 16:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:45}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:45}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:45}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:46}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:46}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 2 -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Only absolute URLs are supported
+
+url tidak valid
+
+Error Message
+Date: 16:49}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 2 -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Only absolute URLs are supported
+
+url tidak valid
+
+Error Message
+Date: 16:57}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:57}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 17:34}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 21:24}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/OtNrC2Wg_dA -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 8:4}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 4 -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Only absolute URLs are supported
+
+url tidak valid
+
+Error Message
+Date: 8:33}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime oppai
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: missing ) after argument list
+
+Error Message
+Date: 8:33}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime oppai
+typeMessage: UNKNOWN
+errorMessage: TypeError: body.slice is not a function
+
+Error Message
+Date: 8:33}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime oppai
+typeMessage: UNKNOWN
+errorMessage: Error: Invalid input
+
+Error Message
+Date: 8:35}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime oppai
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token 'const'
+
+Error Message
+Date: 8:35}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime oppai
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token ';'
+
+Error Message
+Date: 8:36}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime oppai
+typeMessage: UNKNOWN
+errorMessage: TypeError: data.body.buffer is not a function
+
+Error Message
+Date: 8:36}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime oppai
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 9:30}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !anime neko
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: data is not defined
+
+Error Message
+Date: 18:51}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading 'body')
+
+Error Message
+Date: 18:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token ')'
+
+Error Message
+Date: 18:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token ')'
+
+Error Message
+Date: 18:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'data')
+
+Error Message
+Date: 18:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'data')
+
+Error Message
+Date: 19:4}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected reserved word
+
+Error Message
+Date: 19:4}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: TypeError: img.forEach is not a function
+
+Error Message
+Date: 19:5}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: TypeError: img.forEach is not a function
+
+Error Message
+Date: 19:5}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/ke-dalam-100-cm-3-larutan-asam-asetat-ka-1-0-x_FRM-MFC7IWQI
+typeMessage: UNKNOWN
+errorMessage: TypeError: img.forEach is not a function
+
+Error Message
+Date: 19:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot use 'in' operator to search for 'text' in pastikan link benar, dan link harus dari roboguru
+
+Error Message
+Date: 20:21}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 a
+typeMessage: UNKNOWN
+errorMessage: TypeError: Only absolute URLs are supported
+
+url tidak valid
+
+Error Message
+Date: 16:16}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Only absolute URLs are supported
+
+url tidak valid
+
+Error Message
+Date: 12:18}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Only absolute URLs are supported
+
+url tidak valid
+
+Error Message
+Date: 20:6}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:7}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:7}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:7}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5 -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'message')
+
+Error Message
+Date: 20:9}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 4
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:9}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 9
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:20}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 7
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:21}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:21}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 3
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:22}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:23}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 7
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:26}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6 -a
+typeMessage: UNKNOWN
+errorMessage: TypeError: Only absolute URLs are supported
+
+url tidak valid
+
+Error Message
+Date: 20:28}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1 v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 20:29}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5 -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'content')
+
+url tidak valid
+
+Error Message
+Date: 21:50}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !fimage
+typeMessage: image
+errorMessage: TypeError: Cannot use 'in' operator to search for 'text' in tidak ada gambar yang dijadikan thumbnail
+
+Error Message
+Date: 21:52}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !fimage
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot use 'in' operator to search for 'text' in tidak ada gambar yang dijadikan thumbnail
+
+Error Message
+Date: 21:54}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !fimage
+typeMessage: image
+errorMessage: TypeError: Cannot read properties of undefined (reading 'text')
+
+Error Message
+Date: 13:10}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token 'else'
+
+Error Message
+Date: 13:11}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token 'else'
+
+Error Message
+Date: 13:13}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'slice')
+
+Error Message
+Date: 13:15}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: newLink is not defined
+
+Error Message
+Date: 13:15}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: newLink is not defined
+
+Error Message
+Date: 13:15}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: newLink is not defined
+
+Error Message
+Date: 13:16}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: POST is not defined
+
+Error Message
+Date: 13:16}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: POST is not defined
+
+Error Message
+Date: 13:16}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: JSDOM is not defined
+
+Error Message
+Date: 13:18}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk -v
+typeMessage: UNKNOWN
+errorMessage: TypeError: msg.downloadMediaUrl is not a function
+
+Error Message
+Date: 13:43}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading 'contextInfo')
+
+Error Message
+Date: 13:54}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 4
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading 'contextInfo')
+
+Error Message
+Date: 15:3}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: bodyMessage is not defined
+
+Error Message
+Date: 20:2}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/sebutkan-tahapan-perkembangan-embrio-_QU-9GTL5614
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'src')
+
+Error Message
+Date: 20:2}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/sebutkan-tahapan-perkembangan-embrio-_QU-9GTL5614
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'src')
+
+Error Message
+Date: 20:4}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/sebutkan-tahapan-perkembangan-embrio-_QU-9GTL5614
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:19}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: option is not defined
+
+Error Message
+Date: 16:52}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: msg is not defined
+
+Error Message
+Date: 16:53}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/runner/bot.js' imported from /home/runner/KenzBot/command/process_command.js
+
+Error Message
+Date: 18:21}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot destructure property 'filter' of 'undefined' as it is undefined.
+
+Error Message
+Date: 18:24}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: body is not defined
+
+Error Message
+Date: 18:25}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 18:25}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 18:26}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: link is not defined
+
+Error Message
+Date: 19:4}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl https://youtu.be/UoklxctRrsk
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: a is not defined
+
+Error Message
+Date: 19:14}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5
+typeMessage: UNKNOWN
+errorMessage: Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'undefined' imported from /home/runner/KenzBot/command/process_command.js
+
+Error Message
+Date: 19:15}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 3
+typeMessage: UNKNOWN
+errorMessage: Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'undefined' imported from /home/runner/KenzBot/command/process_command.js
+
+Error Message
+Date: 19:17}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6
+typeMessage: UNKNOWN
+errorMessage: Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'undefined' imported from /home/runner/KenzBot/command/process_command.js
+
+Error Message
+Date: 19:18}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6
+typeMessage: UNKNOWN
+errorMessage: TypeError: Run is not a function
+
+Error Message
+Date: 19:27}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token '{'
+
+Error Message
+Date: 19:27}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'id')
+
+Error Message
+Date: 19:30}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 6
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: ytId is not defined
+
+Error Message
+Date: 11:39}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected reserved word
+
+Error Message
+Date: 11:39}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: post is not defined
+
+Error Message
+Date: 11:40}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: server is not defined
+
+Error Message
+Date: 11:41}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 5
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: json2 is not defined
+
+Error Message
+Date: 12:13}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl v https://youtube.com/shorts/DX4YdsnRmQk?feature=share9
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: link is not defined
+
+Error Message
+Date: 20:58}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl jancok
+typeMessage: UNKNOWN
+errorMessage: TypeError: msg.react is not a function
+
+Error Message
+Date: 21:30}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce tod
+typeMessage: image
+errorMessage: ReferenceError: react is not defined
+
+Error Message
+Date: 16:9}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce tod
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:9}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce toe
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:11}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce tod
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:13}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce nang
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:13}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce yor
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:16}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:17}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce qwa
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:18}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce tt
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:19}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce ah
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:19}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce hh
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 16:21}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce tt
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 17:1}
+chat: 120363038890869072@g.us
+chat room: Bot
+text: !ytdl
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'includes')
+
+Error Message
+Date: 17:3}
+chat: 120363038890869072@g.us
+chat room: Bot
+text: !ytdl
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: command is not defined
+
+Error Message
+Date: 17:7}
+chat: 120363038890869072@g.us
+chat room: Bot
+text: !ytdl bg
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 17:8}
+chat: 120363038890869072@g.us
+chat room: Bot
+text: !ytdl ha
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 18:13}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 4
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading '0')
+
+Error Message
+Date: 19:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !ytdl
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token } in JSON at position 96
+
+Error Message
+Date: 20:1}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !sauce
+typeMessage: image
+errorMessage: SyntaxError: Unexpected token '.'
+
+Error Message
+Date: 20:40}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: key is not defined
+
+Error Message
+Date: 20:41}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: .proto.Message.ReactionMessage.key: object expected
+
+Error Message
+Date: 20:45}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 20:46}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 20:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 20:49}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 20:50}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 20:51}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 20:52}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 20:54}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'remoteJid')
+
+Error Message
+Date: 21:3}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: emoji is not defined
+
+Error Message
+Date: 19:59}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: The requested module '@bochilteam/scraper' does not provide an export named 'instagramdlv2'
+
+Error Message
+Date: 20:0}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: result is not defined
+
+Error Message
+Date: 21:28}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: The requested module '@bochilteam/scraper' does not provide an export named 'InstagramDownloader'
+
+Error Message
+Date: 21:28}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: The requested module '@bochilteam/scraper' does not provide an export named 'default'
+
+Error Message
+Date: 21:29}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: InstagramDownloader is not defined
+
+Error Message
+Date: 21:36}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected reserved word
+
+Error Message
+Date: 21:36}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: The requested module '@bochilteam/scraper' does not provide an export named 'default'
+
+Error Message
+Date: 21:37}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token '...'
+
+Error Message
+Date: 21:37}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token '['
+
+Error Message
+Date: 21:37}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token '['
+
+Error Message
+Date: 21:38}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: instagramdl is not defined
+
+Error Message
+Date: 21:45}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: result is not defined
+
+Error Message
+Date: 21:49}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Cs-00aLgpog/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: link is not defined
+
+Error Message
+Date: 21:53}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/Cs7mU7IoDhx/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "sd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "hd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "hosting"
+    ],
+    "message": "Required"
+  }
+]
+
+Error Message
+Date: 21:53}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/Cs7mU7IoDhx/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "sd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "hd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "hosting"
+    ],
+    "message": "Required"
+  }
+]
+
+Error Message
+Date: 21:56}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/Cs7mU7IoDhx/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "sd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "hd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "hosting"
+    ],
+    "message": "Required"
+  }
+]
+
+Error Message
+Date: 21:56}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/Cs7mU7IoDhx/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "sd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "hd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "hosting"
+    ],
+    "message": "Required"
+  }
+]
+
+Error Message
+Date: 21:57}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/Cs7mU7IoDhx/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: results is not defined
+
+Error Message
+Date: 21:58}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/Cs7mU7IoDhx/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "sd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "hd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "hosting"
+    ],
+    "message": "Required"
+  }
+]
+
+Error Message
+Date: 22:8}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/CtENlnOBjIa/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "sd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "hd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "hosting"
+    ],
+    "message": "Required"
+  }
+]
+
+Error Message
+Date: 22:8}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/CtENlnOBjIa/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: [
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "sd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "hd"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "hosting"
+    ],
+    "message": "Required"
+  }
+]
+
+Error Message
+Date: 20:6}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 4
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 20:6}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 4
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 20:6}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 3
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 20:8}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 4
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 20:10}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading '0')
+
+Error Message
+Date: 20:10}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 2
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'bitrate')
+
+Error Message
+Date: 20:12}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading '0')
+
+Error Message
+Date: 20:13}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 1
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading '0')
+
+Error Message
+Date: 15:16}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: 2
+typeMessage: UNKNOWN
+errorMessage: Error: Media upload failed on all hosts
+
+Error Message
+Date: 7:52}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/tentukan-ph-campuran-dari-200-ml-larutan-nh3-0-4-m-dengan_FRM-4P2JBW7Q
+typeMessage: UNKNOWN
+errorMessage: AxiosError: Request failed with status code 504
+
+Error Message
+Date: 7:53}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/forum/tentukan-ph-campuran-dari-200-ml-larutan-nh3-0-4-m-dengan_FRM-4P2JBW7Q
+typeMessage: UNKNOWN
+errorMessage: AxiosError: Request failed with status code 504
+
+Error Message
+Date: 7:57}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/suatu-indikator-memberikan-warna-merah-jika-diteteskan-pada-larutan-naoh-larutan-di_QU-D29B1OWQ
+typeMessage: UNKNOWN
+errorMessage: AxiosError: Request failed with status code 504
+
+Error Message
+Date: 7:58}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/suatu-indikator-memberikan-warna-merah-jika-diteteskan-pada-larutan-naoh-larutan-di_QU-D29B1OWQ
+typeMessage: UNKNOWN
+errorMessage: AxiosError: Request failed with status code 504
+
+Error Message
+Date: 7:59}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/suatu-indikator-memberikan-warna-merah-jika-diteteskan-pada-larutan-naoh-larutan-di_QU-D29B1OWQ
+typeMessage: UNKNOWN
+errorMessage: AxiosError: Request failed with status code 504
+
+Error Message
+Date: 7:59}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/suatu-indikator-memberikan-warna-merah-jika-diteteskan-pada-larutan-naoh-larutan-di_QU-D29B1OWQ
+typeMessage: UNKNOWN
+errorMessage: AxiosError: Request failed with status code 504
+
+Error Message
+Date: 7:59}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !roboguru https://roboguru.ruangguru.com/question/suatu-indikator-memberikan-warna-merah-jika-diteteskan-pada-larutan-naoh-larutan-di_QU-D29B1OWQ
+typeMessage: UNKNOWN
+errorMessage: AxiosError: Request failed with status code 504
+
+Error Message
+Date: 15:3}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: scrit is not defined
+
+Error Message
+Date: 15:3}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl
+typeMessage: UNKNOWN
+errorMessage: SyntaxError: Unexpected token ')'
+
+Error Message
+Date: 15:43}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot set properties of undefined (setting 'url')
+
+Error Message
+Date: 15:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot set properties of undefined (setting 'url')
+
+Error Message
+Date: 15:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl
+typeMessage: UNKNOWN
+errorMessage: TypeError: msg.quotedMesage is not a function
+
+Error Message
+Date: 15:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: quotedMessage is not defined
+
+Error Message
+Date: 15:57}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/CtJkxDfAByL/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input file is missing: https://media.sf-converter.com/get?__sig=GCN7XektIgCsLVho-b8e9A&__expires=1686215823&uri=https%3A%2F%2Fscontent-ssn1-1.cdninstagram.com%2Fv%2Ft51.2885-15%2F351287840_773554391140554_6268550159115822011_n.jpg%3Fstp%3Ddst-jpg_e15%26_nc_ht%3Dscontent-ssn1-1.cdninstagram.com%26_nc_cat%3D106%26_nc_ohc%3DChkp8XNeZqAAX-NfzmZ%26edm%3DAP_V10EBAAAA%26ccb%3D7-5%26oh%3D00_AfCnuzq8nQsOaRjrUhj9ZKUJitTRZXZd46jGkb3qcKEwxQ%26oe%3D64832C8F%26_nc_sid%3D8721cf
+
+Error Message
+Date: 16:17}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/CsyQ7K-hB3J/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of undefined (reading 'split')
+
+Error Message
+Date: 16:47}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl !igdl https://www.instagram.com/p/CsyQ7K-hB3J/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: ReferenceError: window is not defined
+
+Error Message
+Date: 16:49}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/p/CsyQ7K-hB3J/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: TypeError: Cannot read properties of null (reading 'body')
+
+Error Message
+Date: 8:44}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:45}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:46}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:47}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:48}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:50}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:51}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:53}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format
+
+Error Message
+Date: 8:55}
+chat: 6289530016712@s.whatsapp.net
+chat room: private chat
+text: !igdl https://www.instagram.com/reel/Csm_Lp3puGj/?igshid=NTc4MTIwNjQ2YQ==
+typeMessage: UNKNOWN
+errorMessage: Error: Input buffer contains unsupported image format

@@ -1,8 +1,9 @@
-import makeWASocket ,{ DisconnectReason,useMultiFileAuthState, fetchLatestBaileysVersion } from'@adiwajshing/baileys';
+import makeWASocket ,{ DisconnectReason,useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore} from'@whiskeysockets/baileys';
 import {Boom} from '@hapi/boom';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import pino from 'pino'
 
-import { processCommand } from './command/process_command.js';
+import { processCommand, commandQuoted } from './command/process_command.js';
 import {message_objek} from './message.js'
 
 export let client;
@@ -18,20 +19,32 @@ export const tempStore = (message) => {
     }, 180000)
   })
 }
+const logger= pino({ level: 'silent' }) 
+const store = makeInMemoryStore({logger})
+// can be read from a file
+store.readFromFile('./baileys_store.json')
+// saves the state to a file every 10s
+ setInterval(() => {
+     store.writeToFile('./baileys_store.json')
+}, 10_000)
 
-export async function connecting () {
+export default async function connecting () {
   const { state, saveCreds } = await  useMultiFileAuthState('./auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
-  client = makeWASocket.default({
-    version,
+  client = await makeWASocket.default({
     printQRInTerminal: true,
+    logger,
     auth: state,
-    linkPreviewImageThumbnailWidth: 90,
-    getMessage: async () => {
-			return {
-				conversation: 'pesan ini sedang pending atau tidak dapat dilihat dikarenakan masalah koneksi'
-			}
-		}
+    linkPreviewImageThumbnailWidth: 500,
+    getMessage: async key => {
+      if(store) {
+        const msg = await store.loadMessage(key.remoteJid, key.id, undefined)
+        return msg?.message || undefined
+      }
+      return {
+        conversation: 'tes'
+      }
+    }
   })
   client.ev.on ('creds.update', saveCreds)
   client.ev.on('connection.update', async update => {
@@ -55,11 +68,12 @@ export async function connecting () {
       const isGroup = message?.mentions?.includes('@g.us')
 
       //cek command
-      if(message.body.includes('!'))
+      if(message?.body?.startsWith('!',0))
       {
           await processCommand(message)
-            .then(text => text ? message.reply(message.mentions, text) : '')
+            .then(async text => text ? await message.reply(message.mentions, text, {quoted: message.quotedID}) : '')
             .catch(async err => {
+              console.log(err)
           await message.reply(message.mentions, {text: `*Terjadi Error*
 
 ${err.toString()}`})
@@ -76,10 +90,11 @@ ${err.toString()}`})
 
             message.reply(message.ownerNumber, error)
         })
+        
       }
-      if(parseInt(message.body)  && message?.quotedMessage && temp.length !== 0)
+      if(parseInt(message.body)  && message.quotedMessage() && temp.length !== 0)
       {
-          await processCommand(message, {quoted: true})
+          await commandQuoted(message)
             .then(text => text ? message.reply(message.mentions, text) : '')
             .catch(async err => {
           await message.reply(message.mentions, {text: `*Terjadi Error*

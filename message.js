@@ -1,5 +1,5 @@
-import { downloadMediaMessage, S_WHATSAPP_NET, delay } from "@adiwajshing/baileys"
-import { createWriteStream } from "fs"
+import { downloadMediaMessage, S_WHATSAPP_NET, delay } from "@whiskeysockets/baileys"
+import { createWriteStream, readFileSync } from "fs"
 import fetch from 'node-fetch'
 import sharp from 'sharp'
 
@@ -34,15 +34,14 @@ export function message_objek(msg) {
     isOwner,
     ownerNumber,
     quotedID: msg,
-    quotedMessage: async () => {
-      key.participant = msg.message?.extendedTextMessage?.contextInfo?.participant
-
+    quotedMessage: () => {
       const ctxInfo = msg.message?.extendedTextMessage?.contextInfo || msg.message?.imageMessage?.contextInfo || msg.message?.audioMessage?.contextInfo
       const quoted = ctxInfo.quotedMessage
 
       const quotedID = ctxInfo.stanzaId
       if(!quoted) return null
-
+      key.participant = msg.message?.extendedTextMessage?.contextInfo?.participant || undefined
+      
       const bodyQuoted = quoted?.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
       
       const getType = checkType(findType => findType.find(findOBJ => Object.keys(quoted).find(m => m === findOBJ.type)))
@@ -69,9 +68,12 @@ export function message_objek(msg) {
         reply: async (contact, text, options) => {
           await delayMsg(contact, text, options)
         },
-        resize: async (image) => {
-          const media = await sharpImage(image)
+        resize: async (image, options) => {
+          const media = await sharpImage(image, options)
           return media
+        },
+        reaction: async function({key}, emoji) {
+          const emot =  await react(key, emoji)
         }
       }
     },
@@ -80,17 +82,25 @@ export function message_objek(msg) {
       return download
       
     } : null,
-    urlDownload: async (url, path) => {
-      const urlImage = await downloadMediaUrl(url, path)
+    urlDownload: async (url) => {
+      const urlImage = await downloadMediaUrl(url)
       return urlImage
     },
     reply: async (contact, text, options) =>{
       return delayMsg(contact, text, options)
     },
-    resize: async (image) => {
-      const media = await sharpImage(image)
+    resize: async (image, options) => {
+      const media = await sharpImage(image, options)
       return media
-    }
+    },
+    reaction: async function (reactContent) {
+      const {loading, stop} = reactContent
+      if(loading) await upload({key: msg.key})
+      else if(stop) await upload(stop)
+      else{
+      const emot = await react(msg.key, reactContent)
+      return emot}
+    },
   }
 }
 
@@ -127,14 +137,9 @@ return type(arrType)
 async function delayMsg(contact, body, options = {}) {
   options.ephemeralExpiration = !options.counter ? 60*60*24 : undefined
   await client.presenceSubscribe(contact)
-  await delay(options.kuisDate || 500)
-
-  await client.sendPresenceUpdate('composing', contact)
-  await delay(options.kuisDate || 500)
+  await delay(options.kuisDate || 1000)
   
-  await client.sendPresenceUpdate('paused', contact)
-
-  return client.sendMessage(contact, body, options)
+  return await client.sendMessage(contact, body, options)
 }
 
 async function downloadMedia(imageMessage) {
@@ -147,10 +152,40 @@ async function downloadMediaUrl(url) {
   
 }
 
-async function sharpImage(image) {
+async function sharpImage(image, size={}) {
   const resize = await sharp(image)
-    .resize(300, 150)
+    .resize(size.width || 300, size.height || 150)
     .jpeg({quality: 100})
     .toBuffer()
   return resize
+}
+
+async function react(key, emoji) {
+  const emotJson = JSON.parse(readFileSync('emoji/emoji.json'))
+  const emot = emotJson[emoji]
+  return client.sendMessage(key.remoteJid, {
+    react: {
+      text: emot || '',
+      key
+    }
+  })
+}
+
+let interval;
+export async function upload(timesLimit) {
+  const {key} = timesLimit
+  if(!key) {
+    return clearInterval(interval)
+  }
+  let uploading = 1
+  await react(key, 'loading')
+  interval = setInterval(async () => {
+    if( uploading % 2 == 0) {
+      await react(key, 'loading')
+      uploading++
+      return
+    }
+    await react(key, 'loading2')
+    uploading++
+  },2000)
 }

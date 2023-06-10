@@ -1,3 +1,3 @@
 {
-  "ignore": ["auth/*"]
+  "ignore": ["auth/*", "./baileys_store.json"]
 }

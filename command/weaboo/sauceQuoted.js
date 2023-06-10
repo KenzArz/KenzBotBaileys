@@ -1,0 +1,29 @@
+export default async function(msg, {filter}) {
+    await msg.reaction('process')
+    console.log(filter)
+    const infoAnime = filter[parseInt(msg.body) - 1]
+    const [perfect, persentase] = infoAnime.similarity.toString().split('.')
+
+    const realNumber = persentase?.slice(0, 2) || perfect + '00'
+    const desimal = persentase?.slice(2, 4) || undefined
+
+    const similarity = `${realNumber}${desimal ? `.${desimal}` : ''}%`
+    
+    const info = `      ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`+
+    `Title: ${infoAnime.native}\n`+
+    `Romaji: ${infoAnime.romaji || '-'}\n`+
+    `English: ${infoAnime.english || '-'}\n`+
+    `Episode: ${infoAnime.episode || '-'}\n`+
+    `Similarity: ${similarity}`
+
+    const downloadContent = await msg.urlDownload(infoAnime.image)
+    const resize = await msg.resize(downloadContent)
+
+    msg.reply(msg.mentions, {
+        caption: info,
+        image: downloadContent,
+        jpegThumbnail: resize,
+        mimetype: 'image/jpeg'
+    })
+    await msg.reaction('')
+}
