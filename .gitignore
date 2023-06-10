@@ -3,3 +3,11 @@ jadwal/
 jadwal.js
 tes.js
 tes2.js
+auth/
+.config/
+.git/
+README.md
+replit.txt
+.replit/
+replit.nix
+.upm/
