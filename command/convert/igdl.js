@@ -1,29 +1,86 @@
-import axios from 'axios'
+import got from 'got'
+import vm from 'vm'
+import fetch from 'node-fetch'
 
-export default async function tes() {
-    const igDownloadUrl = 'https://instasupersave.com/'
-    const resp = await axios(igDownloadUrl);
-    const cookie = resp.headers["set-cookie"]; // get cookie from request
-    const session = cookie[0].split(";")[0].replace("XSRF-TOKEN=","").replace("%3D", "")
-    console.log(resp.data)
+export default async function (msg) {
+  const quotedMessage = await msg.quotedMessage()
+  const url = quotedMessage?.body || msg.body.split(' ')[1]
 
-    axios({
-        method: 'POST',
-        url: `${igDownloadUrl}api/convert`,
-        headers: { 
-            'origin': 'https://instasupersave.com', 
-            'referer': 'https://instasupersave.com/pt/', 
-            'sec-fetch-dest': 'empty', 
-            'sec-fetch-mode': 'cors', 
-            'sec-fetch-site': 'same-origin', 
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.52', 
-            'x-xsrf-token': session, 
-            'Content-Type': 'application/json', 
-            'Cookie': `XSRF-TOKEN=${session}; instasupersave_session=${session}`
-        },
-        data : {
-            url: 'https://www.instagram.com/reel/CsNYViLuQEE/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA=='
-        }
-    }).then(m => console.log(m.data)).catch(m)
+  if(!url.includes('instagram.com')) return {text: 'link tidak valid pastikan link benar dari instagram', error: true}
+
+ await msg.reaction('process')
+ const script = await got('https://worker.sf-tools.com/savefrom.php', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      origin: 'https://id.savefrom.net',
+      referer: 'https://id.savefrom.net/',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36'
+    },
+    form: {
+      sf_url: url,
+      sf_submit: '',
+      new: 2,
+      lang: 'id',
+      app: '',
+      country: 'id',
+      os: 'Windows',
+      browser: 'Chrome',
+      channel: ' main',
+      'sf-nomad': 1
+    }
+  })
+   const executeCode = '[]["filter"]["constructor"](b).call(a);'
+   const fileScript = script.body.replace(executeCode, `
+  try {const script = ${executeCode.split('.call')[0]}.toString();if (script.includes('function showResult')) scriptResult = script;else (${executeCode.replace(/;/, '')});} catch {}
+ `)
+
+  const context = {
+    scriptResult: '',
+    log: console.log
+  }
+  vm.createContext(context)
+   new vm.Script(fileScript).runInContext(context)
+  const data = context.scriptResult.split('window.parent.sf.videoResult.show(')?.[1] || context.scriptResult.split('window.parent.sf.videoResult.showRows(')?.[1]
+
+  const content = data.split(');')[0].split(",\"instagram.com\"")[0]
+  const toJSON = JSON.parse(content)
+  const isArray = Array.isArray(toJSON)
+  
+  if(!isArray) {
+    let media = {}
+     for(const content of toJSON.url) {
+       media.url = content.url
+       media.type = content.type
+     }
+    console.log(toJSON.thumb)
+  
+    let message = {}
+    if(media.type == 'jpg' || media.type == 'webp') {
+      message.image = {url: media.url}
+      message.mimetype = 'image/jpeg'
+    }
+    else if(media.type == 'mp4') {
+      message.video = {url: media.url}
+      message.mimetype = 'video/mp4'
+    }
+
+    const fetching = await msg.urlDownload(toJSON.thumb)
+   // console.log(fetching)
+    const thumb = await msg.resize(fetching)
+    message.jpegThumbnail = thumb
+    await msg.reply(msg.mentions, message)
+    return msg.reaction({stop:true})
+  }
+  let index = ''
+  for(const [content] of toJSON.entries()) {
+    index+= `\n${content + 1}`
+  }
+  const contentMedia = await msg.reply(msg.mentions, {
+    text: `ketik angka yang sesuai slide dipostingan untuk didownload\n${index}\n\n*NOTE*\nbalas 99 untuk mendownload semua media`
+  }, {quoted: msg.quotedID})
+
+  const {tempStore} = await import('../../bot.js')
+  tempStore({message: contentMedia, content: toJSON})
+  return msg.reaction('')
 }
-tes()

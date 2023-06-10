@@ -1,23 +1,25 @@
-import fetch from 'node-fetch'
-import JS from 'jsdom'
-const {JSDOM} = JS
-
+import js from 'jsdom'
+const {JSDOM} = js
 
 export default async function (msg) {
 
+    await msg.reaction('process')
     const quotedMessage = await msg.quotedMessage()
 
-    // const param = quotedMessage?.body ? `${quotedMessage.body} ${msg.body.slice(6)}` : msg.body.slice(6)
     const content = msg?.quotedMessage()?.body || msg.body
     const [_, type, links] = content.split(' ')
 
     let data;
-    const isLink = links.includes('https') ? true : false
+    const isLink = links?.includes('https')  || type?.includes('https') ? true : false
     if(!isLink) {
+      return {
+        text: 'maintenance, untuk sekarang fitur ini hanya support untuk convert link yt',
+        error: true
+      }
         data  = await fetch(`https://api.zahwazein.xyz/searching/ytsearch?query=${encodeURIComponent(links)}%20xl&apikey=zenzkey_d4d353be64`)
     }
     else if(isLink) {
-        if(!type.slice(0,1) == 'v' || !type.slice(0,1) == a) return {
+        if(!links) return {
             text: `sertakan keterangan untuk mengirim file dalam bentuk apa
             
 Keterangan: 
@@ -26,14 +28,14 @@ a: untuk audio
 vd: untuk video yang dikirim melalui document
 ad: untuk audio yang dikirim melalui document
 
-*CONTOH*: 5 -a`, error: true}
+*CONTOH*: !ytdl a link`, error: true}
 
         let typeContent
         if(type.slice(0,1) == 'v')typeContent = 'mp4'
         else if(type.slice(0,1) == 'a')typeContent = 'mp3'
         else{return}
-        
-        const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:shorts\/)?(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/
+
+        const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:shorts\/)|(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/
         if(!ytIdRegex.test(links))return {text: 'url tidak valid', error: true}
         const ytId = ytIdRegex.exec(links)
         const url = 'https://youtu.be/' + ytId[1]
@@ -75,16 +77,22 @@ ad: untuk audio yang dikirim melalui document
         const thumbnail = document.querySelector('img').src
         const id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
 
-        let dataContent = 'Reply pesan ini dan pilih angka yang sesuai untuk memilih kualitas video\n'
-        for(const content of fileContent) {
-            dataContent += `${content.bitrate} : ${content.size}\n`
+        const idContent = {
+          id: id[1],
+          ytId: ytId[1],
+          ftype: typeContent
+        }
+
+        let dataContent = 'Reply pesan ini dan pilih angka yang sesuai untuk memilih kualitas video\n\n' +'title: '+ title + '\n'
+        for(const [i, content] of fileContent.entries()) {
+            dataContent += `${i + 1}. ${content.bitrate} : ${content.size}\n`
         }
         
         const getThumb = await msg.urlDownload(thumbnail)
         const thumb = await msg.resize(getThumb)
-        const caption = `${title} \n\n${dataContent}`
+        const caption = `${dataContent}`
         
-       const infoContent = await msg.reply(msg.mentions, {
+        const infoContent = await msg.reply(msg.mentions, {
             image: getThumb,
             caption,
             mimetype: 'image/jpeg',
@@ -92,8 +100,10 @@ ad: untuk audio yang dikirim melalui document
         }, {quoted: msg.quotedID})
 
         const {tempStore} = await import('../../bot.js')
-        tempStore({message: infoContent, downloaded: fileContent, id})
-        return
+
+        tempStore({message: infoContent, downloaded: fileContent, id: idContent, thumbnail: thumb})
+        return msg.reaction('')
+      
     }
 
     if(data.statusText !== 'OK')return '404 Not Found'
@@ -101,7 +111,7 @@ ad: untuk audio yang dikirim melalui document
     const getData = await data.json(),
 
     downloaded = []
-    console.log(getData)
+    
     for(const [i, result] of getData.result.entries()){
         if(result.type !== 'video')continue
         if(parseInt(result.timestamp.split(':')[0]) > 5 || result.timestamp.split(':').length > 2)continue
@@ -126,11 +136,21 @@ ad: untuk audio yang dikirim melalui document
                 author})
 
     }
-    
-    let youtubeInfo = `     ╾─͙─͙─͙Youtube Download List─͙─͙─͙╼
 
+    let youtubeInfo = `     ╾─͙─͙─͙Youtube Download List─͙─͙─͙╼\n\n`
+    for(const [i, media] of downloaded.entries()) {
+        const date = new Date().getFullYear()
+        const checkTime = media?.time?.includes('years')
 
-reply pesan ini dengan urutan urutan yang sesuai
+        const isMonth = !checkTime ? media.time : (date - parseInt(media.time))
+
+        youtubeInfo += `${i + 1}.Title: ${media.title}
+Views: ${media.views}
+Time: ${isMonth || '-'}
+Duration: ${media.duration}
+Author: ${media.author || '-'}\n\n`
+    }
+    youtubeInfo += `reply pesan ini dengan urutan urutan yang sesuai
 *contoh* 5 -v
 
 Keterangan: 
@@ -139,24 +159,10 @@ Keterangan:
 -vd: untuk video yang dikirim melalui document
 -ad: untuk audio yang dikirim melalui document`
 
+const infoMedia = await msg.reply(msg.mentions, {text: youtubeInfo}, {quoted: msg.quotedID})
+const {tempStore} = await import('../../bot.js')
 
-//     for(const [i, media] of downloaded.entries()) {
-//         const date = new Date().getFullYear()
-//         const checkTime = media?.time?.includes('years')
-
-//         const isMonth = !checkTime ? media.time : (date - parseInt(media.time))
-
-//         youtubeInfo += `${i + 1}.Title: ${media.title}
-// Views: ${media.views}
-// Time: ${isMonth || '-'}
-// Duration: ${media.duration}
-// Author: ${media.author || '-'}\n\n`
-//     }
-
-// const infoMedia = await msg.reply(msg.mentions, {text: youtubeInfo}, {quoted: msg.quotedID})
-// const {tempStore} = await import('../../bot.js')
-
-// tempStore({message: infoMedia, downloaded})
+tempStore({message: infoMedia, downloaded})
 }
 
 async function POST(url, formData) {
@@ -170,31 +176,3 @@ async function POST(url, formData) {
         body: new URLSearchParams(Object.entries(formData))
     })
 }
-export function contentType(type) {
-    switch(type) {
-        case 'v':
-            return {
-                video : {url: getVideo},
-                caption : title,
-                mimetype : 'video/mp4',
-                jpegThumbnail : thumbnail
-            }
-            break
-        case 'vd':
-            media.document = {url: getVideo}
-            media.fileName = title
-            media.mimetype = 'video/mp4'
-            break
-        case 'ad':
-            media.document = {url: getAudio}
-            media.fileName = title
-            media.mimetype = 'audio/mp4'
-            break
-        case 'a':
-            media.audio = audio
-            media.mimetype = 'audio/mp4'
-            break
-    }
-
-}
-tes('https://www.youtube.com/watch?v=jp-uOszFnl8 -vd')

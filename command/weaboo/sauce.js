@@ -1,10 +1,12 @@
 import { createWriteStream, readFileSync } from 'fs'
 import fetch from 'node-fetch'
+import {upload} from '../../message.js'
 
 export default async function (msg) {
-    
+
+    await upload(msg.quotedID)
     const isQuoted = await msg.quotedMessage()
-    const errorMessage = 'tidak ada image untuk dicari'
+    const errorMessage = {text: 'tidak ada image untuk dicari', error: true}
     let bufferImage;
 
 
@@ -145,7 +147,8 @@ Similarity: ${similarity}\n\n`
             HThumb = await isQuoted.resize(HImage)
         }
     }
-    
+
+  await upload({stop: true})
     const {tempStore} = await import('../../bot.js')
     if(msg.isOwner){
         const allNime = await msg.reply(msg.ownerNumber, {
@@ -155,6 +158,7 @@ Similarity: ${similarity}\n\n`
             jpegThumbnail: thumb
         }, {quoted: msg.quotedID})
         tempStore({message: allNime, filter})
+        await msg.reaction('succes')
         return
     }
 
@@ -175,5 +179,6 @@ Similarity: ${similarity}\n\n`
             jpegThumbnail: HThumb
         }, {quote: msg.quotedID})
     }
-    
+
+  await msg.reaction(msg.quotedID, 'succes')
 }

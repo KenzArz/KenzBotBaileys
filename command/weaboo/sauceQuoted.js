@@ -1,4 +1,9 @@
 export default async function(msg, {filter}) {
+<<<<<<< HEAD
+=======
+    await msg.reaction('process')
+    console.log(filter)
+>>>>>>> a7c8adf9bed3ee1285647dbdd51358758e626639
     const infoAnime = filter[parseInt(msg.body) - 1]
     const [perfect, persentase] = infoAnime.similarity.toString().split('.')
 
@@ -23,4 +28,8 @@ export default async function(msg, {filter}) {
         jpegThumbnail: resize,
         mimetype: 'image/jpeg'
     })
+<<<<<<< HEAD
+=======
+    await msg.reaction('')
+>>>>>>> a7c8adf9bed3ee1285647dbdd51358758e626639
 }
