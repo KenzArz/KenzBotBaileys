@@ -1,22 +1,28 @@
 import { POST } from '../../system/scraper/savefrom.js'
 
 export default async function (msg) {
-  const quotedMessage = await msg.quotedMessage()
+  const quotedMessage = msg.quotedMessage()
   const url = quotedMessage?.body || msg.body.split(' ')[1]
+  const regex = /(?:https:\/\/:?www.instagram.com)\/((:?reel\/|:?p\/)([-_0-9A-Za-z]{11}))|(stories\/(.+?)\/)([-_0-9A-Za-z]{19})/
+  if(!regex.test(url)) return {text: 'link tidak valid pastikan link benar dari instagram', error: true}
 
-  if(!url.includes('instagram.com')) return {text: 'link tidak valid pastikan link benar dari instagram', error: true}
-
-  await msg.reaction('process')
+  await (url.includes('reel') ? msg.reaction({loading: true}) : msg.reaction('process'))
   const contents = await POST(url)
+  
+  if(contents?.error) return {text: contents.error, error: true}
   const isArray = Array.isArray(contents)
-
   if(!isArray) {
+    const size = {
+      width: 300,
+      height: 300
+    }
     const setting = setMedia(contents.url)
     const fetching = await msg.urlDownload(contents.thumb)
-    const thumb = await msg.resize(fetching)
+    const thumb = await (fetching == "Forbidden" ? msg.resize('./system/image/Error_Thumbnail.png',size): msg.resize(fetching,size))
     setting.jpegThumbnail = thumb
-    await msg.reply(msg.mentions, setting)
-    return msg.reaction({stop:true})
+    await msg.reply(msg.mentions, setting, {counter: true})
+    await msg.reaction({stop: true})
+    return msg.reaction('succes')
   }
 
   let index = ''
