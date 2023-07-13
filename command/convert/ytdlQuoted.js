@@ -14,7 +14,6 @@ export default async function (msg, {downloaded, ID, type, thumbnail}) {
 
     const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, isConvert: true})
   if(convert?.failed) return {text: convert.failed, error: true}
-
   
   if(type == "v"){
     await msg.reply(msg.mentions, {
