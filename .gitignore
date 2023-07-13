@@ -1,1 +1,4 @@
 node_modules/
+system/auth/
+system/baileys_store.json
+system/log/
