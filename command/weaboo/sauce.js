@@ -1,9 +1,8 @@
 import fetch from 'node-fetch'
-import {upload} from '../../message.js'
 
 export default async function (msg) {
 
-    await upload(msg.quotedID)
+    await msg.reaction({loading: true})
     const isQuoted = await msg.quotedMessage()
     const errorMessage = {text: 'tidak ada image untuk dicari', error: true}
     let bufferImage;
@@ -147,16 +146,16 @@ Similarity: ${similarity}\n\n`
         }
     }
 
-  await upload({stop: true})
     const {tempStore} = await import('../../bot.js')
     if(msg.isOwner){
-        const allNime = await msg.reply(msg.ownerNumber, {
+        const allNime = await msg.reply(msg.mentions, {
             image: downloadImage,
             caption: listAnime,
             mimetype: 'image/jpeg',
             jpegThumbnail: thumb
         }, {quoted: msg.quotedID})
         tempStore({message: allNime, filter})
+        await msg.reaction({stop: true})
         await msg.reaction('succes')
         return
     }
@@ -176,8 +175,9 @@ Similarity: ${similarity}\n\n`
             caption: filterHanime,
             mimetype: 'image/jpeg',
             jpegThumbnail: HThumb
-        }, {quote: msg.quotedID})
+        }, {quoted: msg.quotedID})
     }
 
-  await msg.reaction(msg.quotedID, 'succes')
+  await msg.reaction({stop: true})
+  await msg.reaction('succes')
 }

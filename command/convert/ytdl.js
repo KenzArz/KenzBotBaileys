@@ -1,17 +1,14 @@
-import js from 'jsdom'
-const {JSDOM} = js
-
 import {POST} from '../../system/scraper/y2mate.js'
 
 export default async function (msg) {
 
-    await msg.reaction('process')
     const quotedMessage = await msg.quotedMessage()
     const content = quotedMessage?.body || msg.body
     const [_, type, links] = content.split(' ')
 
     let data;
     const isLink = links?.includes('https')  || type?.includes('https') ? true : false
+    await (type == 'a' ? msg.reaction({loading: true}) : msg.reaction('process'))
     if(!isLink) {
       return {
         text: 'maintenance, untuk sekarang fitur ini hanya support untuk convert link yt',
@@ -60,17 +57,21 @@ a: untuk audio
 
         if(typeContent == 'mp3') {
             ID.fquality = '128'
-            const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, convert: true})
+            const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, isConvert: true})
+          if(convert?.failed) return {text: convert.failed, error: true}
+          
             await msg.reply(msg.mentions, {
                 audio: {url: convert},
                 mimetype: "audio/mp4"
-                })
-            return msg.reaction('')
+                }, {counter: true})
+            await msg.reaction({stop: true})
+            return msg.reaction('succes')
         }
 
-        let dataContent = 'Reply pesan ini dan pilih angka yang sesuai untuk memilih kualitas video\n\n' +'title: '+ title + '\n'
+        let dataContent = 'Reply pesan ini dan pilih angka yang sesuai untuk memilih kualitas video\n\n' +'Title: '+ title + '\n'
         for(const [i, content] of fileContent.entries()) {
-            dataContent += `${i + 1}. ${content.bitrate} : ${content.size}\n`
+            const bitrate = content.bitrate.replace('(.mp4)', '')
+            dataContent += `\n${i + 1}. ${bitrate} : ${content.size}\n`
         }
         
         const getThumb = await msg.urlDownload(thumbnail)
@@ -86,7 +87,7 @@ a: untuk audio
 
         const {tempStore} = await import('../../bot.js')
 
-        tempStore({message: infoContent, downloaded: fileContent, ID, thumbnail: thumb})
+        tempStore({message: infoContent, downloaded: fileContent, ID, thumbnail: thumb, type})
         return msg.reaction('')
       
     }

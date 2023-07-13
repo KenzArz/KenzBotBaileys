@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
+import {JSDOM} from 'jsdom'
 
-export async function POST({url, formData, type, convert}) {
+export async function POST({url, formData, type, isConvert}) {
     const fetching = await fetch(url, {
         method: 'POST',
         headers: {
@@ -10,14 +11,17 @@ export async function POST({url, formData, type, convert}) {
         },
         body: new URLSearchParams(Object.entries(formData))
     })
-    const {result} = await fetching.json()
-    if(convert) return /<a.+?href="(.+?)"/.exec(result)[1]
+    const {result} = await fetching.json();
+    if(isConvert) {
+      if(/"sr-only">Error: </.test(result)) return {failed: 'Error: kemungkinan link diblokir oleh youtube untuk tidak bisa didownload'}
+      return /<a.+?href="(.+?)"/.exec(result)[1]
+    }
 
-    const converting = await convert(result, type)
+    const converting = convert(result, type)
     return converting
 }
 
-async function convert(content, type) {
+function convert(content, type) {
 
     const {document} = (new JSDOM(content)).window
     const tables = document.querySelectorAll('table')

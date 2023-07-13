@@ -21,7 +21,7 @@ export default async function (msg) {
       width = 300
     }
     
-    const thumbSize = await quoted.resize(downloadThumb, {height, width})
+    const thumbSize = await quoted.resize(downloadThumb, { width, height})
     
     msg.reply(msg.mentions, {
         image: downloadMedia,
