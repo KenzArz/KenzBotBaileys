@@ -42,12 +42,16 @@ export async function POST(link) {
       })
       Object.assign(content, (await komik.json()))
     } catch (error) {
-      return {text: error.toString(), error true}
+      return {text: error.toString(), error: true}
     }
     
   }
 
   const { headers } = await fetch(content.url)
   
-  return { url: content.url, size: Math.floor(parseInt(headers.get('content-length')) / 1048576), title: headers.get('content-disposition').match(/filename="(.+?)"/)[1], mimetype: headers.get('content-type')}
+  return { 
+    url: content.url, 
+    size: Math.floor(parseInt(headers.get('content-length')) / 1048576), 
+    title: headers.get('content-disposition').match(/filename="(.+?)"/)[1], 
+    mimetype: headers.get('content-type')}
 }
