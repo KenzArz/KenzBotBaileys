@@ -2,6 +2,10 @@ export default async function(msg, {filter}) {
 
     await msg.reaction('process')
     const infoAnime = filter[parseInt(msg.body) - 1]
+    if(!infoAnime) return {
+      text: 'angka yang anda masukan tidak sesuai',
+      error: true
+    }
     const [perfect, persentase] = infoAnime.similarity.toString().split('.')
 
     const realNumber = persentase?.slice(0, 2) || perfect + '00'
@@ -19,7 +23,7 @@ export default async function(msg, {filter}) {
     const downloadContent = await msg.urlDownload(infoAnime.image)
     const resize = await msg.resize(downloadContent)
 
-    msg.reply(msg.mentions, {
+    await msg.reply(msg.mentions, {
         caption: info,
         image: downloadContent,
         jpegThumbnail: resize,

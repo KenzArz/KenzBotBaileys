@@ -1,5 +1,6 @@
 { pkgs }: {
     deps = [
+        pkgs.ffmpeg.bin
         pkgs.rs
         pkgs.nodejs-16_x
         pkgs.yarn

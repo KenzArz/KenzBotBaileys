@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import pino from 'pino'
 
 import { processCommand, commandQuoted } from './command/process_command.js';
-import {message_objek} from './message.js'
+import {message_objek} from './system/message.js'
 
 export let client;
 export const temp = []
@@ -26,12 +26,13 @@ store.readFromFile('system/baileys_store.json')
 // saves the state to a file every 10s
  setInterval(() => {
      store.writeToFile('system/baileys_store.json')
-}, 10_000)
+}, 10000)
 
 export default async function connecting () {
-  const { state, saveCreds } = await  useMultiFileAuthState('./auth');
+  const { state, saveCreds } = await  useMultiFileAuthState('system/auth');
   const { version, isLatest } = await fetchLatestBaileysVersion();    
   client = await makeWASocket.default({
+    version,
     printQRInTerminal: true,
     logger,
     auth: state,
@@ -41,9 +42,10 @@ export default async function connecting () {
         const msg = await store.loadMessage(key.remoteJid, key.id, undefined)
         return msg?.message || undefined
       }
-      return {
-        conversation: 'tes'
-      }
+      const {id} = key
+      console.log('Resending', id)
+      console.log(typeof tempStore[id])
+      return tempStore[id]?.message
     }
   })
   client.ev.on ('creds.update', saveCreds)
@@ -74,6 +76,8 @@ export default async function connecting () {
             .then(async text => text ? await message.reply(message.mentions, text, {quoted: message.quotedID}) : '')
             .catch(async err => {
               console.log(err)
+              await message.reaction({stop: true})
+              await message.reaction('danger')
           await message.reply(message.mentions, {text: `*Terjadi Error*
 
 ${err.toString()}`})
@@ -95,9 +99,13 @@ ${err.toString()}`})
       if(parseInt(message.body)  && message.quotedMessage() && temp.length !== 0)
       {
           await commandQuoted(message)
-            .then(text => text ? message.reply(message.mentions, text) : '')
+            .then(text => text ? message.reply(message.mentions, text, {quoted: message.quotedID}) : '')
             .catch(async err => {
-          await message.reply(message.mentions, {text: `*Terjadi Error*
+              console.log(err)
+              await message.reaction({stop: true})
+              await message.reaction('danger')
+              
+              await message.reply(message.mentions, {text: `*Terjadi Error*
 
 ${err.toString()}`})
             const date = new Date()
