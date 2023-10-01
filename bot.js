@@ -129,5 +129,4 @@ function errorLog(log) {
   writeFileSync(`${pathLog}/log.txt`, `${readFile}\n\n${log}`)
   return {
     text: '*Error Message Detected*\nsilahkan check log message'}
-    return
 }

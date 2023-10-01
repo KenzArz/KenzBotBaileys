@@ -1,17 +1,13 @@
-import js from 'jsdom'
-const {JSDOM} = js
-
 import {POST} from '../../system/scraper/y2mate.js'
 
 export default async function (msg) {
-
-    await msg.reaction('process')
     const quotedMessage = await msg.quotedMessage()
     const content = quotedMessage?.body || msg.body
     const [_, type, links] = content.split(' ')
 
     let data;
     const isLink = links?.includes('https')  || type?.includes('https') ? true : false
+    await (type == 'a' ? msg.reaction({loading: true}) : msg.reaction('process'))
     if(!isLink) {
       return {
         text: 'maintenance, untuk sekarang fitur ini hanya support untuk convert link yt',
@@ -38,42 +34,41 @@ a: untuk audio
         if(!ytIdRegex.test(links))return {text: 'url tidak valid', error: true}
         const ytId = ytIdRegex.exec(links)
         const url = 'https://youtu.be/' + ytId[1]
-        const {title, thumbnail, id, fileContent} = await POST({url: `https://www.y2mate.com/mates/en60/analyze/ajax`, formData: {
-            url,
-            q_auto: 0,
-            ajax: 1
+        const {title, thumbnail, fileContent} = await POST({url: `https://www.y2mate.com/mates/en818/analyzeV2/ajax`, formData: {
+            k_query: url,
+            q_auto: '0',
+            k_page: 'home',
+            hl: 'en'
         }, type: typeContent})
 
-        const {_id, v_id, ftype} = {
-          _id: id[1],
-          v_id: ytId[1],
-          ftype: typeContent
-        }
+      console.log(fileContent)
+      
         const ID = {
-            type: 'youtube',
-            _id,
-            v_id,
-            ajax: '1',
-            token: '',
-            ftype
+            vid: ytId[1]
         }
 
         if(typeContent == 'mp3') {
-            ID.fquality = '128'
-            const convert = await POST({url: `https://www.y2mate.com/mates/en60/convert`, formData: ID, isConvert: true})
+            ID.k = fileContent.audio.id
+            const convert = await POST({url: `https://www.y2mate.com/mates/convertV2/index`, formData: ID, isConvert: true})
+          if(convert?.failed) return {text: convert.failed, error: true}
+          
             await msg.reply(msg.mentions, {
                 audio: {url: convert},
                 mimetype: "audio/mp4"
-                })
-            return msg.reaction('')
+                }, {counter: true})
+            await msg.reaction({stop: true})
+            return msg.reaction('succes')
         }
 
-        let dataContent = 'Reply pesan ini dan pilih angka yang sesuai untuk memilih kualitas video\n\n' +'title: '+ title + '\n'
-        for(const [i, content] of fileContent.entries()) {
-            dataContent += `${i + 1}. ${content.bitrate} : ${content.size}\n`
+        let dataContent = 'Reply pesan ini dan pilih angka yang sesuai untuk memilih kualitas video\n\n' +'Title: '+ title + '\n'
+        for(const [i, content] of fileContent.video.entries()) {
+            const bitrate = content.bitrate
+            dataContent += `\n${i + 1}. ${bitrate} : ${content.size}\n`
         }
-        
+
+      console.log(thumbnail)
         const getThumb = await msg.urlDownload(thumbnail)
+      console.log(getThumb)
         const thumb = await msg.resize(getThumb)
         const caption = `${dataContent}`
         
@@ -86,7 +81,7 @@ a: untuk audio
 
         const {tempStore} = await import('../../bot.js')
 
-        tempStore({message: infoContent, downloaded: fileContent, ID, thumbnail: thumb})
+        tempStore({message: infoContent, downloaded: fileContent.video, ID, thumbnail: thumb, type})
         return msg.reaction('')
       
     }
