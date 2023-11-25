@@ -1,3 +1,0 @@
-{
-  "ignore": ["system/auth/*", "system/baileys_store.json"]
-}
