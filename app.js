@@ -1,7 +1,8 @@
 // import fetch from 'node-fetch'
+import express from 'express'
 import connecting from './bot.js'
 
-export const app = express.default()
+export const app = express()
 const port = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
