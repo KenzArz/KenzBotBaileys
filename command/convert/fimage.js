@@ -23,7 +23,7 @@ export default async function (msg) {
     
     const thumbSize = await quoted.resize(downloadThumb, { width, height})
     
-    msg.reply(msg.mentions, {
+    msg.reply(msg.room_chat, {
         image: downloadMedia,
         mimetype: 'image/jpeg',
         jpegThumbnail: thumbSize

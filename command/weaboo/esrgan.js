@@ -6,14 +6,14 @@ export default async function(msg) {
   
   await msg.reaction({loading: true})
   const replicate = new Replicate({
-    auth: process.env.REPLICATE_KEY,
+    auth: 'r8_BRpHjdfEZQ4CLGz9TL9AhIlEcyBRUxr4Oihn9',
     fetch
   });
 
   const errorMessage = 'tidak ada image untuk diupscale...'
   let bufferImage;
 
-  const isQuoted = await msg.quotedMessage()
+  const isQuoted = msg.quotedMessage()
   if(!isQuoted || msg.isMedia){
       if(!msg.isMedia) return errorMessage
       bufferImage = await msg.media()
@@ -31,7 +31,7 @@ export default async function(msg) {
       }
     }
   );
-  await msg.reply(msg.mentions, {
+  await msg.reply(msg.room_chat, {
     image: {url: output}
   }, {counter: true})
   await msg.reaction({stop: true})

@@ -1,7 +1,8 @@
 import fetch from 'node-fetch'
 
 export async function POST({url, formData, type, isConvert}) {
-  const fetching = await fetch(url, {
+  const baseUrl = 'https://www.y2mate.com/mates/'
+  const fetching = await fetch(baseUrl.concat(url), {
       method: 'POST',
       headers: {
           accept: "*/*",
@@ -13,8 +14,19 @@ export async function POST({url, formData, type, isConvert}) {
 
   const json = await fetching.json();
   if(isConvert) {
-    // if(/"sr-only">Error: </.test(result)) return {failed: 'Error: kemungkinan link diblokir oleh youtube untuk tidak bisa didownload'}
     return json.dlink
+  }
+
+  if(type == 'mp3') {
+    const mp3 = json.links.mp3.mp3128
+    return {
+      size: mp3.size,
+      bitrate: mp3.q,
+      id: mp3.k
+    }
+  }
+  else if(type == 'insta') {
+    return json
   }
 
   const metadata = []
@@ -32,14 +44,49 @@ export async function POST({url, formData, type, isConvert}) {
 
     return parseIntA - parseIntB
   })
-
-  const mp3 = json.links.mp3.mp3128
-  const audio = {
-    size: mp3.size,
-    bitrate: mp3.q,
-    id: mp3.k
-  }
   
-  // const converting = convert(result, type)
-  return {title: json.title, thumbnail: `https://i.ytimg.com/vi/${json.vid}/0.jpg`, fileContent: {video, audio}}
+  return {title: json.title, thumbnail: `https://i.ytimg.com/vi/${json.vid}/0.jpg`, video}
+}
+
+export async function ytdl (link, type) {
+  const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:shorts\/)|(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/
+  if(!ytIdRegex.test(link))return {text: 'url tidak valid', error: true}
+  const ytId = ytIdRegex.exec(link)
+  const url = 'https://youtu.be/' + ytId[1]
+
+  const content = await POST({url: `analyzeV2/ajax`, formData: {
+    k_query: url,
+    q_auto: '0',
+    k_page: 'home',
+    hl: 'en'
+  }, type})
+
+  return {
+    ID: { 
+      vid: ytId[1],
+    },
+    data: content
+  }
+}
+
+export async function igdl(link) {
+  const media = await POST({url: `analyzeV2/ajax`, formData: {
+    k_query: link,
+    q_auto: '1',
+    k_page: 'instagram',
+    hl: 'en'
+  }, type: 'insta'})
+  
+  const contents = media.links.video.map((d, i) => {
+    const pattern = /JPG|JPEG|MP4||heic/gi
+    const type = d.q_text.match(pattern)[0].toLowerCase()
+
+    return {...d,thumb: media.gallery?.items[i]?.thumb, type}
+  })
+
+  return {
+    status: media.status,
+    link: contents,
+    thumbnail: media.thumbnail
+  }
 }

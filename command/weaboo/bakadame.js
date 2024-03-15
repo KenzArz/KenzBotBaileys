@@ -1,8 +1,5 @@
 import fetch from 'node-fetch'
 import cheerio from 'cheerio'
-import { readFileSync, writeFileSync } from 'fs'
-
-import { app } from '../../app.js'
 
 export default async function (msg) {
 
@@ -17,7 +14,7 @@ export default async function (msg) {
     
     const pict = await msg.urlDownload(image)
     const jpegThumbnail = await msg.resize(pict)
-    await msg.reply(msg.mentions, {
+    await msg.reply(msg.room_chat, {
       image: {url: image},
       jpegThumbnail,
       mimetype: 'image/jpeg',
@@ -27,11 +24,11 @@ export default async function (msg) {
     const text = await shortLink(contents)
     if(text.split('LIMIT').length > 1) {
       for(const tautan of text.split('LIMIT')) {
-        await msg.reply(msg.mentions, {text: tautan})
+        await msg.reply(msg.room_chat, {text: tautan})
       }
       return
     }
-    await msg.reply(msg.mentions, {text})
+    await msg.reply(msg.room_chat, {text})
     
     return
   }
@@ -50,13 +47,13 @@ export default async function (msg) {
   })
 
   const noResult = $('.no-results').text()
-  if(noResult.length > 1) return msg.reply(msg.mentions, {text: '*' + noResult + '*\n\n404 *NOT FOUND*'})
+  if(noResult.length > 1) return msg.reply(msg.room_chat, {text: '*' + noResult + '*\n\n404 *NOT FOUND*'})
   let text = `${anime.toUpperCase()} - HASIL PENCARIAN\n`
   for(const [i, content] of contents.entries()) {
     text += `\n${i +1}. ${content.title}\n`
   }
 
-  const komik = await msg.reply(msg.mentions, {text}, {quoted: msg.quotedID})
+  const komik = await msg.reply(msg.room_chat, {text}, {quoted: msg.quotedID})
   
   const {tempStore} = await import('../../bot.js')
   tempStore({message: komik, komikInfo: contents})

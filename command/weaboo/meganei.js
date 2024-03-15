@@ -11,13 +11,13 @@ export default async function (msg) {
     const imageDwn = await msg.urlDownload(preview)
     const thumb = await msg.resize(imageDwn)
 
-    await msg.reply(msg.mentions, {
+    await msg.reply(msg.room_chat, {
       image: {url: preview},
       jpegThumbnail: thumb,
       caption,
       mimetype: 'image/jpeg'
     })
-    await msg.reply(msg.mentions, {text: linkDownload})
+    await msg.reply(msg.room_chat, {text: linkDownload})
     return msg.reaction('')
   }
   
@@ -43,13 +43,13 @@ export default async function (msg) {
     const imageDwn = await msg.urlDownload(preview)
     const thumb = await msg.resize(imageDwn)
 
-    await msg.reply(msg.mentions, {
+    await msg.reply(msg.room_chat, {
       image: {url: preview},
       jpegThumbnail: thumb,
       caption,
       mimetype: 'image/jpeg'
     })
-    await msg.reply(msg.mentions, {text: linkDownload})
+    await msg.reply(msg.room_chat, {text: linkDownload})
     return msg.reaction('')
     
   }
@@ -60,9 +60,9 @@ export default async function (msg) {
   }
   text += '\nreply pesan ini dengan angka yang sesuai untuk melihat info lebih lengkap'
 
-  const komik = await msg.reply(msg.mentions, {text}, {quoted: msg.quotedID})
+  const komik = await msg.reply(msg.room_chat, {text}, {quoted: msg.quotedID})
   const {tempStore} = await import('../../bot.js')
-  tempStore({message: komik, komikInfo: data})
+  tempStore({message: komik, komikInfo: data, room_chat: msg.room_chat})
   return msg.reaction('')
 }
 

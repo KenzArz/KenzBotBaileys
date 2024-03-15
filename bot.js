@@ -1,19 +1,25 @@
+import 'hostname-patcher'
 import makeWASocket ,{ DisconnectReason,useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore} from'@whiskeysockets/baileys';
 import {Boom} from '@hapi/boom';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import pino from 'pino'
 
 import { processCommand, commandQuoted } from './command/process_command.js';
-import {message_objek} from './system/message.js'
+import {Create_message} from './system/message.js'
 
 export let client;
-export const temp = []
-export const tempStore = (message) => {
-  temp.push(message)
-  const index = temp.length - 1
-  new Promise((res, rej) => {
+export const temp = new Map()
+export const tempStore = async (message) => {
+
+  const room_chat = message.message.key.remoteJid
+  const messageTemp = temp.get(room_chat)
+  const set = messageTemp ? messageTemp.push(message) : [message]
+
+  temp.set(room_chat, set) 
+  const index = set.length - 1
+  await new Promise((res, rej) => {
     setTimeout(() => {
-      temp.splice(index, 1)
+      set.splice(index, 1)
       res('ok')
       rej('error')
     }, 180000)
@@ -60,32 +66,42 @@ export default async function connecting () {
           }
       } else if(connection === 'open') {
           console.log('connected')
+          client.ev.flush()
       }
   })
     client.ev.on("messages.upsert", async m => {
       const msg = m.messages[0];
+      console.log(msg?.message?.extendedTextMessage?.contextInfo)
       if(!msg.message) return
       await client.readMessages([msg.key]);
-      const message = message_objek(msg)
-      const isGroup = message?.mentions?.includes('@g.us')
+      const message = new Create_message(msg)
+      if(!message.body)return
+      if(message.body =='t'){
+        const backup = await message.media()
+        return await message.reply(message.room_chat, {
+          video: backup,
+          mimetype: 'video/mp4'
+        })
+      }
+      const isGroup = message?.room_chat?.includes('@g.us')
 
       //cek command
       if(message?.body?.startsWith('!',0))
       {
           await processCommand(message)
-            .then(async text => text ? await message.reply(message.mentions, text, {quoted: message.quotedID}) : '')
+            .then(async text => text ? await message.reply(message.room_chat, text, {quoted: message.quotedID}) : '')
             .catch(async err => {
               console.log(err)
               await message.reaction({stop: true})
               await message.reaction('danger')
-          await message.reply(message.mentions, {text: `*Terjadi Error*
+          await message.reply(message.room_chat, {text: `*Terjadi Error*
 
 ${err.toString()}`})
             const date = new Date()
-            const {subject} = isGroup ? await client.groupMetadata(message.mentions) : false
+            const {subject} = isGroup ? await client.groupMetadata(message.room_chat) : false
             const error = errorLog(`Error Message\n`+
             `Date: ${date.getHours() + 7}:${date.getMinutes()}}\n`+
-            `chat: ${message.mentions}\n`+
+            `chat: ${message.room_chat}\n`+
             `chat room: ${subject || 'private chat'}\n`+
             `text: ${message.body}\n`+
             `typeMessage: ${message?.typeMsg || 'UNKNOWN'}\n`+
@@ -99,20 +115,20 @@ ${err.toString()}`})
       if(parseInt(message.body)  && message.quotedMessage() && temp.length !== 0)
       {
           await commandQuoted(message)
-            .then(text => text ? message.reply(message.mentions, text, {quoted: message.quotedID}) : '')
+            .then(text => text ? message.reply(message.room_chat, text, {quoted: message.quotedID}) : '')
             .catch(async err => {
               console.log(err)
               await message.reaction({stop: true})
               await message.reaction('danger')
               
-              await message.reply(message.mentions, {text: `*Terjadi Error*
+              await message.reply(message.room_chat, {text: `*Terjadi Error*
 
 ${err.toString()}`})
             const date = new Date()
-            const {subject} = isGroup ? await client.groupMetadata(message.mentions) : false
+            const {subject} = isGroup ? await client.groupMetadata(message.room_chat) : false
             const error = errorLog(`Error Message\n`+
             `Date: ${date.getHours() + 7}:${date.getMinutes()}}\n`+
-            `chat: ${message.mentions}\n`+
+            `chat: ${message.room_chat}\n`+
             `chat room: ${subject || 'private chat'}\n`+
             `text: ${message.body}\n`+
             `typeMessage: ${message?.typeMsg || 'UNKNOWN'}\n`+

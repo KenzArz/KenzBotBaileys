@@ -1,26 +1,17 @@
-// import fetch from 'node-fetch'
 import connecting from './bot.js'
+import express from 'express'
 
-export const app = express.default()
+export const app = express()
 const port = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
     res.send('<p>Bot Online...</p>')
 })
 app.get('/api', (req, res) => {
-    res.send('<p> API NOT FOUND')
+    res.send('<p>API NOT FOUND<p>')
 })
 
 app.listen(port, async (a) => {
-    await connecting()
-    console.log(port)
     console.log('ACTIVATING BOT...')
+    await connecting()
 })
-
-// function getServer() {
-//   setInterval(() => { 
-//     fetch('https://kenzbot.kenzart05.repl.co', {method: "HEAD"})
-//       .then(server => server.text())
-    
-//   },60000)
-// }

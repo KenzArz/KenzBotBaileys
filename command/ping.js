@@ -1,4 +1,4 @@
-export default function (msg) {
+export default async function (msg) {
     const contactName = `*${msg.contactName}*`
     const sayHello = [
         `halo ${contactName} ada yang bisa dibantu`,
@@ -6,5 +6,6 @@ export default function (msg) {
         `kenzbot hadir. ada yang bisa dibantu ${contactName}`,
         `kenzbot siap membantumu ${contactName}`
     ]
-    msg.reply(msg.mentions, {text: sayHello[Math.floor(Math.random() * sayHello.length)], quoted: msg.quotedID})
+    const t = await msg.reply(msg.room_chat, {text: sayHello[Math.floor(Math.random() * sayHello.length)], quoted: msg.quotedID})
+    console.log(t.key)
 }

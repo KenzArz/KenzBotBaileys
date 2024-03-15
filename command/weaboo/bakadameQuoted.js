@@ -9,7 +9,7 @@ export default async function(msg, {komikInfo}) {
   const imageDwn = await msg.urlDownload(image)
   const thumb = await msg.resize(imageDwn)
 
-  await msg.reply(msg.mentions, {
+  await msg.reply(msg.room_chat, {
     image: {url: image},
     jpegThumbnail: thumb,
     caption,
@@ -19,11 +19,11 @@ export default async function(msg, {komikInfo}) {
   const text = await shortLink(contents)
     if(text.split('LIMIT').length > 1) {
       for(const tautan of text.split('LIMIT')) {
-        await msg.reply(msg.mentions, {text: tautan})
+        await msg.reply(msg.room_chat, {text: tautan})
       }
       return
     }
-    await msg.reply(msg.mentions, {text})
+    await msg.reply(msg.room_chat, {text})
   
   return msg.reaction('')
 }

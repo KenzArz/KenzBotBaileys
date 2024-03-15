@@ -4,19 +4,9 @@ export default async function (msg) {
 
     await msg.reaction({loading: true})
     const isQuoted = await msg.quotedMessage()
-    const errorMessage = {text: 'tidak ada image untuk dicari', error: true}
-    let bufferImage;
 
-
-    if(!isQuoted || msg.isMedia) {
-        if(!msg.isMedia) return errorMessage
-        bufferImage = await msg.media()
-    }
-    else {
-        if(!isQuoted.isMedia) return errorMessage
-        bufferImage = await isQuoted.media()
-    }
-
+    const bufferImage = await msg.media()
+    if(bufferImage.text)return {text: bufferImage.text, error: true}
 
     const getData = await fetch("https://api.trace.moe/search?anilistInfo", {
         method: "POST",
@@ -104,9 +94,6 @@ Similarity: ${similarity}\n\n`
     const imageAnime = filter[0].image
     let downloadImage
     try {
-        if(isQuoted?.urlDownload !== null && isQuoted) {
-            downloadImage = await isQuoted.urlDownload(imageAnime)
-        }
         if(msg.urlDownload !== null) {
             downloadImage = await msg.urlDownload(imageAnime)
         }
@@ -117,9 +104,6 @@ Similarity: ${similarity}\n\n`
     let HImage
     if(isAdult[0]?.isAdult) {
         try {
-            if(isQuoted?.urlDownload !== null && isQuoted) {
-                HImage = await isQuoted.urlDownload(isAdult[0]?.image)
-            }
             if(msg.urlDownload !== null) {
                 HImage = await msg.urlDownload(isAdult[0]?.image)
             }
@@ -127,28 +111,15 @@ Similarity: ${similarity}\n\n`
             throw error + '\n\nurl tidak valid'
         }
     }
-    let thumb;
-    let HThumb;
-    if(!isQuoted || msg.isMedia) {
-        if(!msg.isMedia) return errorMessage
-        thumb =  await msg.resize(downloadImage)
-
-        if(isAdult[0]?.isAdult) {
-            HThumb = await msg.resize(HImage)
-        }
-    }
-    else {
-        if(!isQuoted?.isMedia) return errorMessage
-        thumb = await isQuoted.resize(downloadImage)
-
-        if(isAdult[0]?.isAdult) {
-            HThumb = await isQuoted.resize(HImage)
-        }
+    const thumb = await msg.resize(downloadImage)
+    let HThumb; 
+    if(isAdult[0]?.isAdult) {
+        HThumb = await msg.resize(HImage)
     }
 
     const {tempStore} = await import('../../bot.js')
     if(msg.isOwner){
-        const allNime = await msg.reply(msg.mentions, {
+        const allNime = await msg.reply(msg.room_chat, {
             image: downloadImage,
             caption: listAnime,
             mimetype: 'image/jpeg',
@@ -160,7 +131,7 @@ Similarity: ${similarity}\n\n`
         return
     }
 
-    const animeContent = await msg.reply(msg.mentions, {
+    const animeContent = await msg.reply(msg.room_chat, {
         image: downloadImage,
         caption: filterAnime,
         mimetype: 'image/jpeg',
@@ -169,7 +140,7 @@ Similarity: ${similarity}\n\n`
     tempStore({message: animeContent, filter})
 
 
-    if(isAdult[0]?.isAdult) {
+    if(HThumb) {
         await  msg.reply(msg.ownerNumber, {
             image: HImage,
             caption: filterHanime,

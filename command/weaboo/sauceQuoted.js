@@ -23,7 +23,7 @@ export default async function(msg, {filter}) {
     const downloadContent = await msg.urlDownload(infoAnime.image)
     const resize = await msg.resize(downloadContent)
 
-    await msg.reply(msg.mentions, {
+    await msg.reply(msg.room_chat, {
         caption: info,
         image: downloadContent,
         jpegThumbnail: resize,

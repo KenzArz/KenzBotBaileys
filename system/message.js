@@ -1,5 +1,5 @@
 import { downloadMediaMessage, S_WHATSAPP_NET, delay } from "@whiskeysockets/baileys"
-import { createWriteStream, readFileSync } from "fs"
+import { readFileSync } from "fs"
 import fetch from 'node-fetch'
 import axios from 'axios'
 import sharp from 'sharp'
@@ -8,85 +8,77 @@ import https from 'https'
 import {client} from '../bot.js'
 const map = new Map()
 
-export function message_objek(msg) {
-  const getMsgType = msg.ephemeralMessage?.message || msg.documentWithCaptionMessage?.message || msg.message
-  const getType = checkType( findType => findType.find(findTypeMsg =>  Object.keys(getMsgType).find(keyType => keyType === findTypeMsg.type)), getMsgType)
+export class Create_message {
 
-  const isMedia = getType?.isMedia ? true : null
+  #msg
+  #getMsgType;
+  #getType;
+  #key
+  #bot
+  #ctxInfo
+  #mediaContent
 
-  const key = msg.key,
-  messageID = key.id,
-  room_chat = key.remoteJid,
-  contactName = msg.pushName,
-  bot = key.fromMe,
-  ownerNumber = process.env.OWNER + S_WHATSAPP_NET,
-  ownerId = ownerNumber == key.participant || ownerNumber == key.remoteJid,
-  isOwner = bot || ownerId,
+  constructor(msg) {
+    this.#msg = msg
 
-  body = msg.message?.conversation|| msg.message.extendedTextMessage?.text || msg.message.imageMessage?.caption || msg.message.videoMessage?.caption
-  if(!body) return {body: 'not a message'}
+    this.#getMsgType = msg.ephemeralMessage?.message || msg.documentWithCaptionMessage?.message || msg.message
+    this.#getType = checkType( findType => findType.find(findTypeMsg =>  Object.keys(this.#getMsgType).find(keyType => keyType === findTypeMsg.type)), this.#getMsgType)
+    this.#key = msg.key
+    this.#bot = this.#key.fromMe
+    this.#mediaContent = msg.message.extendedTextMessage || msg.message.imageMessage || msg.message.videoMessage
+    this.#ctxInfo = this.#msg.message?.extendedTextMessage?.contextInfo || this.#msg.message?.imageMessage?.contextInfo || this.#msg.message?.audioMessage?.contextInfo
 
 
-  return {
-    messageID,
-    contactName,
-    body,
-    mentions: room_chat,
-    typeMsg: getType?.typeMsg,
-    isMedia,
-    isOwner,
-    ownerNumber,
-    quotedID: msg,
-    quotedMessage: () => {
-      const ctxInfo = msg.message?.extendedTextMessage?.contextInfo || msg.message?.imageMessage?.contextInfo || msg.message?.audioMessage?.contextInfo
-      const quoted = ctxInfo?.quotedMessage
 
-      const quotedID = ctxInfo?.stanzaId
-      if(!quoted) return null
-      key.participant = msg.message?.extendedTextMessage?.contextInfo?.participant || undefined
+    this.typeMsg = this.#getType?.typeMsg
+    this.isMedia = this.#getType?.isMedia ? true : false
+    this.contactName = msg.pushName
+
+    this.body = msg.message.extendedTextMessage?.text || msg.message?.conversation || this.#mediaContent?.caption
+    this.messageID = this.#key.id
+    this.room_chat = this.#key.remoteJid
+    this.expiration = this.#ctxInfo?.expiration
+    this.ownerNumber = process.env.OWNER + S_WHATSAPP_NET
+    this.ownerId = this.ownerNumber == this.#key.participant || this.ownerNumber == this.#key.remoteJid,
+    this.isOwner = this.#bot || this.ownerId
+    this.quotedID = this.#msg
+    
+  }
+
+  quotedMessage()  {
+    const quoted = this.#ctxInfo?.quotedMessage
+    const quotedID = this.#ctxInfo?.stanzaId
+    if(!quoted) return null
+    this.#key.participant = this.#msg.message?.extendedTextMessage?.contextInfo?.participant || undefined
+    const bodyQuoted = quoted?.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
       
-      const bodyQuoted = quoted?.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
-      
-      const getType = checkType(findType => findType.find(findOBJ => Object.keys(quoted).find(m => m === findOBJ.type)), quoted)
-      const isMedia = getType?.isMedia ? true : false
-      
-      return {
-        quotedID: {
-        key: key,
+    const getType = checkType(findType => findType.find(findOBJ => Object.keys(quoted).find(m => m === findOBJ.type)), quoted)
+    const isMedia = getType?.isMedia ? true : false
+
+    return {
+      quotedID: {
+        key: this.#key,
         message: quoted
-        },
-        body: bodyQuoted,
-        stanza: quotedID,
-        typeMsg: getType?.typeMsg,
-        isMedia,
-        media: isMedia ? async function () {
-          const download = await downloadMedia(this.quotedID);
-          return download;
-          
-        } : null,
-        urlDownload: async (url, path) => {
-          const urlImage = await downloadMediaUrl(url, path)
-          return urlImage
-        },
-        reply: async (contact, text, options) => {
-          await delayMsg(contact, text, options)
-        },
-        resize: async (image, options) => {
-          const media = await sharpImage(image, options)
-          return media
-        },
-        reaction: async function({key}, emoji) {
-          const emot =  await react(key, emoji)
-        }
-      }
-    },
-    media: isMedia ? async () => {
-      const download = await downloadMedia(msg);
-      return download
-      
-    } : null,
-    urlDownload: async function(url, options = {})  {
-      let urlImage
+      },
+      body: bodyQuoted,
+      stanza: quotedID,
+      typeMsg: getType?.typeMsg,
+      isMedia
+    }
+  }
+
+  media = async () => {
+    const isQuoted = this.quotedMessage()
+    const isMedia = isQuoted?.isMedia || this.isMedia
+    if(!isMedia )return {text: 'sertakan gambar!!!'}
+
+    const media = isQuoted ? isQuoted.quotedID : this.#msg
+    const download = await downloadMedia(media);
+    return download
+  }
+
+  async urlDownload(url, options = {}) {
+    let urlImage
       try {        
         urlImage = await downloadMediaUrl(url, options)
       } catch (error) {
@@ -100,28 +92,146 @@ export function message_objek(msg) {
         }
       }
       return urlImage
-    },
-    reply: async (contact, text, options) =>{
-      return delayMsg(contact, text, options)
-    },
-    resize: async (image, options) => {
-      const media = await sharpImage(image, options)
-      return media
-    },
-    reaction: async function (reactContent) {
-      const {loading, stop} = reactContent
+  }
 
-      if(loading) {
-        await upload({key: msg.key})
-      }
-      else if(stop) await upload(stop)
-      else{
-      const emot = await react(msg.key, reactContent)
-      return emot
-      }
-    },
+  async reply(contact, text, options={}) {
+    options.ephemeralExpiration = this.expiration
+    return delayMsg(contact, text, options)
+  }
+
+  async resize(image, options) {
+    const media = await sharpImage(image, options)
+    return media
+  }
+
+  async reaction(reactContent) {
+    const {loading, stop} = reactContent
+
+    if(loading) {
+      await upload({key: this.#key})
+    }
+    else if(stop) await upload(stop)
+    else{
+    const emot = await react(this.#key, reactContent)
+    return emot
+    }
   }
 }
+
+// export function message_objek(msg) {
+//   const getMsgType = msg.ephemeralMessage?.message || msg.documentWithCaptionMessage?.message || msg.message
+//   const getType = checkType( findType => findType.find(findTypeMsg =>  Object.keys(getMsgType).find(keyType => keyType === findTypeMsg.type)), getMsgType)
+
+//   const isMedia = getType?.isMedia ? true : null
+
+//   const key = msg.key,
+//   messageID = key.id,
+//   room_chat = key.remoteJid,
+//   bot = key.fromMe,
+//   contactName = msg.pushName,
+//   ownerNumber = process.env.OWNER + S_WHATSAPP_NET,
+//   ownerId = ownerNumber == key.participant || ownerNumber == key.remoteJid,
+//   isOwner = bot || ownerId,
+
+//   body = msg.message?.conversation|| msg.message.extendedTextMessage?.text || msg.message.imageMessage?.caption || msg.message.videoMessage?.caption
+//   if(!body) return {body: 'not a message'}
+
+
+//   return {
+//     messageID,
+//     contactName,
+//     body,
+//     mentions: room_chat,
+//     typeMsg: getType?.typeMsg,
+//     isMedia,
+//     isOwner,
+//     ownerNumber,
+//     quotedID: msg,
+//     quotedMessage: () => {
+//       const ctxInfo = msg.message?.extendedTextMessage?.contextInfo || msg.message?.imageMessage?.contextInfo || msg.message?.audioMessage?.contextInfo
+//       const quoted = ctxInfo?.quotedMessage
+
+//       const quotedID = ctxInfo?.stanzaId
+//       if(!quoted) return null
+//       key.participant = msg.message?.extendedTextMessage?.contextInfo?.participant || undefined
+      
+//       const bodyQuoted = quoted?.conversation || quoted.extendedTextMessage?.text || quoted.imageMessage?.caption
+      
+//       const getType = checkType(findType => findType.find(findOBJ => Object.keys(quoted).find(m => m === findOBJ.type)), quoted)
+//       const isMedia = getType?.isMedia ? true : false
+      
+//       return {
+//         quotedID: {
+//         key: key,
+//         message: quoted
+//         },
+//         body: bodyQuoted,
+//         stanza: quotedID,
+//         typeMsg: getType?.typeMsg,
+//         isMedia,
+//         // media: isMedia ? async function () {
+//         //   const download = await downloadMedia(this.quotedID);
+//         //   return download;
+          
+//         // } : null,
+//         // urlDownload: async (url, path) => {
+//         //   const urlImage = await downloadMediaUrl(url, path)
+//         //   return urlImage
+//         // },
+//         // reply: async (contact, text, options) => {
+//         //   await delayMsg(contact, text, options)
+//         // },
+//         // resize: async (image, options) => {
+//         //   const media = await sharpImage(image, options)
+//         //   return media
+//         // },
+//         // reaction: async function({key}, emoji) {
+//         //   const emot =  await react(key, emoji)
+//         // }
+//       }
+//     },
+//     media: isMedia ? async () => {
+//       const download = await downloadMedia(msg);
+//       return download
+      
+//     } : null,
+//     urlDownload: async function(url, options = {})  {
+//       let urlImage
+//       try {        
+//         urlImage = await downloadMediaUrl(url, options)
+//       } catch (error) {
+//         if(error.toString().includes('network socket') || error.response.status == 521) {
+//           if(options.repeat == 5) {
+//             return {error: true}
+//           }
+//          if(options.repeat) options.repeat = options.repeat + 1
+//           options.repeat = options.repeat || 0
+//           urlImage = await this.urlDownload(url, options)
+//         }
+//       }
+//       return urlImage
+//     },
+//     reply: async (contact, text, options) =>{
+//       return delayMsg(contact, text, options)
+//     },
+//     resize: async (image, options) => {
+//       const media = await sharpImage(image, options)
+//       return media
+//     },
+//     reaction: async function (reactContent) {
+//       const {loading, stop} = reactContent
+
+//       if(loading) {
+//         await upload({key: msg.key})
+//       }
+//       else if(stop) await upload(stop)
+//       else{
+//       const emot = await react(msg.key, reactContent)
+//       return emot
+//       }
+//     },
+//   }
+// }
 
 function checkType (type, msgDetail) {
   const arrType = [{
@@ -148,13 +258,17 @@ function checkType (type, msgDetail) {
     type: 'stickerMessage',
     typeMsg: 'sticker',
     isMedia: true
+  },
+  {
+    type: 'extendedTextMessage',
+    typeMsg: 'text',
+    isMedia: false
   }
 ]
 return type(arrType)
 }
 
 async function delayMsg(contact, body, options = {}) {
-  options.ephemeralExpiration = !options.counter ? 60*60*24 : undefined
   await client.presenceSubscribe(contact)
   await delay(options.kuisDate || 1000)
   
@@ -162,7 +276,7 @@ async function delayMsg(contact, body, options = {}) {
 }
 
 async function downloadMedia(imageMessage) {
-  return await downloadMediaMessage(imageMessage, 'buffer')
+  return await downloadMediaMessage(imageMessage, 'buffer', {})
 }
 
 async function downloadMediaUrl(url, agent) {

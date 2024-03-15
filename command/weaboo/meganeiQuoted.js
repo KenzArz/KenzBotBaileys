@@ -10,12 +10,12 @@ export default async function (msg, {komikInfo}) {
   const imageDwn = await msg.urlDownload(preview)
   const thumb = await msg.resize(imageDwn)
 
-  await msg.reply(msg.mentions, {
+  await msg.reply(msg.room_chat, {
     image: {url: preview},
     jpegThumbnail: thumb,
     caption,
     mimetype: 'image/jpeg'
   })
-  await msg.reply(msg.mentions, {text: linkDownload})
+  await msg.reply(msg.room_chat, {text: linkDownload})
   return msg.reaction('')
 }

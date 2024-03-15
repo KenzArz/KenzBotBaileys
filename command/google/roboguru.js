@@ -61,7 +61,7 @@ export default async function (msg) {
 
             const thumb = await msg.resize(imageBuffer)
 
-            await msg.reply(msg.mentions, {
+            await msg.reply(msg.room_chat, {
               caption: text || 'hasil yang ditemukan',
               image: imageBuffer,
               jpegThumbnail: thumb
@@ -70,7 +70,7 @@ export default async function (msg) {
           }
         const downloadContent = await axios.get(image, {responseType: 'arraybuffer'})
         const thumb = await msg.resize(downloadContent.data)
-        await msg.reply(msg.mentions, {
+        await msg.reply(msg.room_chat, {
             caption: text || 'hasil yang ditemukan',
             image: {url: image},
             jpegThumbnail: thumb
@@ -78,7 +78,7 @@ export default async function (msg) {
       })
     }
     else {
-      await msg.reply(msg.mentions, {
+      await msg.reply(msg.room_chat, {
           text: text
       })
     }

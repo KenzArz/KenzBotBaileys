@@ -1,30 +1,20 @@
 import { Sticker, StickerTypes } from "wa-sticker-formatter";
-import ffmpeg from 'ffmpeg-static';
-
+import 'ffmpeg-static';
 
 export default async function (msg) {
-  // console.log(msg.typeMsg)
+  
+  await msg.reaction('process')
   const isQuoted = await msg.quotedMessage()
   const type = msg.typeMsg || isQuoted.typeMsg
   if(type == 'video')return {error: true, text: 'media harus berupa gambar atau video gif'}
   const quality = type == 'image' ? 100 : 15
   
-  await msg.reaction('process')
-  const errorMessage = 'tidak ada image untuk diconvert menjadi stiker'
-  let bufferImage;
-  
-  if(!isQuoted || msg.isMedia){
-      if(!msg.isMedia) return errorMessage
-      bufferImage = await msg.media()
-  }
-  else {
-      if(!isQuoted.isMedia) return errorMessage
-      bufferImage = await isQuoted.media()
-  }
+  const bufferImage = await msg.media()
+  if(bufferImage.text)return {text: bufferImage.text, error: true}
 
   const buffer = new Sticker(bufferImage, {author: 'KenzBot (´-﹏-`)', type: StickerTypes.FULL, quality, background:'transparent'})
   const sticker = await buffer.toMessage()
   
-  await msg.reply(msg.mentions, sticker, {quoted: msg.quotedID})
+  await msg.reply(msg.room_chat, sticker, {quoted: msg.quotedID})
   await msg.reaction('')
 }
