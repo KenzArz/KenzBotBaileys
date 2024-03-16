@@ -6,6 +6,7 @@ import pino from 'pino'
 
 import { processCommand, commandQuoted } from './command/process_command.js';
 import {Create_message} from './system/message.js'
+import { generateQR } from './app.js';
 
 export let client;
 export const temp = new Map()
@@ -39,7 +40,6 @@ export default async function connecting () {
   const { version, isLatest } = await fetchLatestBaileysVersion();    
   client = await makeWASocket.default({
     version,
-    printQRInTerminal: true,
     logger,
     auth: state,
     linkPreviewImageThumbnailWidth: 500,
@@ -56,7 +56,7 @@ export default async function connecting () {
   })
   client.ev.on ('creds.update', saveCreds)
   client.ev.on('connection.update', async update => {
-      const { connection, lastDisconnect } = update
+      const { connection, lastDisconnect, qr } = update
       if(connection === 'close') {
           const shouldReconnect = new Boom(lastDisconnect.error)?.output?.statusCode !== DisconnectReason.loggedOut
           console.log('connection closed due to \n\n', lastDisconnect.error, ',\n\n reconnecting \n\n', shouldReconnect)
@@ -64,6 +64,8 @@ export default async function connecting () {
           if(shouldReconnect) {
               await connecting()
           }
+      } else if(qr) {
+          await generateQR(qr)
       } else if(connection === 'open') {
           console.log('connected')
           client.ev.flush()
@@ -71,18 +73,10 @@ export default async function connecting () {
   })
     client.ev.on("messages.upsert", async m => {
       const msg = m.messages[0];
-      console.log(msg?.message?.extendedTextMessage?.contextInfo)
       if(!msg.message) return
       await client.readMessages([msg.key]);
       const message = new Create_message(msg)
       if(!message.body)return
-      if(message.body =='t'){
-        const backup = await message.media()
-        return await message.reply(message.room_chat, {
-          video: backup,
-          mimetype: 'video/mp4'
-        })
-      }
       const isGroup = message?.room_chat?.includes('@g.us')
 
       //cek command

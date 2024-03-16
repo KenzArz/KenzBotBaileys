@@ -17,8 +17,10 @@
     "node-fetch": "^2.7.0",
     "pino": "^8.14.1",
     "protobufjs": ">=6.10.3",
+    "qrcode": "^1.5.3",
     "qrcode-terminal": "^0.12.0",
     "replicate": "^0.12.3",
+    "uuid": "^9.0.1",
     "wa-sticker-formatter": "^4.4.4"
   },
   "devDependencies": {
