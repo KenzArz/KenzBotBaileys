@@ -1,35 +1,26 @@
 {
-  "name": "KenzBotWa",
-  "version": "1.6.0",
+  "name": "kenzbotwa",
+  "version": "2.1.0",
   "main": "app.js",
   "dependencies": {
-    "@adiwajshing/keyed-db": "^0.2.4",
-    "@hapi/boom": "^10.0.0",
-    "@whiskeysockets/baileys": "^6.3.0",
-    "axios": "^1.6.7",
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.6.0",
+    "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
-    "express": "^4.18.3",
-    "ffmpeg-static": "^5.2.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "form-data": "^4.0.0",
-    "formdata-node": "^6.0.3",
-    "got": "^13.0.0",
     "hostname-patcher": "^1.2.0",
-    "node-fetch": "^2.7.0",
-    "pino": "^8.14.1",
-    "protobufjs": ">=6.10.3",
+    "node-fetch": "^3.3.2",
     "qrcode": "^1.5.3",
-    "qrcode-terminal": "^0.12.0",
-    "replicate": "^0.12.3",
-    "uuid": "^9.0.1",
     "wa-sticker-formatter": "^4.4.4"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.16",
-    "protobufjs": ">=6.10.3"
-  },
   "scripts": {
-    "start": "nodemon app",
+    "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "16.x"
   },
   "repository": {
     "type": "git",
