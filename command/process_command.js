@@ -1,91 +1,87 @@
-import { readdirSync, readFileSync} from 'fs'
-import { Create_message } from '../system/message.js'
+import { readdirSync, readFileSync } from "fs";
+import { Create_message } from "../system/message.js";
 
-let mainDir = './command'
+let mainDir = "./command";
 
-function dirPath() {
-    const checkDir = readdirSync(mainDir, {withFileTypes: true}).map(item => {
-        if(!item.isDirectory()) {
-            if(item.name !== 'process_command.js'){
-                return {
-                    item: item.name.split('.js')[0],
-                    owner: false
-                }
-            }
-            return
-        }
-        return {
-            item: item.name,
-            subItem: readdirSync(`${mainDir}/${item.name}`, {withFileTypes: true}).map(subItem => {
-                return subItem.name.split('.js')[0]
-            }),
-            owner: item.name == 'owner' ? true : false
-        }
-    })
-    return checkDir.filter(m => m !== undefined)
-    
+export function dirPath() {
+	const listDir = readdirSync(mainDir, { withFileTypes: true });
+	return listDir.reduce((result, item) => {
+		if (item.isDirectory()) {
+			result.push({
+				item: item.name,
+				subItem: readdirSync(`${mainDir}/${item.name}`, {
+					withFileTypes: true,
+				}).map(({ name }) => name.split(".")[0]),
+			});
+		}
+		return result;
+	}, []);
 }
 
 function filePath(body) {
-    const checkDir = dirPath()
-    const delPrefix = body.slice(1).split(' ')[0]
-    
-    const getItem = checkDir.find(m => m.subItem?.find(k => k == delPrefix)) || checkDir.find(m => m.item == delPrefix)
-    if(!getItem) return {text: `fitur ${body.split(' ')[0]} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`}
-    
-    const setPath = {
-        item: getItem.item,
-        subItem: getItem?.subItem?.find(subItem => subItem.toLowerCase() === delPrefix.toLowerCase()) || ''
-    }
-    return {
-        path: `./${setPath.item}${setPath.subItem ? `/${setPath.subItem}` : ''}.js`
-    }
-    
+	const delPrefix = body.slice(1).split(" ")[0];
+	const [item, subItem] = dirPath().reduce((result, m) => {
+		const subItem = m.subItem?.find(k => k == delPrefix && k !== "index");
+		if (subItem) result.push(m.item, subItem);
+		return result;
+	}, []);
+
+	if (!subItem)
+		return {
+			text: `fitur !${delPrefix} tidak ada, silahkan ketik !menu untuk melihat fitur yang ada`,
+		};
+	return `./${item}/${subItem}.js`;
 }
 
 /**@param {Create_message} msg */
 export async function processCommand(msg) {
-    
-    const checkFitur =  filePath(msg.body)
-    if(checkFitur.text) {
-      await msg.reaction('failed')
-      return checkFitur
-    }
+	const searchFeatures = filePath(msg.body);
+	if (searchFeatures.text) {
+		await msg.reaction("failed");
+		return searchFeatures;
+	}
 
-    const {default: Run} = await import(checkFitur.path)
-    const command = await Run(msg)
+	const { default: Run } = await import(searchFeatures);
+	const command = await Run(msg);
 
-    if(command?.error) {
-    await msg.reaction({stop: true})
-    await msg.reaction('failed')
-    return command
-    }
-    
-    return false
+	if (command?.error) {
+		await msg.reaction({ stop: true });
+		await msg.reaction("failed");
+		return command;
+	}
+
+	return false;
 }
 
 /**@param {Create_message} msgQuoted */
 export async function commandQuoted(msgQuoted) {
+	const quoted = msgQuoted.quotedMessage();
+	const { temp } = await import("../bot.js");
+	const dataTemp = temp.get(msgQuoted.room_chat);
+	const content = dataTemp.find(
+		({ message }) => message.key.id == quoted.stanza
+	);
 
-    const quoted = msgQuoted.quotedMessage()
-    const {temp} = await import('../bot.js')
-    const dataTemp = temp.get(msgQuoted.room_chat)
-    const content = dataTemp.find(({message}) => message.key.id == quoted.stanza)
-  
-    const ctx = content.message.message?.imageMessage?.contextInfo?.quotedMessage || content.message.message?.extendedTextMessage.contextInfo.quotedMessage || content.message.message?.videoMessage.contextInfo.quotedMessage
-    const bodyMesage = ctx.imageMessage?.caption?.slice(0) || ctx.conversation?.slice(0) || ctx.extendedTextMessage?.text?.slice(0)
-    if(msgQuoted.body.split(' ')[0] == '0')return
+	const ctx =
+		content.message.message?.imageMessage?.contextInfo?.quotedMessage ||
+		content.message.message?.extendedTextMessage.contextInfo.quotedMessage ||
+		content.message.message?.videoMessage.contextInfo.quotedMessage;
+	const bodyMesage =
+		ctx.imageMessage?.caption?.slice(0) ||
+		ctx.conversation?.slice(0) ||
+		ctx.extendedTextMessage?.text?.slice(0);
+	if (msgQuoted.body.split(" ")[0] == "0") return;
 
-    const checkFitur = filePath(bodyMesage.split(' ')[0]+ 'Quoted')
+	const searchFeatures = filePath(bodyMesage.split(" ")[0] + "Quoted");
 
-    const {default: Run} = await import(checkFitur.path)
-    const commandQuoted = await Run(msgQuoted, content)
+	const { default: Run } = await import(searchFeatures);
+	const commandQuoted = await Run(msgQuoted, content);
 
-    if(commandQuoted?.error){
-    await msgQuoted.reaction({stop: true})
-    await msgQuoted.reaction('failed')
-    return commandQuoted
-    }
+	if (commandQuoted?.error) {
+		await msgQuoted.reaction({ stop: true });
+		await msgQuoted.reaction("failed");
+		return commandQuoted;
+	}
 
-    return false
+	return false;
 }

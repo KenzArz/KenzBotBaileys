@@ -1,38 +1,38 @@
 {
-  "name": "kenzbotwa",
-  "version": "2.1.0",
-  "main": "app.js",
-  "dependencies": {
-    "@hapi/boom": "^10.0.1",
-    "@whiskeysockets/baileys": "^6.6.0",
-    "axios": "^1.6.8",
-    "cheerio": "^1.0.0-rc.12",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "form-data": "^4.0.0",
-    "hostname-patcher": "^1.2.0",
-    "node-fetch": "^3.3.2",
-    "qrcode": "^1.5.3",
-    "wa-sticker-formatter": "^4.4.4"
-  },
-  "scripts": {
-    "start": "node app",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "engines": {
-    "node": "16.x"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KenzArz/KenzBotWa.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/KenzArz/KenzBotWa/issues"
-  },
-  "homepage": "https://github.com/KenzArz/KenzBotWa#readme",
-  "description": "",
-  "type": "module"
+	"name": "kenzbotwa",
+	"version": "2.5.0",
+	"main": "app.js",
+	"dependencies": {
+		"@hapi/boom": "^10.0.1",
+		"@whiskeysockets/baileys": "^6.6.0",
+		"axios": "^1.6.8",
+		"cheerio": "^1.0.0-rc.12",
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"form-data": "^4.0.0",
+		"hostname-patcher": "^1.2.0",
+		"node-fetch": "^3.3.2",
+		"qrcode": "^1.5.3",
+		"wa-sticker-formatter": "^4.4.4"
+	},
+	"scripts": {
+		"start": "node app",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"engines": {
+		"node": "16.x"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/KenzArz/KenzBotWa.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/KenzArz/KenzBotWa/issues"
+	},
+	"homepage": "https://github.com/KenzArz/KenzBotWa#readme",
+	"description": "",
+	"type": "module"
 }

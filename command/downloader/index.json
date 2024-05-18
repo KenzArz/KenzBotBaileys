@@ -1,0 +1,18 @@
+[
+	{
+		"title": "drive",
+		"description": "download file dari google drive"
+	},
+	{
+		"title": "kraken",
+		"description": "download file dari krakenfiles"
+	},
+	{
+		"title": "mdfire",
+		"description": "download file dari mediafire"
+	},
+	{
+		"title": "odrive",
+		"description": "download file dari 1drive"
+	}
+]

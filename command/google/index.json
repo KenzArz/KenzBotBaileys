@@ -1,0 +1,14 @@
+[
+	{
+		"title": "ai",
+		"description": "chat dengan ai dari question AI"
+	},
+	{
+		"title": "ai to text",
+		"description": "convert gambar menjadi teks dengan question AI"
+	},
+	{
+		"title": "roboguru",
+		"description": "mengambi jawaban terkunci di ruangguru"
+	}
+]
