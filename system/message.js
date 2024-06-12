@@ -31,7 +31,6 @@ export class Create_message {
 			msg.ephemeralMessage?.message ||
 			msg.documentWithCaptionMessage?.message ||
 			msg.message;
-		const bot = this.#key.fromMe;
 		const getType = checkType(
 			findType =>
 				findType.find(findTypeMsg =>
@@ -56,12 +55,12 @@ export class Create_message {
 		this.room_chat = this.#key.remoteJid;
 		this.expiration = this.#ctxInfo?.expiration;
 		this.ownerNumber = process.env.OWNER + S_WHATSAPP_NET;
-		(this.ownerId =
+		this.isOwner =
 			this.ownerNumber == this.#key.participant ||
-			this.ownerNumber == this.#key.remoteJid),
-			(this.isOwner = bot || this.ownerId);
+			this.ownerNumber == this.#key.remoteJid;
+		this.bot = process.env.OWNER + S_WHATSAPP_NET;
+		this.isBot = this.#key.fromMe;
 		this.quotedID = this.#msg;
-		this.cache = [];
 	}
 
 	quotedMessage() {
@@ -115,7 +114,7 @@ export class Create_message {
 		} catch (error) {
 			if (
 				error.toString().includes("network socket") ||
-				error.response.status == 521
+				error?.response?.status == 521
 			) {
 				if (options.repeat == 5) {
 					return { error: true };
@@ -146,6 +145,18 @@ export class Create_message {
 		else {
 			return await react(this.#key, reactContent);
 		}
+	}
+
+	localStore(data, key, store) {
+		if (store) return map.set(key, [data]);
+
+		const collectData = map.get(key);
+		if (!Array.isArray(collectData) || collectData.length < 1)
+			return { error: "empty" };
+
+		const randomData = Math.round(Math.random() * collectData.length - 1);
+		collectData.splice(randomData, 1);
+		return collectData[randomData];
 	}
 }
 

@@ -1,5 +1,9 @@
 [
 	{
+		"title": "animages",
+		"description": "cari gambar anime random, atau tags (!animages tags)"
+	},
+	{
 		"title": "bakadame",
 		"description": "mencari komik/novel/anime dari bakadame"
 	},

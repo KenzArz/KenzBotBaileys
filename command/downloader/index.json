@@ -14,5 +14,17 @@
 	{
 		"title": "odrive",
 		"description": "download file dari 1drive"
+	},
+	{
+		"title": "igdl",
+		"description": "download foto/video instagram"
+	},
+	{
+		"title": "yt3",
+		"description": "download audio dari youtube"
+	},
+	{
+		"title": "yt4",
+		"description": "download video dari youtube"
 	}
 ]
