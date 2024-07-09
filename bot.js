@@ -71,7 +71,7 @@ export default async function connecting() {
 	client.ev.on("creds.update", saveCreds);
 	client.ev.on("connection.update", async update => {
 		const { connection, lastDisconnect, qr } = update;
-		qr ? event.emit("qrcode", qr) : event.emit("authenticated");
+		qr ? event.emit("qrcode", qr) : event.emit("rmvPath");
 		if (connection === "close") {
 			const shouldReconnect =
 				new Boom(lastDisconnect.error)?.output?.statusCode !==

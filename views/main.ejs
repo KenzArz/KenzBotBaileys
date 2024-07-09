@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title><%= title %></title>
+		<link rel="shortcut icon" href="img/masami.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="css/main.css" />
+		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+	</head>
+	<body>
+		<nav class="navbar">
+			<div class="left">
+				<img class="avatar" src="img/bot.jpg" alt="" />
+				<h3 class="bot">
+					<a class="bot-name" href="#"><%= bot %></a>
+				</h3>
+			</div>
+			<div class="right">
+				<ul class="nav-list">
+					<li class="list-item">
+						<a href="#home" class="active">Home</a>
+					</li>
+					<li class="list-item">
+						<a href="#features">Features</a>
+					</li>
+					<li class="list-item">
+						<a href="#contact">Contact</a>
+					</li>
+				</ul>
+				<div class="nav-extra">
+					<span class="list-item" id="hamburger">
+						<i data-feather="menu"></i>
+					</span>
+				</div>
+			</div>
+		</nav>
+		<!-- HOME -->
+		<section class="container" id="home">
+			<main class="content">
+				<h3>WhatsApp <span>Bot</span></h3>
+				<h5 class="desc">
+					Made by using
+					<a
+						href="http://github.com/WhiskeySockets/Baileys"
+						target="_blank"
+						rel="noreferrer">
+						WhiskeySockets/Baileys
+					</a>
+					<br />
+				</h5>
+				<p class="desc">
+					Offering various useful features sourced from different websites, such
+					as converting YouTube and Instagram videos, chatting with AI,
+					searching anime sources from screenshots, and also generating fake
+					image thumbnails for WhatsApp
+				</p>
+				<h3 id="status">ONLINE</h3>
+				<a
+					class="wa-me"
+					href="https:/wa.me/<%= hp %>?text=!menu"
+					rel="noreferrer">
+					Chat here...
+				</a>
+			</main>
+		</section>
+		<!-- HOME END -->
+
+		<!-- FEATURE -->
+		<section class="features" id="features">
+			<div class="feature-head">
+				<div class="feature-head-info">
+					<h1>FEATURES</h1>
+					<p>
+						Providing several useful features to enhance your internet
+						experience quickly and for free without having to open the website
+						or download third-party applications.
+					</p>
+				</div>
+			</div>
+			<div class="list-features">
+				<div class="features-item">
+					<div class="sub-head">
+						<span><i data-feather="file-text"></i></span>
+						<h3 id="<%- features[0] %>"><%= features[0] %></h3>
+					</div>
+					<p>
+						Converting text or number to roman numeral, binary, and rot13. Also
+						can convert image to sticker or making fake image thumbnails.
+					</p>
+				</div>
+				<div class="features-item">
+					<div class="sub-head">
+						<span><i data-feather="download"></i></span>
+						<h3 id="<%- features[0] %>"><%= features[1] %></h3>
+					</div>
+					<p>
+						Downloading media in any platforms, such as YouTube, Instagram,
+						Twitter, Tiktok, and etc.
+					</p>
+				</div>
+				<div class="features-item">
+					<div class="sub-head">
+						<span><i data-feather="globe"></i></span>
+						<h3 id="<%- features[0] %>"><%= features[2] %></h3>
+					</div>
+					<p>
+						Chatting with AI or converting images to text using AI assistance
+					</p>
+				</div>
+				<div class="features-item">
+					<div class="sub-head">
+						<span><i data-feather="book"></i></span>
+						<h3 id="<%- features[0] %>"><%= features[4] %></h3>
+					</div>
+					<p>
+						Weaboo is a term that encompasses anime, manga, and light novel,
+						such as searching for the source of an anime from a screenshot,
+						looking up manga and light novel, and generating random anime images
+					</p>
+				</div>
+			</div>
+		</section>
+		<!-- FEATURE END -->
+
+		<!-- CONTACT -->
+		<section class="contact" id="contact">
+			<h1>Contact Me</h1>
+			<form>
+				<div class="input-group">
+					<label for="name"><i data-feather="user"></i></label>
+					<input type="text" id="name" name="user" placeholder="Anonymous" />
+				</div>
+				<div class="input-group">
+					<label for="name"><i data-feather="message-circle"></i></label>
+					<input
+						type="text"
+						id="name"
+						name="message"
+						placeholder="message..." />
+				</div>
+				<div class="submit">
+					<button type="submit" id="send-button">
+						<i data-feather="send"></i>
+					</button>
+				</div>
+			</form>
+		</section>
+		<!-- JAVASCRIPT -->
+		<script src="js/main.js"></script>
+		<script>
+			feather.replace();
+		</script>
+	</body>
+</html>

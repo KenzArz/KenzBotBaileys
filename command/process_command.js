@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from "fs";
-import { Create_message } from "../system/message.js";
+// import { Create_message } from "../system/message.js";
 
 let mainDir = "./command";
 
