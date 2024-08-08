@@ -7,11 +7,13 @@ import makeWASocket, {
 } from "@whiskeysockets/baileys";
 import { Boom } from "@hapi/boom";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import pino from "pino";
+import { EventEmitter } from "events";
 import { processCommand, commandQuoted } from "./command/process_command.js";
-import { Create_message, temp, event } from "./system/message.js";
+import { Create_message } from "./system/message.js";
+import pino from "pino";
 
 export let client;
+export const event = new EventEmitter();
 const logger = pino({ level: "silent" });
 const store = makeInMemoryStore({ logger });
 // can be read from a file
@@ -23,7 +25,7 @@ setInterval(() => {
 
 export default async function connecting() {
 	const { state, saveCreds } = await useMultiFileAuthState("system/auth");
-	const { version, isLatest } = await fetchLatestBaileysVersion();
+	const { version } = await fetchLatestBaileysVersion();
 	client = await makeWASocket.default({
 		version,
 		logger,
@@ -69,13 +71,13 @@ export default async function connecting() {
 		const message = new Create_message(msg);
 		if (!message.body) return;
 		const quotedMessage = message.quotedMessage();
-		const localStore = message.localStore(quotedMessage.stanzaId);
+		const localStore = message.localStore(quotedMessage?.stanzaId);
 
 		//cek command
 		if (message?.body?.startsWith("!", 0)) {
 			try {
 				const results = await processCommand(message);
-				await sendMessage(results, message);
+				await sendMessage(results, message, localStore);
 			} catch (error) {
 				await errorMessage(error, message);
 			}
@@ -84,7 +86,7 @@ export default async function connecting() {
 		if (quotedMessage && !localStore.error) {
 			try {
 				const results = await commandQuoted(message, localStore);
-				await sendMessage(results, message);
+				await sendMessage(results, message, localStore);
 			} catch (error) {
 				await errorMessage(error, message);
 			}
@@ -94,9 +96,12 @@ export default async function connecting() {
 
 async function sendMessage(results, message) {
 	for (const result of results) {
-		await message.reply(message.room_chat, result, {
+		const infoMessage = await message.reply(message.room_chat, result, {
 			quoted: result.quoted ? message.quotedID : undefined,
 		});
+		if (result.isExtended) {
+			message.localStore(infoMessage.key.id, result.data);
+		}
 	}
 	await message.reaction({ stop: true });
 	await message.reaction("success");

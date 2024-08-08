@@ -38,19 +38,16 @@ export async function processCommand(msg) {
 	const { default: Run } = await import(filePath(command));
 	const message = await Run(msg);
 	if (!Array.isArray(message)) {
-		message.command = command;
+		message.data = { ...message.data, command };
 		return Array.of(message);
 	}
 	return message;
 }
 
 /**@param {Create_message} msgQuoted */
-export async function commandQuoted(msgQuoted, { command, data }) {
+export async function commandQuoted(msgQuoted, data) {
 	const { default: Run } = await import(filePath(command + "Quoted"));
 	const extendedMessage = await Run(msgQuoted, data);
-	if (!Array.isArray(extendedMessage)) {
-		extendedMessage.command = command;
-		return Array.of(extendedMessage);
-	}
+	if (!Array.isArray(extendedMessage)) return Array.of(extendedMessage);
 	return extendedMessage;
 }

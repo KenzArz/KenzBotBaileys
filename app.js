@@ -64,7 +64,7 @@ app.listen(port, async () => {
 event.on("qrcode", qr => {
 	app.get("/qrcode", (_, res) => {
 		qrcode.toDataURL(qr, (e, code) => {
-			if (e) rej(e);
+			if (e) return e;
 			res.send(`<img src="${code}">`);
 		});
 	});

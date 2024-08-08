@@ -74,29 +74,47 @@ export default async function (msg) {
 	if (msg.isOwner) {
 		const animeImage = await msg.urlDownload(animes[0].image);
 		const thumb = await msg.resize(animeImage);
-		return Object.assign(options, {
+		return {
+			...options,
 			image: animeImage,
 			caption: listAnime,
 			jpegThumbnail: thumb,
 			data: animes,
-		});
+		};
 	}
-	if (nsfw.length) {
-		const HImage = await msg.urlDownload(nsfw[0].image);
-		const HThumb = await msg.resize(animeImage);
-		return Object.assign(options, {
-			image: HImage,
-			caption: listAnimeNsfw,
-			jpegThumbnail: HThumb,
-			quoted: true,
-		});
-	}
-
 	const { image, size } = await downloadMedia(msg.urlDownload, sfw[0].image);
 	const thumb = await msg.resize(image, { width: size, height: size });
-	return Object.assign(options, {
+	const animeSfw = {
+		...options,
 		image: image,
 		caption: listAnimeSfw,
 		jpegThumbnail: thumb,
-	});
+		data: sfw,
+	};
+
+	if (nsfw.length) {
+		const HImage = await msg.urlDownload(nsfw[0].image);
+		const HThumb = await msg.resize(animeImage);
+		return [
+			{
+				...options,
+				image: HImage,
+				caption: listAnimeNsfw,
+				jpegThumbnail: HThumb,
+				quoted: true,
+				data: sfw,
+				toOwner: true,
+			},
+			animeSfw,
+		];
+	}
+	return animeSfw;
+	// const { image, size } = await downloadMedia(msg.urlDownload, sfw[0].image);
+	// const thumb = await msg.resize(image, { width: size, height: size });
+	// const animeSfw = Object.assign(options, {
+	// 	image: image,
+	// 	caption: listAnimeSfw,
+	// 	jpegThumbnail: thumb,
+	// 	data: sfw,
+	// });
 }

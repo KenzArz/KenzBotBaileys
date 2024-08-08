@@ -8,11 +8,11 @@ import fetch from "node-fetch";
 import axios from "axios";
 import sharp from "sharp";
 import { EventEmitter } from "events";
-import { client, temp, event } from "../bot.js";
+import { client } from "../bot.js";
 
 const date = new Date();
-export const temp = new Map();
-export const event = new EventEmitter();
+const event = new EventEmitter();
+const temp = new Map();
 
 export class Create_message {
 	#msg;
@@ -170,18 +170,15 @@ export class Create_message {
 			event.on(this.messageID, () => clearInterval(interval));
 		} else if (stop) {
 			event.emit(this.messageID);
-			event.removeListener(this.messageID);
 		} else {
 			return await react(this.#key, reactContent);
 		}
 	}
 
 	localStore(key, store) {
-		if (store) return map.set(key, [store]);
-
-		const collectData = map.get(key);
-		if (!Array.isArray(collectData) || !collectData.length)
-			return { error: "empty" };
+		if (store) return temp.set(key, store);
+		const collectData = temp.get(key);
+		if (!collectData) return { error: "empty" };
 		return collectData;
 	}
 }

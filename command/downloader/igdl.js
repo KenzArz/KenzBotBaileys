@@ -29,7 +29,7 @@ export default async function (msg) {
 
 export async function setMedia(msg, contents, thumbnail) {
 	const size = 300;
-	const mediaBuffer = msg.urlDownload(linkContent.url);
+	const mediaBuffer = msg.urlDownload(contents.url);
 	const thumbnailBuffer = await msg.urlDownload(thumbnail || contents.thumb);
 	const thumbError =
 		thumbnailBuffer == "Forbidden" ||
@@ -41,10 +41,10 @@ export async function setMedia(msg, contents, thumbnail) {
 		: msg.resize(thumbnailBuffer, size, size));
 
 	const message = {};
-	if (linkContent.mimetype.match(/mp4/)) {
+	if (contents.mimetype.match(/mp4/)) {
 		message.video = mediaBuffer;
 		message.mimetype = "video/mp4";
-	} else if (/webp|jpg|heic|jpeg/.test(linkContent.mimetype)) {
+	} else if (/webp|jpg|heic|jpeg/.test(contents.mimetype)) {
 		message.image = mediaBuffer;
 		message.mimetype = "image/jpeg";
 	}

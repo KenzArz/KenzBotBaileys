@@ -24,6 +24,7 @@ export default async function (msg) {
 		caption: dataContent,
 		mimetype: "image/jpeg",
 		jpegThumbnail: thumbnail,
+		isExtended: true,
 		data: {
 			downloaded: data.video,
 			ID,
