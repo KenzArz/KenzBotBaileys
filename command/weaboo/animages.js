@@ -52,11 +52,11 @@ export default async function (msg) {
 
 	const imageBuffer = await msg.urlDownload(image);
 	const thumb = await msg.resize(imageBuffer);
-	return await msg.reply(msg.room_chat, {
+	return {
 		image: imageBuffer,
 		mimetype: "image/jpeg",
 		jpegThumbnail: thumb,
-	});
+	};
 }
 
 const searchTag = tagName =>

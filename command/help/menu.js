@@ -36,5 +36,5 @@ ${features}
 
 ꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷꒷
 `;
-	await msg.reply(msg.room_chat, { text: menu });
+	return { text: menu };
 }

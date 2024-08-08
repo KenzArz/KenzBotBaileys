@@ -12,23 +12,21 @@ export default async function (msg) {
 
 	const { url, fileName, mimetype, fileSize } = data;
 	if (fileSize >= 150) {
-		await msg.reply(msg.mentions, {
+		throw {
 			text: `File terlalu besar untuk didownload, silahkan download manual dari link berikut:\n\n${url}`,
-		});
-		await msg.reaction({ stop: true });
-		return msg.reaction("succes");
+		};
 	}
-	await msg.reply(msg.mentions, {
+	return {
 		document: { url },
 		mimetype,
 		fileName,
-	});
-	await msg.reaction({ stop: true });
-	return msg.reaction("succes");
+	};
+	// await msg.reaction({ stop: true });
+	// return msg.reaction("succes");
 }
 
 async function directLink(link) {
-	let mediafire = link.replace(/\?dkey=.*$/, "");
+	const mediafire = link.replace(/\?dkey=.*$/, "");
 	const content = await fetch(mediafire);
 	const html = await content.text();
 	const $ = cheerio.load(html);

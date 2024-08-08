@@ -1,8 +1,7 @@
 export default async function (msg) {
 	await msg.reaction("process");
 	const quoted = msg.quotedMessage();
-	if (!quoted)
-		return { text: "tidak ada gambar yang dijadikan thumbnail", error: true };
+	if (!quoted) throw { text: "tidak ada gambar yang dijadikan thumbnail" };
 
 	const downloadMedia = await msg.media();
 	const downloadThumb = await msg.media(msg.quotedID);
@@ -21,10 +20,9 @@ export default async function (msg) {
 
 	const thumbSize = await quoted.resize(downloadThumb, { width, height });
 
-	msg.reply(msg.room_chat, {
+	return {
 		image: downloadMedia,
 		mimetype: "image/jpeg",
 		jpegThumbnail: thumbSize,
-	});
-	await msg.reaction("");
+	};
 }

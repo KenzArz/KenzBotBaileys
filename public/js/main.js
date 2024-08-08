@@ -28,9 +28,9 @@ const sendMessage = async ({ user, message }) => {
 		body: new URLSearchParams(Object.entries({ user, message })),
 	});
 
-	const { status, message } = await report.json();
+	const { status, statusMessage } = await report.json();
 	console.log(status);
-	return message;
+	return statusMessage;
 };
 
 hamburger.addEventListener("click", () =>

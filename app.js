@@ -1,6 +1,13 @@
+import "hostname-patcher";
+import env from "dotenv";
+env.config({
+	path: "./key/.env",
+});
+
 import express from "express";
 import bodyParser from "body-parser";
 import qrcode from "qrcode";
+import { S_WHATSAPP_NET } from "@whiskeysockets/baileys";
 
 import connecting, { event, client } from "./bot.js";
 import { dirPath } from "./command/process_command.js";
@@ -25,7 +32,11 @@ app.get("/", (_, res) => {
 });
 
 app.post("/contact", async (req, res) => {
-	if (!client) return res.json({ status: 500, message: "Server shutdown" });
+	if (!client)
+		return res.json({
+			status: 500,
+			statusMessage: "Server shutdown, try again later.",
+		});
 	if (!req.body.user) req.body.user = "Anonymous";
 	if (!req.body.message)
 		return res.json({
@@ -33,7 +44,7 @@ app.post("/contact", async (req, res) => {
 			statusMessage:
 				"Something wrong, make sure the message is not empty, and try again!",
 		});
-	await client.sendMessage(process.env["OWNER"], {
+	await client.sendMessage(process.env["OWNER"] + S_WHATSAPP_NET, {
 		text: `Report Message: \n\nUser: ${req.body.user}\nMessage: ${req.body.message}`,
 	});
 	return res.json({ status: 200, statusMessage: "The message has been sent" });

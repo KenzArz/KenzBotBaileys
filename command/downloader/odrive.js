@@ -1,5 +1,5 @@
 export default async function (msg) {
-	return {
+	throw {
 		text: "fitur ini sedang dalam perbaikan",
 		error: true,
 	};

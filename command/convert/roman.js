@@ -2,11 +2,9 @@ export default async function (msg) {
 	const quotedMsg = await msg.quotedMessage();
 	let body = Number(quotedMsg?.body || msg.body.slice(7));
 
-	if (!body) return { error: true, text: "pesan harus berupa angka" };
-	else if (body < 1)
-		return { error: true, text: "Angka harus lebih besar dari 0" };
-	else if (body >= 4000)
-		return { error: true, text: "Angka harus lebih kecil dari 4000" };
+	if (!body) throw { text: "pesan harus berupa angka" };
+	else if (body < 1) throw { text: "Angka harus lebih besar dari 0" };
+	else if (body >= 4000) throw { text: "Angka harus lebih kecil dari 4000" };
 
 	const romanNumerals = {
 		M: 1000,
@@ -31,5 +29,5 @@ export default async function (msg) {
 			body -= romanNumerals[roman];
 		}
 	}
-	await msg.reply(msg.room_chat, { text: result });
+	return { text: result };
 }

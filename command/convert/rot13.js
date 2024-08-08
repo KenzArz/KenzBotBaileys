@@ -10,5 +10,5 @@ export default async function (msg) {
 		)
 		.toLowerCase();
 
-	await msg.reply(msg.room_chat, { text: convert });
+	return { text: convert };
 }

@@ -1,5 +1,4 @@
-import { igdl } from "../../system/scraper/y2mate.js";
-import https from "https";
+import { y2mate } from "../../system/scraper/y2mate.js";
 import { Create_message } from "../../system/message.js";
 
 /**@param {Create_message} msg */
@@ -10,80 +9,79 @@ export default async function (msg) {
 	const regex =
 		/(?:https:\/\/:?www.instagram.com)\/((:?reel\/|:?p\/)([-_0-9A-Za-z]{11}))|(stories\/(.+?)\/)([-_0-9A-Za-z]{19})/;
 	if (!regex.test(url))
-		return {
-			text: "link tidak valid pastikan link benar dari instagram",
-			error: true,
-		};
+		throw { text: "link tidak valid pastikan link benar dari instagram" };
 
-	await (url.includes("reel")
-		? msg.reaction({ loading: true })
-		: msg.reaction("process"));
+	await msg.reaction(url.match("reel") ? { loading: true } : "process");
 	const contents = await igdl(url);
-	if (contents.status != "ok")
-		return { error: true, text: "*ERROR*\nsilahkan coba lagi!" };
 
-	if (contents.link.length <= 1) {
-		const size = {
-			width: 300,
-			height: 300,
+	// Contents index is more than 1
+	if (contents.link.length > 1) {
+		return {
+			text: `Reply pesan ini dan pilih angka 1-${contents.link.length} yang sesuai slide dipostingan untuk didownload\n\n*NOTE*\nReply dengan angka 99 untuk mendownload semua media`,
+			isExtended: true,
 		};
-		const setting = await setMedia(contents.link, msg.urlDownload);
-		const mediaBuffer = setting?.image || setting?.video;
-		if (!mediaBuffer) {
-			await msg.reaction({ stop: true });
-			return msg.reaction("failed");
-		}
-		const fetching = await msg.urlDownload(contents.thumbnail);
-		const validateThumb =
-			fetching == "Forbidden" || fetching?.error || !fetching;
-
-		let thumb;
-		if (validateThumb)
-			thumb = await msg.resize("./system/image/Error_Thumbnail.png", size);
-		else {
-			thumb = await msg.resize(fetching, size);
-		}
-		setting.jpegThumbnail = thumb;
-
-		await msg.reply(msg.room_chat, setting);
-		await msg.reaction({ stop: true });
-		return msg.reaction("succes");
 	}
 
-	let index = "";
-	for (const [content] of contents.link.entries()) {
-		index += `\n${content + 1}`;
-	}
-	const contentMedia = await msg.reply(
-		msg.room_chat,
-		{
-			text: `ketik angka yang sesuai slide dipostingan untuk didownload\n${index}\n\n*NOTE*\nbalas 99 untuk mendownload semua media`,
-		},
-		{ quoted: msg.quotedID }
-	);
-
-	const { tempStore } = await import("../../bot.js");
-	tempStore({ message: contentMedia, contents, setMedia });
-	return msg.reaction("");
+	// contents index is 1
+	const linkContent = contents.link[0];
+	return await setMedia(msg, linkContent, contents.thumbnail);
 }
 
-async function setMedia(data, dwd) {
-	const agent = new https.Agent({ keepAlive: true, timeout: 10000 });
-	let message = {};
+export async function setMedia(msg, contents, thumbnail) {
+	const size = 300;
+	const mediaBuffer = msg.urlDownload(linkContent.url);
+	const thumbnailBuffer = await msg.urlDownload(thumbnail || contents.thumb);
+	const thumbError =
+		thumbnailBuffer == "Forbidden" ||
+		thumbnailBuffer?.error ||
+		!thumbnailBuffer;
 
-	for (const content of data) {
-		const bufferMedia = await dwd(content.url, agent);
-		if (content.type == "mp4") {
-			message.video = bufferMedia;
-			message.mimetype = "video/mp4";
-		} else if (
-			content.type == "webp" ||
-			content.type == "jpg" ||
-			content.type == "heic"
-		) {
-			message.image = bufferMedia;
-			message.mimetype = "image/jpeg";
-		}
+	const thumb = await (thumbError
+		? msg.resize("./system/image/Error_Thumbnail.png", 300, 300)
+		: msg.resize(thumbnailBuffer, size, size));
+
+	const message = {};
+	if (linkContent.mimetype.match(/mp4/)) {
+		message.video = mediaBuffer;
+		message.mimetype = "video/mp4";
+	} else if (/webp|jpg|heic|jpeg/.test(linkContent.mimetype)) {
+		message.image = mediaBuffer;
+		message.mimetype = "image/jpeg";
 	}
+	message.jpegThumbnail = thumb;
 	return message;
+}
+
+export async function igdl(link) {
+	const media = await y2mate({
+		url: `analyzeV2/ajax`,
+		formData: {
+			k_query: link,
+			q_auto: "1",
+			k_page: "instagram",
+			hl: "en",
+		},
+		type: "insta",
+	});
+
+	const pattern = /(JPG|JPEG|MP4||HEIC)\s(.*)/i;
+	const contents = media.links.video.reduce((result, d, i) => {
+		const text = d.q_text.match(pattern);
+		const [_qtext, type, bitrate] = text;
+		if (!media.gallery && (bitrate.match("1080") || bitrate.match("video")))
+			result.push({ url: d.url, mimetype: type.toLowerCase() });
+		else if (media.gallery) {
+			result.push({
+				url: d.url,
+				thumb: media.gallery.items[i]?.thumb,
+				mimetype: type.toLowerCase(),
+			});
+		}
+		return result;
+	}, []);
+
+	return {
+		link: contents,
+		thumbnail: media.thumbnail,
+	};
 }

@@ -1,33 +1,18 @@
-export default async function(msg, {filter}) {
+import { generateList } from "./sauce.js";
 
-    await msg.reaction('process')
-    const infoAnime = filter[parseInt(msg.body) - 1]
-    if(!infoAnime) return {
-      text: 'angka yang anda masukan tidak sesuai',
-      error: true
-    }
-    const [perfect, persentase] = infoAnime.similarity.toString().split('.')
+export default async function (msg, anime) {
+	await msg.reaction("process");
+	const infoAnime = anime[Number(msg.body) - 1];
+	if (!infoAnime) throw { text: "angka yang anda masukan tidak sesuai" };
 
-    const realNumber = persentase?.slice(0, 2) || perfect + '00'
-    const desimal = persentase?.slice(2, 4) || undefined
+	const info = generateList([infoAnime], "Info Anime");
+	const downloadContent = await msg.urlDownload(infoAnime.image);
+	const resize = await msg.resize(downloadContent);
 
-    const similarity = `${realNumber}${desimal ? `.${desimal}` : ''}%`
-    
-    const info = `      ╾─͙─͙─͙Info Anime─͙─͙─͙╼\n`+
-    `Title: ${infoAnime.native}\n`+
-    `Romaji: ${infoAnime.romaji || '-'}\n`+
-    `English: ${infoAnime.english || '-'}\n`+
-    `Episode: ${infoAnime.episode || '-'}\n`+
-    `Similarity: ${similarity}`
-
-    const downloadContent = await msg.urlDownload(infoAnime.image)
-    const resize = await msg.resize(downloadContent)
-
-    await msg.reply(msg.room_chat, {
-        caption: info,
-        image: downloadContent,
-        jpegThumbnail: resize,
-        mimetype: 'image/jpeg'
-    })
-    await msg.reaction('')
+	return {
+		caption: info,
+		image: downloadContent,
+		jpegThumbnail: resize,
+		mimetype: "image/jpeg",
+	};
 }

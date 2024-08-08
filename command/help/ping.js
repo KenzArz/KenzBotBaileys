@@ -6,8 +6,8 @@ export default async function (msg) {
 		`kenzbot hadir. ada yang bisa dibantu ${contactName}`,
 		`kenzbot siap membantumu ${contactName}`,
 	];
-	await msg.reply(msg.room_chat, {
+	return {
 		text: sayHello[Math.floor(Math.random() * sayHello.length)],
-		quoted: msg.quotedID,
-	});
+		quoted: true,
+	};
 }

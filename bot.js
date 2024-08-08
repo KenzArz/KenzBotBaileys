@@ -1,9 +1,3 @@
-import "hostname-patcher";
-import env from "dotenv";
-env.config({
-	path: "./key/.env",
-});
-
 import makeWASocket, {
 	DisconnectReason,
 	useMultiFileAuthState,
@@ -14,29 +8,10 @@ import makeWASocket, {
 import { Boom } from "@hapi/boom";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import pino from "pino";
-import { EventEmitter } from "events";
-
 import { processCommand, commandQuoted } from "./command/process_command.js";
-import { Create_message } from "./system/message.js";
+import { Create_message, temp, event } from "./system/message.js";
 
 export let client;
-export const temp = new Map();
-export const event = new EventEmitter();
-export const tempStore = async message => {
-	const room_chat = message.message.key.remoteJid;
-	const messageTemp = temp.get(room_chat) || [message];
-	messageTemp ? messageTemp.push(message) : "";
-
-	temp.set(room_chat, messageTemp);
-	const index = messageTemp.length - 1;
-	await new Promise((res, rej) => {
-		setTimeout(() => {
-			messageTemp.splice(index, 1);
-			res("ok");
-			rej("error");
-		}, 180000);
-	});
-};
 const logger = pino({ level: "silent" });
 const store = makeInMemoryStore({ logger });
 // can be read from a file
@@ -62,10 +37,7 @@ export default async function connecting() {
 				const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
 				return msg?.message || undefined;
 			}
-			const { id } = key;
-			console.log("Resending", id);
-			console.log(typeof tempStore[id]);
-			return tempStore[id]?.message;
+			return;
 		},
 	});
 	client.ev.on("creds.update", saveCreds);
@@ -96,85 +68,65 @@ export default async function connecting() {
 		await client.readMessages([msg.key]);
 		const message = new Create_message(msg);
 		if (!message.body) return;
-		const isGroup = message?.room_chat?.includes("@g.us");
+		const quotedMessage = message.quotedMessage();
+		const localStore = message.localStore(quotedMessage.stanzaId);
 
 		//cek command
 		if (message?.body?.startsWith("!", 0)) {
-			await processCommand(message)
-				.then(async text =>
-					text
-						? await message.reply(message.room_chat, text, {
-								quoted: message.quotedID,
-						  })
-						: ""
-				)
-				.catch(async err => {
-					console.log(err);
-					await message.reaction({ stop: true });
-					await message.reaction("danger");
-					await message.reply(message.room_chat, {
-						text: `*Terjadi Error*
-
-${err.toString()}`,
-					});
-					const date = new Date();
-					const { subject } = isGroup
-						? await client.groupMetadata(message.room_chat)
-						: false;
-					const error = errorLog(
-						`Error Message\n` +
-							`Date: ${date.getHours() + 7}:${date.getMinutes()}}\n` +
-							`chat: ${message.room_chat}\n` +
-							`chat room: ${subject || "private chat"}\n` +
-							`text: ${message.body}\n` +
-							`typeMessage: ${message?.typeMsg || "UNKNOWN"}\n` +
-							`errorMessage: ${err}`
-					);
-
-					message.reply(message.ownerNumber, error);
-				});
+			try {
+				const results = await processCommand(message);
+				await sendMessage(results, message);
+			} catch (error) {
+				await errorMessage(error, message);
+			}
 		}
-		if (
-			parseInt(message.body) &&
-			message.quotedMessage() &&
-			temp.length !== 0
-		) {
-			await commandQuoted(message)
-				.then(text =>
-					text
-						? message.reply(message.room_chat, text, {
-								quoted: message.quotedID,
-						  })
-						: ""
-				)
-				.catch(async err => {
-					console.log(err);
-					await message.reaction({ stop: true });
-					await message.reaction("danger");
 
-					await message.reply(message.room_chat, {
-						text: `*Terjadi Error*
-
-${err.toString()}`,
-					});
-					const date = new Date();
-					const { subject } = isGroup
-						? await client.groupMetadata(message.room_chat)
-						: false;
-					const error = errorLog(
-						`Error Message\n` +
-							`Date: ${date.getHours() + 7}:${date.getMinutes()}}\n` +
-							`chat: ${message.room_chat}\n` +
-							`chat room: ${subject || "private chat"}\n` +
-							`text: ${message.body}\n` +
-							`typeMessage: ${message?.typeMsg || "UNKNOWN"}\n` +
-							`errorMessage: ${err}`
-					);
-
-					message.reply(message.ownerNumber, error);
-				});
+		if (quotedMessage && !localStore.error) {
+			try {
+				const results = await commandQuoted(message, localStore);
+				await sendMessage(results, message);
+			} catch (error) {
+				await errorMessage(error, message);
+			}
 		}
 	});
+}
+
+async function sendMessage(results, message) {
+	for (const result of results) {
+		await message.reply(message.room_chat, result, {
+			quoted: result.quoted ? message.quotedID : undefined,
+		});
+	}
+	await message.reaction({ stop: true });
+	await message.reaction("success");
+}
+
+async function errorMessage(error, message) {
+	if (error.text) {
+		await message.reply(message.room_chat, error);
+		await message.reaction({ stop: true });
+		await message.reaction("failed");
+	} else if (error.toString()) {
+		await message.reply(message.room_chat, {
+			text: "*Terjadi Error*\n\n" + err.toString(),
+		});
+		await message.reaction({ stop: true });
+		await message.reaction("danger");
+	}
+	const date = new Date();
+	const group = await client?.groupMetadata(message.room_chat);
+	const e = errorLog(
+		`Error Message\n` +
+			`Date: ${date.getHours() + 7}:${date.getMinutes()}}\n` +
+			`chat: ${message.room_chat}\n` +
+			`chat room: ${group.subject || "private chat"}\n` +
+			`text: ${message.body}\n` +
+			`typeMessage: ${message?.typeMsg || "UNKNOWN"}\n` +
+			`errorMessage: ${err}`
+	);
+
+	await message.reply(message.ownerNumber, e);
 }
 
 function errorLog(log) {
