@@ -109,12 +109,4 @@ export default async function (msg) {
 		];
 	}
 	return animeSfw;
-	// const { image, size } = await downloadMedia(msg.urlDownload, sfw[0].image);
-	// const thumb = await msg.resize(image, { width: size, height: size });
-	// const animeSfw = Object.assign(options, {
-	// 	image: image,
-	// 	caption: listAnimeSfw,
-	// 	jpegThumbnail: thumb,
-	// 	data: sfw,
-	// });
 }

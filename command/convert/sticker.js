@@ -18,7 +18,4 @@ export default async function (msg) {
 		background: "transparent",
 	});
 	return await buffer.toMessage();
-
-	// await msg.reply(msg.room_chat, sticker, { quoted: msg.quotedID });
-	// await msg.reaction("");
 }

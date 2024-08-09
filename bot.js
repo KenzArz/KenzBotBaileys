@@ -77,7 +77,7 @@ export default async function connecting() {
 		if (message?.body?.startsWith("!", 0)) {
 			try {
 				const results = await processCommand(message);
-				await sendMessage(results, message, localStore);
+				await sendMessage(results, message);
 			} catch (error) {
 				await errorMessage(error, message);
 			}
@@ -86,7 +86,7 @@ export default async function connecting() {
 		if (quotedMessage && !localStore.error) {
 			try {
 				const results = await commandQuoted(message, localStore);
-				await sendMessage(results, message, localStore);
+				await sendMessage(results, message);
 			} catch (error) {
 				await errorMessage(error, message);
 			}
@@ -95,30 +95,29 @@ export default async function connecting() {
 }
 
 async function sendMessage(results, message) {
-	for (const result of results) {
-		const infoMessage = await message.reply(message.room_chat, result, {
-			quoted: result.quoted ? message.quotedID : undefined,
-		});
-		if (result.isExtended) {
-			message.localStore(infoMessage.key.id, result.data);
+	for (const { isExtended, data, quoted, toOwner, ...result } of results) {
+		const infoMessage = await message.reply(
+			toOwner ? message.ownerNumber : message.room_chat,
+			result,
+			{
+				quoted: quoted ? message.quotedID : undefined,
+			}
+		);
+		if (isExtended) {
+			message.localStore(infoMessage.key.id, data);
 		}
 	}
 	await message.reaction({ stop: true });
-	await message.reaction("success");
 }
 
 async function errorMessage(error, message) {
-	if (error.text) {
-		await message.reply(message.room_chat, error);
-		await message.reaction({ stop: true });
-		await message.reaction("failed");
-	} else if (error.toString()) {
-		await message.reply(message.room_chat, {
-			text: "*Terjadi Error*\n\n" + err.toString(),
-		});
-		await message.reaction({ stop: true });
-		await message.reaction("danger");
-	}
+	const errorText = error.text || error.toString();
+	await message.reply(message.room_chat, {
+		text: "*Terjadi Error*\n\n" + errorText,
+	});
+	await message.reaction({ stop: true });
+	await message.reaction(error.text ? "failed" : "danger");
+
 	const date = new Date();
 	const group = await client?.groupMetadata(message.room_chat);
 	const e = errorLog(
@@ -127,8 +126,8 @@ async function errorMessage(error, message) {
 			`chat: ${message.room_chat}\n` +
 			`chat room: ${group.subject || "private chat"}\n` +
 			`text: ${message.body}\n` +
-			`typeMessage: ${message?.typeMsg || "UNKNOWN"}\n` +
-			`errorMessage: ${err}`
+			`typeMessage: ${message.typeMsg || "UNKNOWN"}\n` +
+			`errorMessage: ${errorText}`
 	);
 
 	await message.reply(message.ownerNumber, e);

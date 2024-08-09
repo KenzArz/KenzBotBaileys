@@ -1,5 +1,5 @@
 import { Create_message } from "../../system/message.js";
-import { POST } from "../../system/scraper/y2mate.js";
+import { y2mate } from "../../system/scraper/y2mate.js";
 
 /**@param {Create_message} msg */
 export default async function (msg) {
@@ -42,7 +42,7 @@ export async function ytdl({ link, audioOnly, formData }) {
 	const url = "https://youtu.be/" + ytId;
 
 	const ID = { vid: ytId };
-	const content = await POST({
+	const content = await y2mate({
 		url: formData ? "convertV2/index" : "analyzeV2/ajax",
 		formData: formData || {
 			k_query: url,
@@ -54,7 +54,7 @@ export async function ytdl({ link, audioOnly, formData }) {
 
 	if (formData) return content.dlink;
 	else if (audioOnly) {
-		ID.k = mp3.mp3128.k;
+		ID.k = content.links.mp3.mp3128.k;
 		return await ytdl({ formData: ID });
 	}
 	const mp4 = content.links.mp4;

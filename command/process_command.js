@@ -41,12 +41,13 @@ export async function processCommand(msg) {
 		message.data = { ...message.data, command };
 		return Array.of(message);
 	}
+	message.forEach(item => (item.data = { ...item.data, command }));
 	return message;
 }
 
 /**@param {Create_message} msgQuoted */
 export async function commandQuoted(msgQuoted, data) {
-	const { default: Run } = await import(filePath(command + "Quoted"));
+	const { default: Run } = await import(filePath(data.command + "Quoted"));
 	const extendedMessage = await Run(msgQuoted, data);
 	if (!Array.isArray(extendedMessage)) return Array.of(extendedMessage);
 	return extendedMessage;

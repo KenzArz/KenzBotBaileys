@@ -7,10 +7,11 @@ export default async function (msg, contents) {
 	// Download all content
 	if (int == "99") {
 		return contents.link.reduce(async (prev, curr) => {
+			const tempData = await prev;
 			const mediaContent = await setMedia(msg, curr);
-			prev.push(mediaContent);
-			return prev;
-		}, []);
+			tempData.push(mediaContent);
+			return tempData;
+		}, Promise.resolve([]));
 	}
 
 	// Download content that has been chosed by user

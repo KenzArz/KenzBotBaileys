@@ -8,16 +8,12 @@ export default async function (msg) {
 	const quotedMessage = msg.quotedMessage();
 	const content = quotedMessage?.body || msg.body;
 	const mp3 = await ytdl({ link: content, audioOnly: true });
-	await msg.reply(
-		msg.room_chat,
-		{
-			audio: {
-				url: mp3,
-			},
-			mimetype: "audio/mp4",
+
+	return {
+		audio: {
+			url: mp3,
 		},
-		{ quoted: msg.quotedID }
-	);
-	await msg.reaction({ stop: true });
-	return msg.reaction("succes");
+		mimetype: "audio/mp4",
+		quoted: true,
+	};
 }

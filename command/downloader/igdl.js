@@ -18,6 +18,7 @@ export default async function (msg) {
 	if (contents.link.length > 1) {
 		return {
 			text: `Reply pesan ini dan pilih angka 1-${contents.link.length} yang sesuai slide dipostingan untuk didownload\n\n*NOTE*\nReply dengan angka 99 untuk mendownload semua media`,
+			data: contents,
 			isExtended: true,
 		};
 	}
@@ -28,17 +29,18 @@ export default async function (msg) {
 }
 
 export async function setMedia(msg, contents, thumbnail) {
-	const size = 300;
-	const mediaBuffer = msg.urlDownload(contents.url);
+	const mediaBuffer = await msg.urlDownload(contents.url);
 	const thumbnailBuffer = await msg.urlDownload(thumbnail || contents.thumb);
 	const thumbError =
 		thumbnailBuffer == "Forbidden" ||
 		thumbnailBuffer?.error ||
 		!thumbnailBuffer;
 
-	const thumb = await (thumbError
-		? msg.resize("./system/image/Error_Thumbnail.png", 300, 300)
-		: msg.resize(thumbnailBuffer, size, size));
+	const thumb = await msg.resize(
+		thumbError ? "./system/image/Error_Thumbnail.png" : thumbnailBuffer,
+		300,
+		300
+	);
 
 	const message = {};
 	if (contents.mimetype.match(/mp4/)) {
