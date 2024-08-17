@@ -1,4 +1,3 @@
-import "hostname-patcher";
 import env from "dotenv";
 env.config({
 	path: "./key/.env",

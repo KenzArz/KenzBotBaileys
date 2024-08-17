@@ -77,6 +77,7 @@ export default async function connecting() {
 		if (message?.body?.startsWith("!", 0)) {
 			try {
 				const results = await processCommand(message);
+				console.log(results);
 				await sendMessage(results, message);
 			} catch (error) {
 				await errorMessage(error, message);
@@ -112,6 +113,7 @@ async function sendMessage(results, message) {
 
 async function errorMessage(error, message) {
 	const errorText = error.text || error.toString();
+	console.log(error);
 	await message.reply(message.room_chat, {
 		text: "*Terjadi Error*\n\n" + errorText,
 	});

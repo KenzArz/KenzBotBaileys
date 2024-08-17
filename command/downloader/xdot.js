@@ -1,15 +1,9 @@
 import fetch from "node-fetch";
 import * as Cheerio from "cheerio";
-import { Create_message } from "../../system/message";
-
-/**
- *
- * @param {Create_message} msg
- */
 
 export default async function (msg) {
 	const quotedMessage = msg.quotedMessage();
-	const links = quotedMessage.body || msg.body.slice(6);
+	const links = quotedMessage?.body || msg.body.slice(6);
 
 	const x2twitter = await fetch("https://x2twitter.com/api/ajaxSearch", {
 		headers: {
@@ -18,7 +12,7 @@ export default async function (msg) {
 		method: "post",
 		body: new URLSearchParams(
 			Object.entries({
-				q: "https://x.com/40hara/status/1824220015991853138",
+				q: links,
 				lang: "en",
 			})
 		),
@@ -26,7 +20,7 @@ export default async function (msg) {
 
 	const pattern = /image/;
 	const media = await x2twitter.json();
-	if (media.statusCode) throw { text: media.data };
+	if (media.statusCode) throw { text: media.msg };
 	const $ = Cheerio.load(media.data);
 	const contents = await Promise.all(
 		$(".thumbnail img")
@@ -52,8 +46,7 @@ export default async function (msg) {
 			contents[i].mimetype = "image/jpeg";
 		})
 	);
-
-	return !contents.length
+	return contents.length
 		? contents
 		: await Promise.all(
 				$(".download-items")
@@ -71,6 +64,6 @@ export default async function (msg) {
 						}
 						return obj;
 					})
-					.toArray()[0]
+					.toArray()
 		  );
 }
