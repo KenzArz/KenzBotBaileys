@@ -4,3 +4,4 @@ system/baileys_store.json
 system/log/
 test.js
 key/
+.env
